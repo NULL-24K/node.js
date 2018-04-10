@@ -21,14 +21,14 @@ var server = http.createServer(function (req, res) {
     // }
 
     var file = documentRoot ; //+ url;
-    console.log(file.toJSON());
+    //console.log(file.toJSON());
 
     //参数1:要读取的文件路径;
     //参数2:回调函数,读取失败的信息在err中,err为空表示没有错误.data为读取到的文件数据
     fs.readFile(file, function (err, data) {
         if (err) {
             res.writeHeader(404, {'content-type': 'text/html;charset="utf-8"'});
-            res.write('<h1>404错误 大大的error</h1><p>你要找的页面不存在</p>');
+            res.write('nihao');//<h1>404错误 大大的error</h1><p>你要找的页面不存在</p>
             res.end();
 
         } else {
