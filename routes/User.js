@@ -9,7 +9,17 @@ function User() {
     this.iconUrl;
     this.sex;
     this.age;
-    this.dop;
+    this.education;
+    this.workIntention;
+    this.advantage;
+    this.workExperienceList;
+    this.educationList;
+    this.workYears;
+}
+
+function workAndEducationModel() {
+   this.title;
+   this.detail;
 }
 
 function Name() {
@@ -18,8 +28,10 @@ function Name() {
 
 
 module.exports ={
-    one:User,
-    two:Name
+    userInfo:User,
+    test:Name,
+    titleModel:workAndEducationModel
+
 }
 
 
