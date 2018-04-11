@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var User = require('./User.js');
+var User = require('./UserModel.js');
 var URL = require('url');
 var Msg = require('./Msg');
-
+var ResModel = require('./responseModel');
+var util = require('./util');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -11,42 +12,38 @@ router.get('/', function(req, res, next) {
 });
 
 
-router.get('/getMsgInfo', function(req, res, next) {
 
+router.get('/getMsgInfo', function(req, res, next) {
 
   var msg =  new Msg();
   var params = URL.parse(req.url, true).query;
 
-
-
   if(params.id == '1') {
-
-
     msg.age = "1";
-
-
   }else{
-
     msg.age = "1";
-
   }
 
   console.log(typeof msg);
-
   var response = {status:1,data:msg};
   res.send(JSON.stringify(response));
 
 });
 
-
+/* 获取用户信息*/
 router.get('/getUserInfo', function(req, res, next) {
+
+  var model = new ResModel();
 
   var user_ = new User.userInfo();
 
-  var params = URL.parse(req.url, true).query;
-  var msg = ''
+   var params = URL.parse(req.url, true).query;
+   if (!req.headers.token || req.headers.token.length == 0){
+     model.msg = '该用户尚未登录';
+     res.send(JSON.stringify(model));
+     return;
+   }
 
-  if(params.id == '1') {
     var workArr = new Array();
     for (var i = 0 ; i < 2 ; i ++){
         var userMode = new  User.titleModel();
@@ -67,50 +64,81 @@ router.get('/getUserInfo', function(req, res, next) {
     user_.age = "24";
     user_.education = "本科";
     user_.phoneNum ="13095515908";
-    user_.iconUrl = "";
+    user_.iconUrl = "http://pic29.photophoto.cn/20131204/0034034499213463_b.jpg";
     user_.sex = "男";
     user_.workIntention = 'iOS/web前端';
     user_.advantage = '本人性格开朗,代码习惯良好';
     user_.workExperienceList = workArr;
     user_.educationList = educationArr;
     user_.workYears = '5年以上'
-    msg = '请求成功'
+    model.msg = '请求成功';
+    model.code = 0;
+    model.data = user_;
+    res.send(JSON.stringify(model));
 
-  }else{
-    user_.name = "SPTING";
-    user_.age = "1";
-    user_.city = "杭州市";
+});
+/*求职意向*/
+router.post('/jobIntention',function(req,res,next) {
+    var model = new  ResModel();
+    if (!req.headers.token || req.headers.token.length == 0){
+        model.msg = '请登录'
+    }else {
+        var intentionInfo = new User.jobIntention();
+        if (req.body.type == 0){
+            /*期望工作地点*/
+            intentionInfo.intentionAddress ='上海市-浦东新区-唐镇';
+            /*期望行业*/
+            intentionInfo.intentionIndustry ='IT/通信/电子/互联网';
+            /*期望职位*/
+            intentionInfo.intentionPosition ='催收';
+            /*期望薪资*/
+            intentionInfo.intentionSalary ='24000~30000';
+            /*求职状态*/
+            intentionInfo.jobState ='在职-考虑更好的工作机会';
+            model.code = 0;
+            model.msg = '请求成功';
+            model.data = intentionInfo;
+
+        }else {
+
+        }
+    }
+
+    res.send(JSON.stringify(model));
+});
+
+/*个人信息 type:0为获取信息 其他为提交*/
+router.post('/persionInfo',function(req,res,next) {
+
+  var model = new ResModel();
+  if (!req.headers.token || req.headers.token.length == 0){
+    model.msg = '该用户尚未登录';
+  }else {
+    var _info = new User.persionInfo();
+    if (req.body.type == 0){//.获取信息
+      _info.iconUrl = 'http://pic29.photophoto.cn/20131204/0034034499213463_b.jpg';
+      _info.nickName = '独孤求败';
+      _info.sex = '男';
+      _info.phoneNum = '130****908';
+      _info.emaill = '11******17@qq.com';
+      _info.birthday = '1990-06-28';
+      _info.education = '本科';
+      _info.endEducationTime = '2014-07-01';
+      _info.workYears = '5年以上';
+      _info.address = '上海市-浦东新区-张江';
+      model.data = [[_info.iconUrl,_info.nickName,_info.sex],
+                    [_info.phoneNum,_info.emaill],
+                    [_info.birthday,_info.education,_info.endEducationTime,_info.workYears,_info.address]];
+      model.code = 0;
+    }else {//上传信息
+
+    }
   }
 
-  console.log(typeof user_);
-
-
-
-  var response = {code:0,msg:msg,data:user_};
-  res.send(JSON.stringify(response));
+  res.send(JSON.stringify(model));
 
 });
 
-router.get('/getUserInfo_new', function(req, res, next) {
-
-  var xxx = new User.two();
- // var Name = {name:''}
-  console.log(xxx.age +'###');
-  var params = URL.parse(req.url, true).query;
-
-  if(params.id == '1') {
-
-    xxx.age = "ligh";
-
-  }else{
-    xxx.age = "SPTING";
-
-  }
-
-  var response = {status:1,data:xxx};
-  res.send(JSON.stringify(response));
-
-});
 
 module.exports = router;
 

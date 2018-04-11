@@ -38,6 +38,5 @@ var server = http.createServer(function (req, res) {
     });
 }).listen(8889);// 此处的8889是监听的端口号,可以根据自己的需要配置,注意不要和本地的一些应用程序使用的端口号冲突
 
-console.log('服务器开启成功---');
 
 module.exports = router;
