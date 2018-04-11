@@ -25,13 +25,26 @@ function workAndEducationModel() {
 function Name() {
     this.age;
 }
+/*个人信息*/
+function PersionInfo() {
+    this.iconUrl;
+    this.nickName;
+    this.sex;
+    this.phoneNum;
+    this.emaill;
+    this.birthday;
+    this.education;
+    this.endEducationTime;
+    this.workYears;
+    this.address;
+}
 
 
 module.exports ={
     userInfo:User,
     test:Name,
-    titleModel:workAndEducationModel
-
+    titleModel:workAndEducationModel,
+    persionInfo:PersionInfo
 }
 
 
