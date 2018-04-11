@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="946661d2-50e8-4a1d-a6aa-62433731524e" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/node_js_node_modules.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/node.iml" afterPath="$PROJECT_DIR$/.idea/node.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/User.js" afterPath="$PROJECT_DIR$/routes/User.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/users.js" afterPath="$PROJECT_DIR$/routes/users.js" />
-    </list>
+    <list default="true" id="946661d2-50e8-4a1d-a6aa-62433731524e" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -321,12 +314,12 @@
       <updated>1523283719770</updated>
       <workItem from="1523283722243" duration="3067000" />
       <workItem from="1523326685745" duration="8847000" />
-      <workItem from="1523371305797" duration="3265000" />
+      <workItem from="1523371305797" duration="3448000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15179000" />
+    <option name="totallyTimeSpent" value="15362000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="9" y="24" width="1280" height="739" extended-state="0" />
