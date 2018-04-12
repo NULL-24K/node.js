@@ -20,6 +20,7 @@ function User() {
 function workAndEducationModel() {
    this.title;
    this.detail;
+   this.id;
 }
 
 function Name() {

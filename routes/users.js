@@ -30,6 +30,51 @@ router.get('/getMsgInfo', function(req, res, next) {
 
 });
 
+router.post('/workExperience',function (req,res,next) {
+    var model = new ResModel();
+    if(req.headers.token.length > 0){
+        if(req.body.type == 0){//按照id来获取信息
+
+            var resData = {
+                companyName:'科大讯飞',
+                jobName:'项目经理',
+                startTime:'2014-8-8',
+                endTime:'2018-3-6',
+                jobDescribe:'这个工作其实很简单...'
+            }
+            model.data = resData;
+            model.code = 0;
+            model.msg = '请求成功'
+        }else {//.提交
+
+        }
+    }else {
+
+    }
+    res.send(JSON.stringify(model));
+})
+
+/*工作经历list*/
+router.post('/workList',function (req,res,next) {
+    var model = new ResModel();
+    if(req.headers.token && req.headers.token.length >0){
+        var workListArr = new  Array();
+        for (var i = 0 ; i < 2 ; i ++){
+            var userMode = new  User.titleModel();
+            userMode.title = i==0?'科大讯飞':'阿里巴巴集团';
+            userMode.detail = i==0?'2015-11-24~2017-08-08':'2017-11-24~2018-08-08';
+            userMode.id = i ==0?'666':'888';
+            workListArr.push(userMode);
+        }
+        model.data = workListArr;
+        model.code = 0;
+        model.msg = '请求成功'
+    }else {
+        model.msg = '请先登录';
+    }
+    res.send(JSON.stringify(model));
+})
+
 /* 获取用户信息*/
 router.get('/getUserInfo', function(req, res, next) {
 
@@ -49,6 +94,7 @@ router.get('/getUserInfo', function(req, res, next) {
         var userMode = new  User.titleModel();
         userMode.title = i==0?'科大讯飞':'阿里巴巴集团';
         userMode.detail = i==0?'2015-11-24~2017-08-08':'2017-11-24~2018-08-08';
+        userMode.id = i ==0?'666':'888';
         workArr.push(userMode);
     }
 
@@ -57,6 +103,7 @@ router.get('/getUserInfo', function(req, res, next) {
           var userMode = new  User.titleModel();
           userMode.title = i==0?'安徽大学':'潜山中学';
           userMode.detail = i==0?'2011-09-01~2015-07-01':'2008-09-01~2011-07-01';
+          userMode.id = i ==0?'666':'888';
           educationArr.push(userMode);
       }
 
