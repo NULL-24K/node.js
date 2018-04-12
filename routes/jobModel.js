@@ -15,6 +15,24 @@ function companyModel() {
     this.time;
 }
 
+
+function jobDetailModel() {
+    this.jobName;
+    this.jobIncom;
+    this.singerLocation;
+    this.minEducation;
+    this.workExperienc;
+    this.applyNum;
+    this.wellArr;
+    this.interviewTime;
+    this.interViewLocation;
+    this.jobLocation;
+    this.jobDescribe;
+    this.applyState;
+    this.jobid;
+}
+
 module.exports = {
-    companyModel:companyModel
+    companyModel:companyModel,
+    jobDetailModel:jobDetailModel
 }

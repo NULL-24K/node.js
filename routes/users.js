@@ -77,6 +77,7 @@ router.get('/getUserInfo', function(req, res, next) {
     res.send(JSON.stringify(model));
 
 });
+
 /*求职意向*/
 router.post('/jobIntention',function(req,res,next) {
     var model = new  ResModel();
@@ -100,7 +101,8 @@ router.post('/jobIntention',function(req,res,next) {
             model.data = intentionInfo;
 
         }else {
-
+            model.code =0;
+            model.msg = '上传成功'
         }
     }
 
@@ -119,8 +121,8 @@ router.post('/persionInfo',function(req,res,next) {
       _info.iconUrl = 'http://pic29.photophoto.cn/20131204/0034034499213463_b.jpg';
       _info.nickName = '独孤求败';
       _info.sex = '男';
-      _info.phoneNum = '130****908';
-      _info.emaill = '11******17@qq.com';
+      _info.phoneNum = '13095515908';
+      _info.emaill = '1182513617@qq.com';
       _info.birthday = '1990-06-28';
       _info.education = '本科';
       _info.endEducationTime = '2014-07-01';
@@ -131,7 +133,10 @@ router.post('/persionInfo',function(req,res,next) {
                     [_info.birthday,_info.education,_info.endEducationTime,_info.workYears,_info.address]];
       model.code = 0;
     }else {//上传信息
+        //.对上传的信息做校验
 
+        model.code = 0;
+        model.msg = '上传成功';
     }
   }
 
