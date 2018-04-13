@@ -11,25 +11,31 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+router.post('/education',function (req,res,next) {
+    var  model = new ResModel();
+    if (req.headers.token.length > 0){
+
+        var educationInfo = {
+            startTime:'2010-09-01',
+            endTime:'2014-07-01',
+            school:'清华大学',
+            specialize:'计算机科学与技术',
+            diploma:'本科',
+            id:'999'
+        }
+        model.code = 0;
+        model.msg = '请求成功';
+        model.data = educationInfo;
+
+    }else {
+        model.msg = '请登录'
+    }
+
+    res.send(JSON.stringify(model));
+})
 
 
-router.get('/getMsgInfo', function(req, res, next) {
-
-  var msg =  new Msg();
-  var params = URL.parse(req.url, true).query;
-
-  if(params.id == '1') {
-    msg.age = "1";
-  }else{
-    msg.age = "1";
-  }
-
-  console.log(typeof msg);
-  var response = {status:1,data:msg};
-  res.send(JSON.stringify(response));
-
-});
-
+/*工作经历*/
 router.post('/workExperience',function (req,res,next) {
     var model = new ResModel();
     if(req.headers.token.length > 0){
@@ -46,10 +52,11 @@ router.post('/workExperience',function (req,res,next) {
             model.code = 0;
             model.msg = '请求成功'
         }else {//.提交
-
+            model.code = 0;
+            model.msg = '提交成功';
         }
     }else {
-
+        model.msg = '请先登录'
     }
     res.send(JSON.stringify(model));
 })
