@@ -50,3 +50,6 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
+
+//.MySQL 密码:RI_h?dpQ+8si
