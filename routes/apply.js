@@ -29,5 +29,13 @@ router.post('/applyJob',function (req,res,next) {
 
 })
 
+router.post('/',function (req,res,next) {
+    var model = new ResModel();
+
+    var  token = req.headers.token;
+})
+
+
+
 
 module.exports = router;

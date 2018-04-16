@@ -13,24 +13,76 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+router.post('/education',function (req,res,next) {
+    var  model = new ResModel();
+    if (req.headers.token.length > 0){
+
+        var educationInfo = {
+            startTime:'2010-09-01',
+            endTime:'2014-07-01',
+            school:'清华大学',
+            specialize:'计算机科学与技术',
+            diploma:'本科',
+            id:'999'
+        }
+        model.code = 0;
+        model.msg = '请求成功';
+        model.data = educationInfo;
+
+    }else {
+        model.msg = '请登录'
+    }
+
+    res.send(JSON.stringify(model));
+})
 
 
-router.get('/getMsgInfo', function(req, res, next) {
+/*工作经历*/
+router.post('/workExperience',function (req,res,next) {
+    var model = new ResModel();
+    if(req.headers.token.length > 0){
+        if(req.body.type == 0){//按照id来获取信息
 
-  var msg =  new Msg();
-  var params = URL.parse(req.url, true).query;
+            var resData = {
+                companyName:'科大讯飞',
+                jobName:'项目经理',
+                startTime:'2014-8-8',
+                endTime:'2018-3-6',
+                jobDescribe:'这个工作其实很简单...'
+            }
+            model.data = resData;
+            model.code = 0;
+            model.msg = '请求成功'
+        }else {//.提交
+            model.code = 0;
+            model.msg = '提交成功';
+        }
+    }else {
+        model.msg = '请先登录'
+    }
+    res.send(JSON.stringify(model));
+})
 
-  if(params.id == '1') {
-    msg.age = "1";
-  }else{
-    msg.age = "1";
-  }
-
-  console.log(typeof msg);
-  var response = {status:1,data:msg};
-  res.send(JSON.stringify(response));
-
-});
+/*工作经历list*/
+router.post('/workList',function (req,res,next) {
+    var model = new ResModel();
+    if(req.headers.token && req.headers.token.length >0){
+        var workListArr = new  Array();
+        for (var i = 0 ; i < 2 ; i ++){
+            var userMode = new  User.titleModel();
+            userMode.title = i==0?'科大讯飞':'阿里巴巴集团';
+            userMode.detail = i==0?'2015-11-24~2017-08-08':'2017-11-24~2018-08-08';
+            userMode.id = i ==0?'666':'888';
+            workListArr.push(userMode);
+        }
+        model.data = workListArr;
+        model.code = 0;
+        model.msg = '请求成功'
+    }else {
+        model.msg = '请先登录';
+    }
+    res.send(JSON.stringify(model));
+})
 
 /* 获取用户信息*/
 router.get('/getUserInfo', function(req, res, next) {
@@ -51,6 +103,7 @@ router.get('/getUserInfo', function(req, res, next) {
         var userMode = new  User.titleModel();
         userMode.title = i==0?'科大讯飞':'阿里巴巴集团';
         userMode.detail = i==0?'2015-11-24~2017-08-08':'2017-11-24~2018-08-08';
+        userMode.id = i ==0?'666':'888';
         workArr.push(userMode);
     }
 
@@ -59,6 +112,7 @@ router.get('/getUserInfo', function(req, res, next) {
           var userMode = new  User.titleModel();
           userMode.title = i==0?'安徽大学':'潜山中学';
           userMode.detail = i==0?'2011-09-01~2015-07-01':'2008-09-01~2011-07-01';
+          userMode.id = i ==0?'666':'888';
           educationArr.push(userMode);
       }
 

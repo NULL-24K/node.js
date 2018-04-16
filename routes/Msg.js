@@ -4,6 +4,4 @@
 function Msg() {
     this.age;
 }
-
-
 module.exports = Msg;
