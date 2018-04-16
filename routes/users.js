@@ -6,6 +6,8 @@ var Msg = require('./Msg');
 var ResModel = require('./responseModel');
 var util = require('./util');
 
+var db = require("./dataBase/db");
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');

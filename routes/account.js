@@ -8,6 +8,7 @@ var router = express.Router();
 var URL = require('url');
 var ResModel = require('./responseModel');
 var util = require('./util');
+var db = require('./dataBase/db')
 
 /*用户登录*/
 router.post('/Login',function(req,res,next) {
@@ -25,16 +26,28 @@ router.post('/Login',function(req,res,next) {
     }else if(params.psd.length > 20){
         model.msg = '密码不能大于20位';
     }else {
-        //.此处判断用户是否注册过
-        if (params.phoneNum == '13095515908'){
-            model.data = {token:'123456789'}
-            model.code = 0;
-            model.msg = '登录成功'
-        }else{
-            model.code = 0;
-            model.msg = '注册成功';
-            model.data = {token:'88888888'}
-        }
+        var sql = "select * from account" +" where phone = '"+ params.phoneNum +"'";
+        sql.replace("and","where");
+        db.query(sql, function (err, rows) {
+            console.log(rows?'存在':'不存在');
+            console.log(rows.length);
+            console.log(rows[0].phone);
+            if (err){
+                model.msg = '网络异常 请稍后再试'
+            }else {
+                //.此处判断用户是否注册过
+                if(rows.length ==1){
+                    model.data = {token:'123456789'}
+                    model.code = 0;
+                    model.msg = '登录成功'
+                }else {
+                    //.没有注册过 生成一条用户账户信息
+                    model.code = 0;
+                    model.msg = '注册成功';
+                    model.data = {token:'88888888'}
+                }
+            }
+        })
     }
     res.send(JSON.stringify(model));
 })
