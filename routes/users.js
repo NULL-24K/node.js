@@ -87,6 +87,10 @@ router.post('/workList',function (req,res,next) {
 /* 获取用户信息*/
 router.get('/getUserInfo', function(req, res, next) {
 
+    util.db_add('account',{'phone':'18800008888','uuid':'9999'},function (isSuccess) {
+        console.log(isSuccess +'###')
+    });
+
   var model = new ResModel();
 
   var user_ = new User.userInfo();

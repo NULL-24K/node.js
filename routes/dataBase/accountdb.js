@@ -13,6 +13,30 @@ var db = require("./db.js");
 
 
 
+function db_add(table,obj,callback) {
+
+    var keyStr = '(';
+    var valueStr = '(';
+    var keyArr = Object.keys(obj);
+    for(var i=0 ; i < keyArr.length;i ++){
+        var key = keyArr[i];
+        var addStr = i==keyArr.length-1?')':',';
+        keyStr += key +addStr;
+        valueStr += obj[key] + addStr;
+    }
+    var sql = "insert into "+table+keyStr +' values' +valueStr;
+    console.log(sql_)
+
+    db.query(sql,function (err,rows) {
+        if (err){
+            callback(false)
+        }else {
+            callback(true)
+        }
+    })
+}
+
+
 
 /**
  * 查询列表页
