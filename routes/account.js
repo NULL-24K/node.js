@@ -28,6 +28,7 @@ router.post('/Login',function(req,res,next) {
         model.msg = '密码不能大于20位';
     }else {
         isAsync = true;
+        //.这里还要判断验证码是否正确***
         db.Account.findOne({
             where: {
                 phoneNum:params.phoneNum

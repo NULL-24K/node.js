@@ -117,6 +117,14 @@ router.get('/getUserInfo', function(req, res, next) {
     // }).catch(function (err) {
     //
     // })
+    var sqlInfo = {where:{
+        uuid:req.headers.token
+    }}
+    db.User.findOne(sqlInfo).then(function (res) {
+
+    }).catch(function (err) {
+
+    })
 
   var model = new ResModel();
 

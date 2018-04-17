@@ -25,6 +25,15 @@ module.exports = function(sequelize,DataTypes){
             unique:true,
             allowNull:false,
             defaultValue:DataTypes.UUIDV4,
+        },
+        /*绑定ID
+        * 1.每个用户都会携带一个绑定ID(初始值都是默认值) 当该用户发起分享时 会将该ID携带给被邀请者
+        * 被邀请者进行注册时 会将该bindingId替换为邀请者携带的ID
+        * 2.如果某位用户是管理员 则会为该用户生成一个唯一的bindingId 且该用户与之前所有的分享和被分享关系全部清空
+        * */
+        bindingId:{
+            type:DataTypes.STRING,
+            allowNull:true
         }
     },{
         freezeTableName: true

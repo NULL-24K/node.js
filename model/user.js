@@ -5,22 +5,56 @@
 module.exports = function(sequelize,DataTypes){
     var User = sequelize.define('user',{ // 表里的具体字段
         id:{
-            type:DataTypes.UUID,
+            type:DataTypes.INTEGER,
             primaryKey:true,
             allowNull:false,
-            defaultValue:DataTypes.UUIDV1
+            autoIncrement:true
+        },
+        uuid:{
+            type:DataTypes.STRING,
+            unique:true
+        },
+        iconUrl:{
+          type:DataTypes.STRING
+        },
+        nickName:{
+            type:DataTypes.STRING
+        },
+        sex:{
+            type:DataTypes.INTEGER
+        },
+        phoneNum:{
+            type:DataTypes.STRING
+        },
+        jobIntenview:{
+          type:DataTypes.STRING
+        },
+        jobExpress:{
+          type:DataTypes.JSON
+        },
+        educations:{
+          type:DataTypes.JSON
+        },
+        email:{
+            type:DataTypes.STRING
+        },
+        birthday:{
+            type:DataTypes.STRING
+        },
+        education:{
+            type:DataTypes.STRING
+        },
+        endEducationTime:{
+            type:DataTypes.STRING
+        },
+        workExpressTimes:{
+            type:DataTypes.INTEGER
+        },
+        address:{
+            type:DataTypes.STRING
         },
         name:{
             type:DataTypes.STRING
-        },
-        age:{
-            type:DataTypes.INTEGER
-        },
-        height:{
-            type:DataTypes.INTEGER
-        },
-        weight:{
-            type:DataTypes.INTEGER
         }
     },{
         freezeTableName: true
