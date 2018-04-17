@@ -2,7 +2,7 @@
  * Created by chubin on 2018/4/11.
  */
 
-var db = require('./dataBase/db');
+var db = require('../sqldb');
 
 function isPhoneNum(phoneNum) {
     var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;

@@ -7,10 +7,10 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var mytext = require('./routes/myTest');
 var account = require('./routes/account');
 var jobs = require('./routes/jobs');
 var apply = require('./routes/apply');
+var sqldb = require('./sqldb');
 
 var app = express();
 
@@ -47,6 +47,12 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+sqldb.sequelize.sync({force: false}).then(function() {
+  console.log("Server successed to start");
+}).catch(function(err){
+  console.log("Server failed to start due to error: %s", err);
 });
 
 module.exports = app;

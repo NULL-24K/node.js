@@ -5,8 +5,8 @@ var URL = require('url');
 var Msg = require('./Msg');
 var ResModel = require('./responseModel');
 var util = require('./util');
-
-var db = require("./dataBase/db");
+var db = require('../sqldb');
+var xxx = require('sequelize');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -87,9 +87,36 @@ router.post('/workList',function (req,res,next) {
 /* 获取用户信息*/
 router.get('/getUserInfo', function(req, res, next) {
 
-    util.db_add('account',{'phone':'18800008888','uuid':'9999'},function (isSuccess) {
-        console.log(isSuccess +'###')
-    });
+    // var saveUser = {
+    //     name:'储彬',
+    //     age:'24',
+    //     height:'180',
+    //     weight:'70'
+    // };
+    // return db.sequelize.transaction(function (t) {
+    //     return db.User.create(saveUser, {
+    //         transaction:t
+    //     }).then(function (result) {
+    //         console.log(result);
+    //     }).catch(function (err) {
+    //         console.log('错误'+err)
+    //     });
+    // })
+
+    // db.Account.findOne({
+    //     where: {
+    //         phoneNum:'13095515908'
+    //     }
+    // }).then(function (result) {
+    //     console.log(result.dataValues)
+    //     if (result && result.dataValues.length > 0){
+    //
+    //     }else {
+    //
+    //     }
+    // }).catch(function (err) {
+    //
+    // })
 
   var model = new ResModel();
 
