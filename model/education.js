@@ -46,6 +46,6 @@ module.exports = function(sequelize,DataTypes){
     },{
         freezeTableName: true
     });
-    // Account.sync({force:true})
+    // Education.sync({force:true})
     return Education;
 };

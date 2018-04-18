@@ -38,6 +38,6 @@ module.exports = function(sequelize,DataTypes){
     },{
         freezeTableName: true
     });
-    // Account.sync({force:true})
+    // JobIntention.sync({force:true})
     return JobIntention;
 };

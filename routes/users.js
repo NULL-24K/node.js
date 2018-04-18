@@ -53,7 +53,7 @@ router.post('/workExperience',function (req,res,next) {
             model.msg = '请求成功';
             model.code = 0;
             if (result && result.dataValues){
-                console.log(result.dataValues)
+
                 
             }else {
 
@@ -71,13 +71,31 @@ router.post('/workExperience',function (req,res,next) {
             endTime:req.body.endTime,
             jobDescribe:req.body.jobDescribe,
         }
-        if(req.body.jobExprienceId){
+        if(req.body.jobExprienceId && req.body.jobExprienceId.length > 0){
             jobExprienceSql['jobExprienceId'] = req.body.jobExprienceId
         }
         db.JobExperience.upsert(jobExprienceSql).then(function (result) {
             model.code = 0;
             model.msg = '提交成功'
             res.send(JSON.stringify(model));
+            //.更新User表中jobExpress字段
+            db.JobExperience.findAll({where:{uuid:req.headers.token}}).then(function (resul) {
+                if(resul){
+                    var jobsArr = [];
+                    for(var i=0;i < resul.length;i ++){
+                        var obj = {title:resul[i].dataValues.companyName,detail:resul[i].dataValues.startTime,
+                            id:resul[i].dataValues.jobExprienceId}
+                        jobsArr.push(obj);
+                    }
+                    var jobexreienceSql = {
+                        uuid:req.headers.token,
+                        jobExpress:JSON.stringify(jobsArr)
+                    }
+                    db.User.upsert(jobexreienceSql);
+                }
+            }).catch(function (err) {
+                console.log(err +'||')
+            })
         }).catch(function (err) {
             res.send(JSON.stringify(model));
         })
@@ -110,31 +128,12 @@ router.post('/workExperience',function (req,res,next) {
 /*工作经历list*/
 router.post('/workList',function (req,res,next) {
 
-    var workListArr = new  Array();
-    for (var i = 0 ; i < 2 ; i ++){
-        var userMode = new  User.titleModel();
-        userMode.title = i==0?'科大讯飞':'阿里巴巴集团';
-        userMode.detail = i==0?'2015-11-24~2017-08-08':'2017-11-24~2018-08-08';
-        userMode.id = i ==0?'666':'888';
-        workListArr.push(userMode);
-    }
-    model.data = workListArr;
-    // if(req.headers.token && req.headers.token.length >0){
-    //     var workListArr = new  Array();
-    //     for (var i = 0 ; i < 2 ; i ++){
-    //         var userMode = new  User.titleModel();
-    //         userMode.title = i==0?'科大讯飞':'阿里巴巴集团';
-    //         userMode.detail = i==0?'2015-11-24~2017-08-08':'2017-11-24~2018-08-08';
-    //         userMode.id = i ==0?'666':'888';
-    //         workListArr.push(userMode);
-    //     }
-    //     model.data = workListArr;
-    //     model.code = 0;
-    //     model.msg = '请求成功'
-    // }else {
-    //     model.msg = '请先登录';
-    // }
-    // res.send(JSON.stringify(model));
+    db.JobExperience.findAll({where:{uuid:req.headers.token}}).then(function (ress) {
+        console.log(ress +'&&&')
+    }).catch(function (err) {
+
+    })
+
 })
 
 /* 获取用户信息*/

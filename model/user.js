@@ -63,6 +63,6 @@ module.exports = function(sequelize,DataTypes){
         freezeTableName: true
     });
     //.同步数据模型到数据库
-  //  User.sync({force: true});
+    //User.sync({force: true});
     return User;
 };

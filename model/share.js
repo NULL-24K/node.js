@@ -27,6 +27,6 @@ module.exports = function(sequelize,DataTypes){
     },{
         freezeTableName: true
     });
-   // Account.sync({force:true})
+   // Share.sync({force:true})
     return Share;
 };
