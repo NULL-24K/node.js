@@ -12,5 +12,10 @@ var db = {
 };
 
 db.User = db.sequelize.import('../model/user'); // 引入model 数据user表
-db.Account = db.sequelize.import('../model/account')
+db.Account = db.sequelize.import('../model/account');
+db.Education = db.sequelize.import('../model/education');
+db.Share = db.sequelize.import('../model/share');
+db.JobExperience = db.sequelize.import('../model/jobExperience');
+db.JobIntention = db.sequelize.import('../model/jobIntention')
+
 module.exports = db; //通过common.js 来导出

@@ -48,16 +48,21 @@ module.exports = function(sequelize,DataTypes){
             type:DataTypes.STRING
         },
         workExpressTimes:{
-            type:DataTypes.INTEGER
+            type:DataTypes.STRING
         },
         address:{
             type:DataTypes.STRING
         },
         name:{
             type:DataTypes.STRING
+        },
+        advantage:{
+            type:DataTypes.STRING
         }
     },{
         freezeTableName: true
     });
+    //.同步数据模型到数据库
+  //  User.sync({force: true});
     return User;
 };

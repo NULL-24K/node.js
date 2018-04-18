@@ -31,7 +31,13 @@ function db_add(table,obj,callback) {
     })
 }
 
+function workStatusENUM(status) {
+    var statusObj = ['正在找工作-随时到岗', '在职-正在考虑换工作', '在职-考虑更好的工作机会', '在职-暂无跳槽意向'];
+    return statusObj[status];
+}
+
 module.exports = {
     _isPhoneNum:isPhoneNum,
-    db_add:db_add
+    db_add:db_add,
+    workStatusENUM:workStatusENUM
 }

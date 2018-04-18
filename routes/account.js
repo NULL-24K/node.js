@@ -36,16 +36,25 @@ router.post('/Login',function(req,res,next) {
         }).then(function (result) {
             //.此处判断用户是否注册过
             if (result && result.dataValues){
-                model.data = {token:result.dataValues.token}
+                model.data = {token:result.dataValues.token,shareId:result.dataValues.shareId}
                 model.code = 0;
                 model.msg = '登录成功'
                 res.send(JSON.stringify(model));
             }else {
                 var saveInfo = {phoneNum:params.phoneNum}
                 db.Account.create(saveInfo).then(function (result) {
+                    //.如果该用户携带了shareID 插入share表中
+                    if (params.shareId && params.shareId != 'goldbee'){
+                        var shareSql = {shareID:params.shareId,uuid:result.dataValues.uuid}
+                        db.Share.create({}).then(function (res) {
+                            console.log('添加shareID成功')
+                        }).catch(function (err) {
+
+                        })
+                    }
                     model.code = 0;
                     model.msg = '注册成功';
-                    model.data = {token:result.dataValues.token}
+                    model.data = {token:result.dataValues.token,shareId:result.dataValues.shareId}
                     res.send(JSON.stringify(model));
                 }).catch(function (err) {
                     console.log(err )

@@ -4,7 +4,7 @@
 var util = require('./util');
 function ResModel() {
     this.data;
-    this.msg = '请求成功';
+    this.msg = '网络异常 请重试';
     this.code = 1;
 }
 

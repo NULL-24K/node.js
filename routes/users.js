@@ -39,138 +39,161 @@ router.post('/education',function (req,res,next) {
 
 /*工作经历*/
 router.post('/workExperience',function (req,res,next) {
-    var model = new ResModel();
-    if(req.headers.token.length > 0){
-        if(req.body.type == 0){//按照id来获取信息
 
-            var resData = {
-                companyName:'科大讯飞',
-                jobName:'项目经理',
-                startTime:'2014-8-8',
-                endTime:'2018-3-6',
-                jobDescribe:'这个工作其实很简单...'
-            }
-            model.data = resData;
-            model.code = 0;
-            model.msg = '请求成功'
-        }else {//.提交
-            model.code = 0;
-            model.msg = '提交成功';
-        }
-    }else {
-        model.msg = '请先登录'
+
+    var model = new ResModel();
+    if (!req.headers.token || req.headers.token.length == 0){
+        model.msg = '该用户尚未登录';
+        res.send(JSON.stringify(model));
+        return;
     }
-    res.send(JSON.stringify(model));
+    if(req.body.type == 0){
+        console.log('获取')
+        db.JobExperience.findOne({where:{uuid:req.headers.token}}).then(function (result) {
+            model.msg = '请求成功';
+            model.code = 0;
+            if (result && result.dataValues){
+                console.log(result.dataValues)
+                
+            }else {
+
+            }
+            res.send(JSON.stringify(model));
+        }).catch(function (err) {
+            res.send(JSON.stringify(model));
+        })
+    }else {
+        var jobExprienceSql = {
+            uuid:req.headers.token,
+            companyName:req.body.companyName,
+            jobName:req.body.jobName,
+            startTime:req.body.startTime,
+            endTime:req.body.endTime,
+            jobDescribe:req.body.jobDescribe,
+        }
+        if(req.body.jobExprienceId){
+            jobExprienceSql['jobExprienceId'] = req.body.jobExprienceId
+        }
+        db.JobExperience.upsert(jobExprienceSql).then(function (result) {
+            model.code = 0;
+            model.msg = '提交成功'
+            res.send(JSON.stringify(model));
+        }).catch(function (err) {
+            res.send(JSON.stringify(model));
+        })
+    }
+
+    // var model = new ResModel();
+    // if(req.headers.token.length > 0){
+    //     if(req.body.type == 0){//按照id来获取信息
+    //
+    //         var resData = {
+    //             companyName:'科大讯飞',
+    //             jobName:'项目经理',
+    //             startTime:'2014-8-8',
+    //             endTime:'2018-3-6',
+    //             jobDescribe:'这个工作其实很简单...'
+    //         }
+    //         model.data = resData;
+    //         model.code = 0;
+    //         model.msg = '请求成功'
+    //     }else {//.提交
+    //         model.code = 0;
+    //         model.msg = '提交成功';
+    //     }
+    // }else {
+    //     model.msg = '请先登录'
+    // }
+    // res.send(JSON.stringify(model));
 })
 
 /*工作经历list*/
 router.post('/workList',function (req,res,next) {
-    var model = new ResModel();
-    if(req.headers.token && req.headers.token.length >0){
-        var workListArr = new  Array();
-        for (var i = 0 ; i < 2 ; i ++){
-            var userMode = new  User.titleModel();
-            userMode.title = i==0?'科大讯飞':'阿里巴巴集团';
-            userMode.detail = i==0?'2015-11-24~2017-08-08':'2017-11-24~2018-08-08';
-            userMode.id = i ==0?'666':'888';
-            workListArr.push(userMode);
-        }
-        model.data = workListArr;
-        model.code = 0;
-        model.msg = '请求成功'
-    }else {
-        model.msg = '请先登录';
-    }
-    res.send(JSON.stringify(model));
-})
 
-/* 获取用户信息*/
-router.get('/getUserInfo', function(req, res, next) {
-
-    // var saveUser = {
-    //     name:'储彬',
-    //     age:'24',
-    //     height:'180',
-    //     weight:'70'
-    // };
-    // return db.sequelize.transaction(function (t) {
-    //     return db.User.create(saveUser, {
-    //         transaction:t
-    //     }).then(function (result) {
-    //         console.log(result);
-    //     }).catch(function (err) {
-    //         console.log('错误'+err)
-    //     });
-    // })
-
-    // db.Account.findOne({
-    //     where: {
-    //         phoneNum:'13095515908'
-    //     }
-    // }).then(function (result) {
-    //     console.log(result.dataValues)
-    //     if (result && result.dataValues.length > 0){
-    //
-    //     }else {
-    //
-    //     }
-    // }).catch(function (err) {
-    //
-    // })
-    var sqlInfo = {where:{
-        uuid:req.headers.token
-    }}
-    db.User.findOne(sqlInfo).then(function (res) {
-
-    }).catch(function (err) {
-
-    })
-
-  var model = new ResModel();
-
-  var user_ = new User.userInfo();
-
-   var params = URL.parse(req.url, true).query;
-   if (!req.headers.token || req.headers.token.length == 0){
-     model.msg = '该用户尚未登录';
-     res.send(JSON.stringify(model));
-     return;
-   }
-
-    var workArr = new Array();
+    var workListArr = new  Array();
     for (var i = 0 ; i < 2 ; i ++){
         var userMode = new  User.titleModel();
         userMode.title = i==0?'科大讯飞':'阿里巴巴集团';
         userMode.detail = i==0?'2015-11-24~2017-08-08':'2017-11-24~2018-08-08';
         userMode.id = i ==0?'666':'888';
-        workArr.push(userMode);
+        workListArr.push(userMode);
+    }
+    model.data = workListArr;
+    // if(req.headers.token && req.headers.token.length >0){
+    //     var workListArr = new  Array();
+    //     for (var i = 0 ; i < 2 ; i ++){
+    //         var userMode = new  User.titleModel();
+    //         userMode.title = i==0?'科大讯飞':'阿里巴巴集团';
+    //         userMode.detail = i==0?'2015-11-24~2017-08-08':'2017-11-24~2018-08-08';
+    //         userMode.id = i ==0?'666':'888';
+    //         workListArr.push(userMode);
+    //     }
+    //     model.data = workListArr;
+    //     model.code = 0;
+    //     model.msg = '请求成功'
+    // }else {
+    //     model.msg = '请先登录';
+    // }
+    // res.send(JSON.stringify(model));
+})
+
+/* 获取用户信息*/
+router.get('/getUserInfo', function(req, res, next) {
+    if (!req.headers.token || req.headers.token.length == 0){
+        model.msg = '该用户尚未登录';
+        res.send(JSON.stringify(model));
+        return;
     }
 
-    var  educationArr = new  Array;
-      for (var i = 0 ; i < 2 ; i ++){
-          var userMode = new  User.titleModel();
-          userMode.title = i==0?'安徽大学':'潜山中学';
-          userMode.detail = i==0?'2011-09-01~2015-07-01':'2008-09-01~2011-07-01';
-          userMode.id = i ==0?'666':'888';
-          educationArr.push(userMode);
-      }
+    var sqlInfo = {where:{
+        uuid:req.headers.token
+    }}
+    var model = new ResModel();
+    db.User.findOne(sqlInfo).then(function (result) {
+        model.code = 0;
+        model.msg = '请求成功'
+        if(result && result.dataValues){
+            var user_ = new User.userInfo();
+            var workArr = new Array();
+            var Arr = JSON.parse(result.dataValues.jobExpress)
+            if(Arr){
+                for (var i = 0 ; i < Arr.length; i ++){
+                    var userMode = new  User.titleModel();
+                    userMode.title = Arr[i].title;
+                    userMode.detail = Arr[i].detail;
+                    userMode.id = Arr[i].id;
+                    workArr.push(userMode);
+                }
+            }
 
-    user_.name = "储彬";
-    user_.age = "24";
-    user_.education = "本科";
-    user_.phoneNum ="13095515908";
-    user_.iconUrl = "http://pic29.photophoto.cn/20131204/0034034499213463_b.jpg";
-    user_.sex = "男";
-    user_.workIntention = 'iOS/web前端';
-    user_.advantage = '本人性格开朗,代码习惯良好';
-    user_.workExperienceList = workArr;
-    user_.educationList = educationArr;
-    user_.workYears = '5年以上'
-    model.msg = '请求成功';
-    model.code = 0;
-    model.data = user_;
-    res.send(JSON.stringify(model));
-
+            var  educationArr = new  Array;
+            var Arr_ = JSON.parse(result.dataValues.educations)
+            if(Arr_){
+                for (var i = 0 ; i < Arr_.length ; i ++){
+                    var userMode = new  User.titleModel();
+                    userMode.title = Arr_[i].title;
+                    userMode.detail = Arr_[i].detail;
+                    userMode.id = Arr_[i].id;
+                    educationArr.push(userMode);
+                }
+            }
+            user_.name = result.dataValues.nickName;
+            user_.education = result.dataValues.education;
+            user_.phoneNum =result.dataValues.phoneNum;
+            user_.iconUrl = result.dataValues.iconUrl;
+            user_.sex = result.dataValues.sex == 0?'女':'男';
+            user_.workIntention = result.dataValues.jobIntenview;
+            user_.advantage = result.dataValues.advantage;
+            user_.workExperienceList = workArr;
+            user_.educationList = educationArr;
+            user_.workYears = result.dataValues.workExpressTimes;
+            model.data = user_;
+        }
+        res.send(JSON.stringify(model));
+    }).catch(function (err) {
+        console.log((err))
+        res.send(JSON.stringify(model));
+    })
 });
 
 /*求职意向*/
@@ -178,65 +201,116 @@ router.post('/jobIntention',function(req,res,next) {
     var model = new  ResModel();
     if (!req.headers.token || req.headers.token.length == 0){
         model.msg = '请登录'
+        res.send(JSON.stringify(model));
     }else {
-        var intentionInfo = new User.jobIntention();
         if (req.body.type == 0){
-            /*期望工作地点*/
-            intentionInfo.intentionAddress ='上海市-浦东新区-唐镇';
-            /*期望行业*/
-            intentionInfo.intentionIndustry ='IT/通信/电子/互联网';
-            /*期望职位*/
-            intentionInfo.intentionPosition ='催收';
-            /*期望薪资*/
-            intentionInfo.intentionSalary ='24000~30000';
-            /*求职状态*/
-            intentionInfo.jobState ='在职-考虑更好的工作机会';
-            model.code = 0;
-            model.msg = '请求成功';
-            model.data = intentionInfo;
+            //.获取工作经验信息
+            db.JobIntention.findOne({where:{uuid:req.headers.token}}).then(function (result) {
+                model.code = 0;
+                model.msg = '请求成功';
+                if (result && result.dataValues){
+                    var intentionInfo = new User.jobIntention();
+                    /*期望工作地点*/
+                    intentionInfo.intentionAddress =result.dataValues.intentionAddress;
+                    /*期望行业*/
+                    intentionInfo.intentionIndustry =result.dataValues.intentionIndustry;
+                    /*期望职位*/
+                    intentionInfo.intentionPosition =result.dataValues.intentionPosition;
+                    /*期望薪资*/
+                    intentionInfo.intentionSalary =result.dataValues.intentionSalary;
+                    /*求职状态*/
+                    intentionInfo.jobState = util.workStatusENUM(result.dataValues.jobState);
+                    model.data = intentionInfo;
+                }else {
 
+                }
+                res.send(JSON.stringify(model));
+            }).catch(function (err) {
+                res.send(JSON.stringify(model));
+            })
         }else {
-            model.code =0;
-            model.msg = '上传成功'
+            var intentionSql = {
+                intentionAddress:req.body.intentionAddress,
+                intentionIndustry:req.body.intentionIndustry,
+                intentionPosition:req.body.intentionPosition,
+                intentionSalary:req.body.intentionSalary,
+                jobState:req.body.jobState,
+                uuid:req.headers.token
+            }
+            db.JobIntention.upsert(intentionSql).then(function (result) {
+                model.code =0;
+                model.msg = '上传成功'
+                res.send(JSON.stringify(model))
+            }).catch(function (err) {
+                console.log(err+'错误')
+              res.send(JSON.stringify(model))
+            })
+            //.此时 修改user表中求职意向数据
+            db.User.upsert({uuid:req.headers.token,jobIntenview:req.body.intentionPosition});
         }
     }
-
-    res.send(JSON.stringify(model));
 });
 
 /*个人信息 type:0为获取信息 其他为提交*/
 router.post('/persionInfo',function(req,res,next) {
-
-  var model = new ResModel();
-  if (!req.headers.token || req.headers.token.length == 0){
-    model.msg = '该用户尚未登录';
-  }else {
+    var model = new ResModel();
+    if (!req.headers.token || req.headers.token.length == 0){
+        model.msg = '该用户尚未登录';
+        res.send(JSON.stringify(model));
+    }
     var _info = new User.persionInfo();
     if (req.body.type == 0){//.获取信息
-      _info.iconUrl = 'http://pic29.photophoto.cn/20131204/0034034499213463_b.jpg';
-      _info.nickName = '独孤求败';
-      _info.sex = '男';
-      _info.phoneNum = '13095515908';
-      _info.emaill = '1182513617@qq.com';
-      _info.birthday = '1990-06-28';
-      _info.education = '本科';
-      _info.endEducationTime = '2014-07-01';
-      _info.workYears = '5年以上';
-      _info.address = '上海市-浦东新区-张江';
-      model.data = [[_info.iconUrl,_info.nickName,_info.sex],
+        
+        db.User.findOne({where:{uuid:req.headers.token}}).then(function (result) {
+            model.code = 0;
+            model.msg = '请求成功';
+            if (result && result.dataValues){
+                _info.iconUrl = result.dataValues.iconUrl;
+                _info.nickName = result.dataValues.nickName;
+                _info.sex = result.dataValues.sex ==0?'女':'男';
+                _info.phoneNum = result.dataValues.phoneNum;
+                _info.emaill = result.dataValues.email;
+                _info.birthday = result.dataValues.birthday;
+                _info.education = result.dataValues.education;
+                _info.endEducationTime = result.dataValues.endEducationTime;
+                _info.workYears = result.dataValues.workExpressTimes;
+                _info.address = result.dataValues.address;
+                model.data = [[_info.iconUrl,_info.nickName,_info.sex],
                     [_info.phoneNum,_info.emaill],
                     [_info.birthday,_info.education,_info.endEducationTime,_info.workYears,_info.address]];
-      model.code = 0;
+            }else {
+
+            }
+            res.send(JSON.stringify(model));
+        }).catch(function (err) {
+            res.send(JSON.stringify(model))
+        })
     }else {//上传信息
         //.对上传的信息做校验
+        console.log('上传')
+        var sql = {
+            uuid:req.headers.token,
+            iconUrl:req.body.iconUrl,
+            nickName:req.body.nickName,
+            sex:req.body.sex == '男'?1:0,
+            phoneNum:req.body.phoneNum,
+            emaill:req.body.emaill,
+            birthday:req.body.birthday,
+            education:req.body.education,
+            endEducationTime:req.body.endEducationTime,
+            workExpressTimes:req.body.workYears,
+            address:req.body.address
+        }
+        db.User.upsert(sql).then(function (result) {
+            model.msg = '上传成功';
+            model.code = 0;
+            res.send(JSON.stringify(model));
+        }).catch(function (err) {
+            console.log(err)
+            res.send(JSON.stringify(model));
+        })
 
-        model.code = 0;
-        model.msg = '上传成功';
     }
-  }
-
-  res.send(JSON.stringify(model));
-
 });
 
 
