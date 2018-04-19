@@ -15,25 +15,74 @@ router.get('/', function(req, res, next) {
 
 router.post('/education',function (req,res,next) {
     var  model = new ResModel();
-    if (req.headers.token.length > 0){
-
-        var educationInfo = {
-            startTime:'2010-09-01',
-            endTime:'2014-07-01',
-            school:'清华大学',
-            specialize:'计算机科学与技术',
-            diploma:'本科',
-            id:'999'
-        }
-        model.code = 0;
-        model.msg = '请求成功';
-        model.data = educationInfo;
-
-    }else {
+    if(!req.headers.token|| req.headers.token.length == 0){
         model.msg = '请登录'
+        res.send(JSON.stringify(model));
+        return;
+    }
+    // if(!req.body.educationId || req.body.educationId.length ==0){
+    //     model.code =0;
+    //     model.msg ='';
+    //     res.send(JSON.stringify(model));
+    // }r
+    if (req.body.type == 0){
+        db.Education.findOne({where:{educationId:req.body.educationId}}).then(function (result) {
+            model.code = 0;
+            model.msg = '请求成功'
+            if (result){
+                var  educationInfo = {
+                    startTime:result.dataValues.startTime,
+                    endTime:result.dataValues.endTime,
+                    school:result.dataValues.schoolName,
+                    specialize:result.dataValues.department,
+                    diploma:result.dataValues.doploma,
+                    educationId:result.dataValues.educationId
+                }
+                model.data = educationInfo
+            }
+            res.send(JSON.stringify(model));
+        }).catch(function (err) {
+            res.send(JSON.stringify(model));
+        })
+    }else {
+        var educationSql = {
+            uuid:req.headers.token,
+            startTime:req.body.startTime,
+            endTime:req.body.endTime,
+            schoolName:req.body.school,
+            department:req.body.specialize,
+            doploma:req.body.diploma
+        }
+        if(req.body.educationId && req.body.educationId.length >0){
+            educationSql['educationId'] = req.body.educationId
+        }
+        db.Education.upsert(educationSql).then(function (result) {
+            model.code = 0;
+            model.msg = '上传成功'
+            res.send(JSON.stringify(model));
+            //.此时 查询教育信息 并更新User表中教育信息字段
+            db.Education.findAll({where:{uuid:req.headers.token}}).then(function (resul) {
+                if(resul){
+                    var educationsArr = [];
+                    for(var i=0;i < resul.length;i ++){
+                        var obj = {title:resul[i].dataValues.schoolName,detail:resul[i].dataValues.doploma,
+                            id:resul[i].dataValues.educationId}
+                        educationsArr.push(obj);
+                    }
+                    var educationSql = {
+                        uuid:req.headers.token,
+                        jobExpress:JSON.stringify(educationsArr)
+                    }
+                    db.User.upsert(educationSql);
+                }
+            }).catch(function (err) {
+                console.log(err )
+            })
+        }).catch(function (err) {
+            res.send(JSON.stringify(model));
+        })
     }
 
-    res.send(JSON.stringify(model));
 })
 
 
@@ -47,16 +96,26 @@ router.post('/workExperience',function (req,res,next) {
         res.send(JSON.stringify(model));
         return;
     }
+    if(!req.body.jobExprienceId || req.body.jobExprienceId.length == 0){
+        model.msg = '';
+        model.code =0;
+        res.send(JSON.stringify(model));
+        return;
+    }
     if(req.body.type == 0){
-        console.log('获取')
-        db.JobExperience.findOne({where:{uuid:req.headers.token}}).then(function (result) {
+        db.JobExperience.findOne({where:{jobExprienceId:req.body.jobExprienceId}}).then(function (result) {
             model.msg = '请求成功';
             model.code = 0;
-            if (result && result.dataValues){
-
-                
+            if (result){
+                var resObj = {
+                    companyName:result.dataValues.companyName,
+                    jobName:result.dataValues.jobName,
+                    startTime:result.dataValues.startTime,
+                    endTime:result.dataValues.endTime,
+                    jobDescribe:result.dataValues.jobDescribe
+                }
+                model.data = resObj
             }else {
-
             }
             res.send(JSON.stringify(model));
         }).catch(function (err) {
@@ -100,40 +159,36 @@ router.post('/workExperience',function (req,res,next) {
             res.send(JSON.stringify(model));
         })
     }
-
-    // var model = new ResModel();
-    // if(req.headers.token.length > 0){
-    //     if(req.body.type == 0){//按照id来获取信息
-    //
-    //         var resData = {
-    //             companyName:'科大讯飞',
-    //             jobName:'项目经理',
-    //             startTime:'2014-8-8',
-    //             endTime:'2018-3-6',
-    //             jobDescribe:'这个工作其实很简单...'
-    //         }
-    //         model.data = resData;
-    //         model.code = 0;
-    //         model.msg = '请求成功'
-    //     }else {//.提交
-    //         model.code = 0;
-    //         model.msg = '提交成功';
-    //     }
-    // }else {
-    //     model.msg = '请先登录'
-    // }
-    // res.send(JSON.stringify(model));
 })
 
 /*工作经历list*/
 router.post('/workList',function (req,res,next) {
 
-    db.JobExperience.findAll({where:{uuid:req.headers.token}}).then(function (ress) {
-        console.log(ress +'&&&')
+    var model = new ResModel();
+    if (!req.headers.token || req.headers.token.length == 0){
+        model.msg = '该用户尚未登录';
+        res.send(JSON.stringify(model));
+        return;
+    }
+    db.JobExperience.findAll({where:{uuid:req.headers.token}}).then(function (resul) {
+        model.code = 0;
+        model.msg = '请求成功'
+        if(resul) {
+            var jobsArr = [];
+            for (var i = 0; i < resul.length; i++) {
+                var obj = {
+                    title: resul[i].dataValues.companyName,
+                    detail: resul[i].dataValues.startTime,
+                    jobExprienceId: resul[i].dataValues.jobExprienceId
+                }
+                jobsArr.push(obj);
+            }
+            model.data = jobsArr;
+        }
+        res.send(JSON.stringify(model))
     }).catch(function (err) {
-
+        res.send(JSON.stringify(model))
     })
-
 })
 
 /* 获取用户信息*/
