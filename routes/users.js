@@ -6,7 +6,7 @@ var Msg = require('./Msg');
 var ResModel = require('./responseModel');
 var util = require('./util');
 var db = require('../sqldb');
-var xxx = require('sequelize');
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -20,11 +20,7 @@ router.post('/education',function (req,res,next) {
         res.send(JSON.stringify(model));
         return;
     }
-    // if(!req.body.educationId || req.body.educationId.length ==0){
-    //     model.code =0;
-    //     model.msg ='';
-    //     res.send(JSON.stringify(model));
-    // }r
+
     if (req.body.type == 0){
         db.Education.findOne({where:{educationId:req.body.educationId}}).then(function (result) {
             model.code = 0;
@@ -71,7 +67,7 @@ router.post('/education',function (req,res,next) {
                     }
                     var educationSql = {
                         uuid:req.headers.token,
-                        jobExpress:JSON.stringify(educationsArr)
+                        educations:JSON.stringify(educationsArr)
                     }
                     db.User.upsert(educationSql);
                 }
@@ -96,12 +92,7 @@ router.post('/workExperience',function (req,res,next) {
         res.send(JSON.stringify(model));
         return;
     }
-    if(!req.body.jobExprienceId || req.body.jobExprienceId.length == 0){
-        model.msg = '';
-        model.code =0;
-        res.send(JSON.stringify(model));
-        return;
-    }
+
     if(req.body.type == 0){
         db.JobExperience.findOne({where:{jobExprienceId:req.body.jobExprienceId}}).then(function (result) {
             model.msg = '请求成功';
@@ -193,6 +184,37 @@ router.post('/workList',function (req,res,next) {
 
 /* 获取用户信息*/
 router.get('/getUserInfo', function(req, res, next) {
+
+
+    // var  addSql = {
+    //     companyName:'腾讯',
+    //     jobName:'软件开发',
+    //     companyImgUrl:'http://pic28.photophoto.cn/20130830/0005018667531249_b.jpg',
+    //     companyDescrie:'牛逼',
+    //     workAddress:'上海市浦东新区唐镇',
+    //     minEducation:'硕士',
+    //     interviewTimes:'03月09日 下午',
+    //     wellArr:JSON.stringify(['五险一金','全款皮肤','定期体检','比赛奖金','季度旅游','美女如云']),
+    //     interViewAddress:'上海市浦东新区',
+    //     jobDescribe:'战争学院是英雄联盟裁决瓦罗兰政治纠纷之地。这里是绝对中立的领土，严禁任何纷争。' +
+    //              '违反者将面对学院的士兵和魔法。学院坐落于一座巨型水晶枢纽之上，由黑曜石、贵金属和魔法塑形而成。它位于' +
+    //             '莫格罗恩关隘的北方入口，刚好位于相互敌对的城邦德玛西亚和诺克萨斯之间。',
+    //     applyNum:8,
+    //     salary:'20~30k',
+    //     minWorkExperience:'5年以上',
+    //     AdministratorId:'123'
+    // }
+    //
+    // db.JobInfo.upsert(addSql).then(function (ress) {
+    //     console.log(ress)
+    //
+    // }).catch(function (err) {
+    //     console.log(err)
+    //
+    // })
+
+
+
     if (!req.headers.token || req.headers.token.length == 0){
         model.msg = '该用户尚未登录';
         res.send(JSON.stringify(model));
