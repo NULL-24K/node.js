@@ -10,22 +10,27 @@ module.exports = function(sequelize,DataTypes){
             allowNull:false,
             autoIncrement:true
         },
+        /*公司名称*/
         companyName:{
             type:DataTypes.STRING,
             allowNull:false,
         },
+        /*职位名称*/
         jobName:{
             type:DataTypes.STRING,
             allowNull:false,
         },
+        /*开始时间*/
         startTime:{
             type:DataTypes.STRING,
             allowNull:false,
         },
+        /*结束时间*/
         endTime:{
             type:DataTypes.STRING,
             allowNull:false,
         },
+        /*工作描述*/
         jobDescribe:{
             type:DataTypes.STRING,
             allowNull:false,
@@ -36,6 +41,7 @@ module.exports = function(sequelize,DataTypes){
             //unique:true,
             allowNull:false,
         },
+        /*工作经验唯一标识符*/
         jobExprienceId:{
             type:DataTypes.UUID,
             unique:true,

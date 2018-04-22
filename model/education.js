@@ -10,18 +10,22 @@ module.exports = function(sequelize,DataTypes){
             allowNull:false,
             autoIncrement:true
         },
+        /*学校*/
         schoolName:{
             type:DataTypes.STRING,
             allowNull:false,
         },
+        /*学历*/
         doploma:{
             type:DataTypes.STRING,
             allowNull:false,
         },
+        /*开始时间*/
         startTime:{
             type:DataTypes.STRING,
             allowNull:false,
         },
+        /*结束时间*/
         endTime:{
             type:DataTypes.STRING,
             allowNull:false,
@@ -37,6 +41,7 @@ module.exports = function(sequelize,DataTypes){
             //unique:true,
             allowNull:false,
         },
+        /*教育经历的唯一标识符*/
         educationId:{
             type:DataTypes.UUID,
             unique:true,

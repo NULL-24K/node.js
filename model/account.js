@@ -9,23 +9,27 @@ module.exports = function(sequelize,DataTypes){
             allowNull:false,
             autoIncrement:true
         },
+        /*手机号码*/
         phoneNum:{
             type:DataTypes.STRING,
             unique:true,
             allowNull:false,
         },
+        /*唯一标识符*/
         uuid:{
             type:DataTypes.UUID,
             unique:true,
             allowNull:false,
             defaultValue:DataTypes.UUIDV1,
         },
+        /*token 用来进行身份验证*/
         token:{
             type:DataTypes.UUID,
             unique:true,
             allowNull:false,
             defaultValue:DataTypes.UUIDV4,
         },
+        /*微信openID 用来进行联合登录*/
         weixinopenId:{
             type:DataTypes.STRING,
             unique:true,

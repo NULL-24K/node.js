@@ -18,5 +18,7 @@ db.Share = db.sequelize.import('../model/share');
 db.JobExperience = db.sequelize.import('../model/jobExperience');
 db.JobIntention = db.sequelize.import('../model/jobIntention');
 db.JobInfo = db.sequelize.import('../model/jobInfo');
+db.Order = db.sequelize.import('../model/order');
+
 
 module.exports = db; //通过common.js 来导出

@@ -11,12 +11,14 @@ var account = require('./routes/account');
 var jobs = require('./routes/jobs');
 var apply = require('./routes/apply');
 var sqldb = require('./sqldb');
+var ejs = require('ejs')
 
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// app.set('views', path.join(__dirname, 'views'));
+app.engine('html',ejs.__express);
+app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

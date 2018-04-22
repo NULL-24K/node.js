@@ -4,5 +4,46 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #999999;
+}
+
+.inputBackSty{
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+
+.titleSty{
+  text-align: center;
+  font-size: 36px;
+  color: #db8621;
+}
+
+.leftImgSty{
+  width: 30px;
+  height:30px;
+  margin-right: 10px;
+}
+
+
+.submitBtnSty{
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 4px;
+  border-color: blueviolet;
+  background-color: darkorange;
+}
+
+.inputSty{
+  font-size: 15px;
+}
+
+.copyRightSty{
+  text-align: center;
+  font-size: 12px;
+  color: #999999;
 }

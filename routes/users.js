@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var User = require('./UserModel.js');
 var URL = require('url');
-var Msg = require('./Msg');
 var ResModel = require('./responseModel');
 var util = require('./util');
 var db = require('../sqldb');
@@ -186,7 +185,7 @@ router.post('/workList',function (req,res,next) {
 router.get('/getUserInfo', function(req, res, next) {
 
 
-    // var  addSql = {
+    //  var  addSql = {
     //     companyName:'腾讯',
     //     jobName:'软件开发',
     //     companyImgUrl:'http://pic28.photophoto.cn/20130830/0005018667531249_b.jpg',
