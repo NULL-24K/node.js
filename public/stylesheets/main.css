@@ -1,0 +1,43 @@
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a{
+    color: blue;
+}
+
+.backSty{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 50px;
+}
+
+.cellBackSty{
+    width: 30%;
+    height: 200px;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #db8621;
+    background-color: black;
+}
+
+.bigTitleSty{
+    color: white;
+    font-size: 30px;
+    text-align: center;
+}
+
+.titleSty{
+    color: white;
+    font-size: 18px;
+    text-align: center;
+}
+
+.h1titleSty{
+    text-align: center;
+    font-size: 36px;
+    color: #db8621;
+}

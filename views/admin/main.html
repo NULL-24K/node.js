@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel='stylesheet', href='/stylesheets/main.css' />
+    <title>Title</title>
+    <script type="text/javascript" >
+        function singTap(index) {
+            if(index ==0){
+                window.location.href = 'http://localhost:3000/admin/jobs'
+            }
+        }
+    </script>
+</head>
+<body>
+<h1 class="h1titleSty"><%=name%>  欢迎您进入蜜蜂直聘管理系统</h1>
+<div class="backSty">
+    <div class="cellBackSty" onclick="singTap(0)">
+        <p class="bigTitleSty">职位管理</p>
+        <p class="titleSty">添加/删除/编辑您的职位</p>
+    </div>
+    <div class="cellBackSty" onclick="singTap(1)">
+        <p class="bigTitleSty">简历处理</p>
+        <p class="titleSty">早日处理您的简历,别让用户久等</p>
+    </div>
+    <div class="cellBackSty" onclick="singTap(2)">
+        <p class="bigTitleSty">管理员管理</p>
+        <p class="titleSty">添加/删除管理员</p>
+    </div>
+</div>
+</body>
+</html>

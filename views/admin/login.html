@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel='stylesheet', href='/stylesheets/style.css' />
+    <meta charset="UTF-8">
+    <script type="text/javascript" ></script>
+    <title>Title</title>
+    <script type="text/javascript">
+
+        //  var util = require('../routes/util');
+        function login() {
+            var phoneNum = document.getElementById('phoneNum').value;
+            var  psd = document.getElementById('psd').value;
+            var alertStr = '';
+//            if(!phoneNum || phoneNum.length == 0){
+//                alertStr = '请输入手机号码'
+//            }else if(phoneNum.length != 11){
+//                alertStr = '请输入正确的手机号码'
+//            }else if(!psd || psd.length == 0){
+//                alertStr = '请输入密码'
+//            }
+//            if(alertStr.length > 0){
+//                alert(alertStr);
+//                return;
+//            }
+
+     //       window.open('http://localhost:3000/admin/main')
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                // 这步为判断服务器是否正确响应
+                 if (xhr.readyState == 4 && xhr.status == 200) {
+                     var obj = JSON.parse(xhr.responseText);
+                     console.log(obj)
+                     if (obj.code == 0 && obj.data){
+                         console.log('登录成功')
+                        window.location.href = 'http://localhost:3000/admin/main'
+                     }
+                  }
+            };
+            xhr.open('post','http://localhost:3000/account/Login')
+            xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            var data ={
+                phoneNum:'13095515908',
+                psd:'123456'
+            }
+            xhr.send("phoneNum=13095515908&psd=123456");
+
+        }
+    </script>
+</head>
+<body>
+<h1 class="titleSty">欢迎进入蜜蜂直聘后台管理系统</h1>
+<div class="inputBackSty">
+    <img src="/resources/img/icon.jpeg" class="iconSty"/>
+</div>
+<div class="inputBackSty" style="margin-top: 30px">
+    <img src="/resources/img/signin_account_press@2x.png" class="leftImgSty"/>
+    <input class="inputSty" placeholder="请输入账号" id="phoneNum" type="text"/>
+</div>
+<div class="inputBackSty" style="margin-top: 10px">
+    <img src="/resources/img/signin_password_press@2x.png" class="leftImgSty"/>
+    <input class="inputSty" placeholder="请输入密码" id="psd" type="password"/>
+</div>
+<div class="inputBackSty" style="margin-top: 40px">
+    <button onclick="login()" class="submit BtnSty">提交</button>
+</div>
+<div class="inputBackSty">
+    <p style="position:fixed;bottom:5px;width: 100%" class="copyRightSty">©安徽金蜜蜂人力资源有限公司所有</p>
+</div>
+
+</body>
+</html>

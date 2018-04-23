@@ -12,7 +12,6 @@ var db = require('../sqldb')
 
 /*用户登录*/
 router.post('/Login',function(req,res,next) {
-
     var model = new ResModel();
     var params = req.body;
     var isAsync = false;

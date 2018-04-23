@@ -1,0 +1,20 @@
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.cellBackSty{
+    margin-left: 50px;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.titleSty{
+    color: red;
+    font-size: 15px;
+}
+
+.inputSty{
+    margin-left: 20px;
+    font-size: 16px;
+}
