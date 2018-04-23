@@ -4,50 +4,100 @@
     <meta charset="UTF-8">
     <link rel='stylesheet', href='/stylesheets/jobs.css' />
     <title>Title</title>
+    <script type="text/javascript">
+        var dataArr = [];
+        dataArr[10] = '';
+        function endEdit(e,index) {
+            if(e && e.length >0){
+                classChanged(index,true)
+            }else {
+                classChanged(index,false)
+            }
+            dataArr[index -1] = e;
+        }
+        function classChanged(index,IsAdjective) {
+            var title = document.getElementById(index);
+            title.style.color = IsAdjective?'green':'red';
+        }
+
+        function subMit() {
+            for(var i=0;i <dataArr.length -1;i ++){
+                if(!dataArr[i]){
+                    var title = document.getElementById(i +1);
+                    var str = title.innerHTML;
+                    str = str.substring(0,str.length -3);
+                    alert(str+'不能为空')
+                    break;
+                    return;
+                }
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                // 这步为判断服务器是否正确响应
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var obj = JSON.parse(xhr.responseText);
+                    console.log(obj)
+                    if (obj.code == 0 && obj.data){
+                        console.log('登录成功')
+                        window.location.href = 'http://localhost:3000/admin/main'
+                    }
+                }
+            };
+            xhr.open('get','http://localhost:3000/admin/post')
+          //  xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            var data ={
+                phoneNum:'13095515908',
+                psd:'123456'
+            }
+            xhr.send();
+          //  window.location.href = 'http://localhost:3000/admin/post?title=888&name=chubin'
+        }
+    </script>
 </head>
 <body>
+<h1>职位管理</h1>
 <div>
     <div class="cellBackSty">
-        <b class="titleSty">公司名称</b>
-        <input type="text" placeholder="请输入公司名称"/>
+        <b class="titleSty" id="1">公司名称:  </b>
+        <input type="text" placeholder="请输入公司名称" onblur="endEdit(this.value,1)"/>
     </div>
     <div class="cellBackSty">
-        <p>公司描述</p>
-        <textarea  placeholder="请输入公司简介"></textarea>
+        <p class="titleSty" id="2">公司描述:  </p>
+        <textarea class="textAreSty"  placeholder="请输入公司简介" onblur="endEdit(this.value,2)"></textarea>
     </div>
     <div class="cellBackSty">
-        <b class="titleSty">职位名称</b>
-        <input type="text" placeholder="请输入职位名称"/>
+        <b class="titleSty" id="3">职位名称:  </b>
+        <input type="text" placeholder="请输入职位名称" onblur="endEdit(this.value,3)"/>
     </div>
     <div class="cellBackSty">
-        <p>职位描述</p>
-        <textarea  placeholder="请输入职位描述"></textarea>
+        <p class="titleSty" id="4">职位描述:  </p>
+        <textarea class="textAreSty" placeholder="请输入职位描述" onblur="endEdit(this.value,4)"></textarea>
     </div>
     <div class="cellBackSty">
-        <b class="titleSty">最低学历要求</b>
-        <input type="text" placeholder="请输入最低学历要求"/>
+        <b class="titleSty" id="5">最低学历要求:  </b>
+        <input type="text" placeholder="请输入最低学历要求" onblur="endEdit(this.value,5)"/>
     </div>
     <div class="cellBackSty">
-        <b class="titleSty">公司地址</b>
-        <input type="text" placeholder="请输入公司地址"/>
+        <b class="titleSty" id="6">公司地址:  </b>
+        <input type="text" placeholder="请输入公司地址" onblur="endEdit(this.value,6)"/>
     </div>
     <div class="cellBackSty">
-        <b class="titleSty">工作地点</b>
-        <input type="text" placeholder="请输入作地点"/>
+        <b class="titleSty" id="7">工作地点:  </b>
+        <input type="text" placeholder="请输入作地点" onblur="endEdit(this.value,7)"/>
     </div>
     <div class="cellBackSty">
-        <b class="titleSty">面试地点</b>
-        <input type="text" placeholder="请输入面试地点"/>
+        <b class="titleSty" id="8">面试地点:  </b>
+        <input type="text" placeholder="请输入面试地点" onblur="endEdit(this.value,8)"/>
     </div>
     <div class="cellBackSty">
-        <b class="titleSty">薪资范围</b>
-        <input type="text" placeholder="请输入薪资范围"/>
+        <b class="titleSty" id="9">薪资范围:  </b>
+        <input type="text" placeholder="请输入薪资范围" onblur="endEdit(this.value,9)"/>
     </div>
     <div class="cellBackSty">
-        <b class="titleSty">公司福利</b>
-        <input type="text" placeholder="请输入公司福利"/>
+        <b class="titleSty" id="10">公司福利:  </b>
+        <input type="text" placeholder="请输入公司福利" onblur="endEdit(this.value,10)"/>
     </div>
-    <button>提交</button>
+    <button style="font-size: 24px;margin-left: 100px;margin-top: 20px;" onclick="subMit()">提交</button>
 </div>
 
 </body>

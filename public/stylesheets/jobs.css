@@ -1,6 +1,6 @@
 body {
     padding: 50px;
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 .cellBackSty{
@@ -11,10 +11,18 @@ body {
 
 .titleSty{
     color: red;
-    font-size: 15px;
+    font-size: 16px;
 }
 
 .inputSty{
     margin-left: 20px;
-    font-size: 16px;
+    font-size: 18px;
+    width: 150px;
+    height: 24px;
+}
+
+.textAreSty{
+    width: 400px;
+    height: 200px;
+    font-size: 15px;
 }
