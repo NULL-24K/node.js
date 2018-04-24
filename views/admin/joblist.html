@@ -54,7 +54,11 @@
                 td_.style.padding = '5px';
                 if(j ==dataArr[i].length -1 || j ==dataArr[i].length -2)
                 td_.onclick = function () {
-                    var jsonStr = JSON.stringify(jsonArr[this.id]);
+                    var data = {
+                        administratorId:'123',
+                        jobId:jsonArr[this.id].jobId
+                    }
+                    var jsonStr = JSON.stringify(data);
                     window.location.href = 'http://localhost:3000/admin/jobs?data='+jsonStr;
                 }
                 tr_.appendChild(td_);

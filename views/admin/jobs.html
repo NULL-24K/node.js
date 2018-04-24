@@ -4,54 +4,6 @@
     <meta charset="UTF-8">
     <link rel='stylesheet', href='/stylesheets/jobs.css' />
     <title>Title</title>
-    <script type="text/javascript">
-        var json = '<%-JSON.stringify(obj)%>';
-        var jsonDic = JSON.parse(json);
-
-        var dataArr = [];
-        dataArr[10] = '';
-        function handelData() {
-            dataArr[0] = jsonDic.companyName;
-            dataArr[1] = jsonDic.companyDescrie;
-            dataArr[2] = jsonDic.jobName;
-            dataArr[3] = jsonDic.jobDescribe;
-            dataArr[4] = jsonDic.minEducation;
-            dataArr[5] = jsonDic.workAddress;
-            dataArr[6] = jsonDic.workAddress;
-            dataArr[7] = jsonDic.interViewAddress;
-            dataArr[8] = jsonDic.salary;
-            dataArr[9] = jsonDic.wellArr;
-            for(var i = 1; i <=9;i ++){
-                var input_ = document.getElementById(i);
-                input_.value = dataArr[i -1];
-            }
-        }
-        function endEdit(e,index) {
-            if(e && e.length >0){
-                classChanged(index,true)
-            }else {
-                classChanged(index,false)
-            }
-            dataArr[index -1] = e;
-        }
-        function classChanged(index,IsAdjective) {
-            var title = document.getElementById(index);
-            title.style.color = IsAdjective?'green':'red';
-        }
-
-        function subMit() {
-            for(var i=0;i <dataArr.length -1;i ++){
-                if(!dataArr[i]){
-                    var title = document.getElementById(i +1);
-                    var str = title.innerHTML;
-                    str = str.substring(0,str.length -3);
-                    alert(str+'不能为空')
-                    break;
-                    return;
-                }
-            }
-        }
-    </script>
 </head>
 <body>
 <h1>职位管理</h1>
@@ -99,6 +51,55 @@
     </div>
     <button style="font-size: 24px;margin-left: 100px;margin-top: 20px;" onclick="subMit()">提交</button>
 </div>
+<script type="text/javascript">
+    var json = '<%-JSON.stringify(obj)%>';
+    var jsonDic = JSON.parse(json);
+    var dataArr = [];
+    dataArr[10] = '';
+    if(jsonDic){
+        handelData();
+    }
+   // console.log(dataArr)
+    function handelData() {
+        dataArr[0] = jsonDic.companyName;
+        dataArr[1] = jsonDic.companyDescrie;
+        dataArr[2] = jsonDic.jobName;
+        dataArr[3] = jsonDic.jobDescribe;
+        dataArr[4] = jsonDic.minEducation;
+        dataArr[5] = jsonDic.workAddress;
+        dataArr[6] = jsonDic.workAddress;
+        dataArr[7] = jsonDic.interViewAddress;
+        dataArr[8] = jsonDic.salary;
+        dataArr[9] = jsonDic.wellArr;
+        for(var i = 1; i <=9;i ++){
+            endEdit(dataArr[i],i);
+        }
+    }
+    function endEdit(e,index) {
+        if(e && e.length >0){
+            classChanged(index,true)
+        }else {
+            classChanged(index,false)
+        }
+        dataArr[index -1] = e;
+    }
+    function classChanged(index,IsAdjective) {
+        var title = document.getElementById(index);
+        title.style.color = IsAdjective?'green':'red';
+    }
 
+    function subMit() {
+        for(var i=0;i <dataArr.length -1;i ++){
+            if(!dataArr[i]){
+                var title = document.getElementById(i +1);
+                var str = title.innerHTML;
+                str = str.substring(0,str.length -3);
+                alert(str+'不能为空')
+                break;
+                return;
+            }
+        }
+    }
+</script>
 </body>
 </html>

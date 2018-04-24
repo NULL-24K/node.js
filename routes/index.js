@@ -21,7 +21,16 @@ router.get('/admin/main',function (req,res,next) {
 router.get('/admin/jobs',function (req,res,next) {
     var params = URL.parse(req.url, true).query;
     if(params.data){
-        res.render('admin/jobs',{obj:params.data})
+        var obj = JSON.parse(params.data);
+        db.JobInfo.findOne({where:{jobId:obj.jobId}}).then(function (result) {
+            if(result){
+                var resObj = result.dataValues;
+                resObj.wellArr = JSON.parse(resObj.wellArr);
+                res.render('admin/jobs',{obj:resObj})
+            }
+        }).catch(function (err) {
+
+        })
     }else {
         res.render('admin/jobs')
     }
