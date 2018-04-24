@@ -3,7 +3,7 @@
 <head>
     <link rel='stylesheet', href='/stylesheets/style.css' />
     <meta charset="UTF-8">
-    <script type="text/javascript" ></script>
+    <script src="/jsDic/ajax.js"></script>
     <title>Title</title>
     <script type="text/javascript">
 
@@ -12,39 +12,50 @@
             var phoneNum = document.getElementById('phoneNum').value;
             var  psd = document.getElementById('psd').value;
             var alertStr = '';
-//            if(!phoneNum || phoneNum.length == 0){
-//                alertStr = '请输入手机号码'
-//            }else if(phoneNum.length != 11){
-//                alertStr = '请输入正确的手机号码'
-//            }else if(!psd || psd.length == 0){
-//                alertStr = '请输入密码'
-//            }
-//            if(alertStr.length > 0){
-//                alert(alertStr);
-//                return;
-//            }
-
-     //       window.open('http://localhost:3000/admin/main')
-
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                // 这步为判断服务器是否正确响应
-                 if (xhr.readyState == 4 && xhr.status == 200) {
-                     var obj = JSON.parse(xhr.responseText);
-                     console.log(obj)
-                     if (obj.code == 0 && obj.data){
-                         console.log('登录成功')
-                        window.location.href = 'http://localhost:3000/admin/main'
-                     }
-                  }
-            };
-            xhr.open('post','http://localhost:3000/account/Login')
-            xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-            var data ={
-                phoneNum:'13095515908',
-                psd:'123456'
+            if(!phoneNum || phoneNum.length == 0){
+                alertStr = '请输入手机号码'
+            }else if(phoneNum.length != 11){
+                alertStr = '请输入正确的手机号码'
+            }else if(!psd || psd.length == 0){
+                alertStr = '请输入密码'
             }
-            xhr.send("phoneNum=13095515908&psd=123456");
+            if(alertStr.length > 0){
+                alert(alertStr);
+                return;
+            }
+            ajax({
+                method:'POST',
+                url:'http://localhost:3000/account/Login',
+                data:{
+                    phoneNum:phoneNum,
+                    psd:psd
+                },
+                success:function (res) {
+                    if (res.code == 0 && res.data){
+                        console.log('登录成功')
+                        window.location.href = 'http://localhost:3000/admin/main'
+                    }
+                }
+            })
+//            var xhr = new XMLHttpRequest();
+//            xhr.onreadystatechange = function () {
+//                // 这步为判断服务器是否正确响应
+//                 if (xhr.readyState == 4 && xhr.status == 200) {
+//                     var obj = JSON.parse(xhr.responseText);
+//                     console.log(obj)
+//                     if (obj.code == 0 && obj.data){
+//                         console.log('登录成功')
+//                        window.location.href = 'http://localhost:3000/admin/main'
+//                     }
+//                  }
+//            };
+//            xhr.open('post','http://localhost:3000/account/Login')
+//            xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+//            var data ={
+//                phoneNum:'13095515908',
+//                psd:'123456'
+//            }
+//            xhr.send("phoneNum=13095515908&psd=123456");
 
         }
     </script>

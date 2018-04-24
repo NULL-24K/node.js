@@ -11,6 +11,7 @@ var account = require('./routes/account');
 var jobs = require('./routes/jobs');
 var apply = require('./routes/apply');
 var sqldb = require('./sqldb');
+// var ajax = require('./routes/ajax')
 var ejs = require('ejs')
 
 var app = express();
@@ -34,6 +35,7 @@ app.use('/users', users);
 app.use('/account',account);
 app.use('/jobs',jobs);
 app.use('/apply',apply);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

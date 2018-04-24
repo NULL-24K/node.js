@@ -1,0 +1,24 @@
+body {
+    padding: 50px;
+    font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
+    list-style: none;
+}
+
+.ulSty{
+    list-style: none;
+
+}
+
+.liSty{
+    float: left;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    padding: 5px;
+}
+
+.tableSty{
+    border-style: solid;
+    border-width: 1px;
+    border-color: #db8621;
+}

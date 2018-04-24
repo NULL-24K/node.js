@@ -5,8 +5,27 @@
     <link rel='stylesheet', href='/stylesheets/jobs.css' />
     <title>Title</title>
     <script type="text/javascript">
+        var json = '<%-JSON.stringify(obj)%>';
+        var jsonDic = JSON.parse(json);
+
         var dataArr = [];
         dataArr[10] = '';
+        function handelData() {
+            dataArr[0] = jsonDic.companyName;
+            dataArr[1] = jsonDic.companyDescrie;
+            dataArr[2] = jsonDic.jobName;
+            dataArr[3] = jsonDic.jobDescribe;
+            dataArr[4] = jsonDic.minEducation;
+            dataArr[5] = jsonDic.workAddress;
+            dataArr[6] = jsonDic.workAddress;
+            dataArr[7] = jsonDic.interViewAddress;
+            dataArr[8] = jsonDic.salary;
+            dataArr[9] = jsonDic.wellArr;
+            for(var i = 1; i <=9;i ++){
+                var input_ = document.getElementById(i);
+                input_.value = dataArr[i -1];
+            }
+        }
         function endEdit(e,index) {
             if(e && e.length >0){
                 classChanged(index,true)
@@ -31,31 +50,12 @@
                     return;
                 }
             }
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                // 这步为判断服务器是否正确响应
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var obj = JSON.parse(xhr.responseText);
-                    console.log(obj)
-                    if (obj.code == 0 && obj.data){
-                        console.log('登录成功')
-                        window.location.href = 'http://localhost:3000/admin/main'
-                    }
-                }
-            };
-            xhr.open('get','http://localhost:3000/admin/post')
-          //  xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-            var data ={
-                phoneNum:'13095515908',
-                psd:'123456'
-            }
-            xhr.send();
-          //  window.location.href = 'http://localhost:3000/admin/post?title=888&name=chubin'
         }
     </script>
 </head>
 <body>
 <h1>职位管理</h1>
+
 <div>
     <div class="cellBackSty">
         <b class="titleSty" id="1">公司名称:  </b>
