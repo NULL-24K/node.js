@@ -52,14 +52,19 @@
                 td_.innerHTML = dataArr[i][j];
                 td_.setAttribute('id',dataArr[i][0]);
                 td_.style.padding = '5px';
-                if(j ==dataArr[i].length -1 || j ==dataArr[i].length -2)
-                td_.onclick = function () {
-                    var data = {
-                        administratorId:'123',
-                        jobId:jsonArr[this.id].jobId
+                if(j ==dataArr[i].length -1 || j ==dataArr[i].length -2){
+                    td_.onclick = function () {
+                        if(this.innerHTML == '删除该职位'){//删除职位
+                            deleteJob(this.id)
+                        }else {
+                            var data = {
+                                administratorId:'123',
+                                jobId:jsonArr[this.id].jobId
+                            }
+                            var jsonStr = JSON.stringify(data);
+                            window.location.href = 'http://localhost:3000/admin/jobs?data='+jsonStr;
+                        }
                     }
-                    var jsonStr = JSON.stringify(data);
-                    window.location.href = 'http://localhost:3000/admin/jobs?data='+jsonStr;
                 }
                 tr_.appendChild(td_);
             }
@@ -71,7 +76,8 @@
         var addBtn = document.createElement('td');
         addBtn.setAttribute('id','123');
         addBtn.setAttribute('style','text-align: center');
-        addBtn.setAttribute('colspan','6')
+        addBtn.setAttribute('colspan','7')
+        addBtn.style.backgroundColor = 'green'
         var addStr = '立即添加'
         if(dataArr.length == 0){
             addStr = '(您还没有添加任何职位,点击立即添加)'
@@ -79,23 +85,22 @@
         addBtn.innerHTML = addStr;
         lastUL.appendChild(addBtn)
         lastUL.onclick = function () {
-            window.location.href = 'http://localhost:3000/admin/jobs'
+            window.location.href = 'http://localhost:3000/admin/jobs?administeratorId=' +'123'
         }
         table.appendChild(lastUL);
     }
 
-    function editJob() {
-        //.这里可以直接传参到job页面
-        window.location.href = 'http://localhost:3000/admin/jobs'
-    }
-
-    function delegateJob() {
+    function deleteJob(index) {
+        if(!index || index <0){
+            return;
+        }
+        var obj = jsonArr[index];
         ajax({
             method:'POST',
-            url:'http://localhost:3000/account/Login',
+            url:'http://localhost:3000/jobs/jobDetail',
             data:{
-                phoneNum:'13095515908',
-                psd:'123456'
+                type:'delete',
+                jobId:obj.jobId
             },
             success:function (res) {
                 console.log(res)

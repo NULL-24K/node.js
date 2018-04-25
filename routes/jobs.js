@@ -14,38 +14,68 @@ var db = require('../sqldb');
 router.post('/jobDetail',function (req,res,next) {
     var model = new  ResModel();
     var _jobInfo = new JOB.jobDetailModel();
-    var jobDetailSql = {where:{jobId:req.body.jobID}}
-    if (req.headers.token && req.headers.token.length >0){//用户已登录 需要查找该用户是否已申请该职位
+    if(req.body.type == 1){//提交/修改参数
+        //此处要先验证管理员权限
+        var params = req.body;
+        if(req.body.type){
+            delete params.type;
+        }
+        if(typeof params.wellArr != 'string'){
+            params.wellArr = JSON.stringify(params.wellArr);
+        }
 
+        db.JobInfo.upsert(params).then(function (result) {
+            model.code =0;
+            if(result == false){
+                model.msg = '修改成功'
+            }else {
+                model.msg = '添加成功'
+            }
+            res.send(JSON.stringify(model))
+        }).catch(function (err) {
+            res.send(JSON.stringify(model))
+        })
+    }else if(req.body.type == 'delete'){//删除该职位
+        db.JobInfo.destroy({where:{jobId:req.body.jobId}}).then(function (result) {
+            console.log(result)
+        }).catch(function (err) {
+            
+        })
     }else {
+        var jobDetailSql = {where:{jobId:req.body.jobID}}
+        if (req.headers.token && req.headers.token.length >0){//用户已登录 需要查找该用户是否已申请该职位
 
+        }else {
+
+        }
+        db.JobInfo.findOne(jobDetailSql).then(function (result) {
+            model.code = 0;
+            if(result){
+                _jobInfo.jobName = result.dataValues.jobName;
+                _jobInfo.jobIncom = result.dataValues.salary;
+                _jobInfo.singerLocation = result.dataValues.workAddress;
+                _jobInfo.minEducation = result.dataValues.minEducation;
+                _jobInfo.workExperienc = result.dataValues.minWorkExperience;
+                _jobInfo.applyNum = result.dataValues.applyNum;
+                _jobInfo.wellArr = JSON.parse(result.dataValues.wellArr);
+                _jobInfo.interviewTime = result.dataValues.interviewTimes;
+                _jobInfo.interViewLocation = result.dataValues.interViewAddress;
+                _jobInfo.jobLocation = result.dataValues.workAddress;
+                _jobInfo.jobDescribe = result.dataValues.jobDescribe;
+                _jobInfo.applyState = result.dataValues.jobName;
+                _jobInfo.jobid = result.dataValues.jobId;
+                model.data = _jobInfo;
+                model.msg = '请求成功'
+            }else {
+                model.msg = '暂无数据'
+            }
+            res.send(JSON.stringify(model))
+        }).catch(function (err) {
+            res.send(JSON.stringify(model))
+        })
     }
 
-    db.JobInfo.findOne(jobDetailSql).then(function (result) {
-        model.code = 0;
-        if(result){
-            _jobInfo.jobName = result.dataValues.jobName;
-            _jobInfo.jobIncom = result.dataValues.salary;
-            _jobInfo.singerLocation = result.dataValues.workAddress;
-            _jobInfo.minEducation = result.dataValues.minEducation;
-            _jobInfo.workExperienc = result.dataValues.minWorkExperience;
-            _jobInfo.applyNum = result.dataValues.applyNum;
-            _jobInfo.wellArr = JSON.parse(result.dataValues.wellArr);
-            _jobInfo.interviewTime = result.dataValues.interviewTimes;
-            _jobInfo.interViewLocation = result.dataValues.interViewAddress;
-            _jobInfo.jobLocation = result.dataValues.workAddress;
-            _jobInfo.jobDescribe = result.dataValues.jobDescribe;
-            _jobInfo.applyState = result.dataValues.jobName;
-            _jobInfo.jobid = result.dataValues.jobId;
-            model.data = _jobInfo;
-            model.msg = '请求成功'
-        }else {
-            model.msg = '暂无数据'
-        }
-        res.send(JSON.stringify(model))
-    }).catch(function (err) {
-        res.send(JSON.stringify(model))
-    })
+
 
 
     //
@@ -149,30 +179,33 @@ router.post('/jobList',function(req,res,next) {
             res.send(JSON.stringify(model));
         })
 
+        // var wellArr = ['五险一金','全款皮肤','定期体检','比赛奖金','季度旅游'];
         // var  addSql = {
-        //     companyName:'百度',
-        //     jobName:'职业玩家',
+        //     companyName:'百度研发中心',
+        //     jobName:'安卓开发',
         //     companyImgUrl:'http://img.wanchezhijia.com/A/2015/5/6/9/48/c6344b4e-07a8-48a4-b5b9-b08cc7269d62.jpg',
-        //     companyDescrie:'666',
+        //     companyDescrie:'牛逼的公司',
         //     workAddress:'上海市浦东新区唐镇',
         //     minEducation:'本科',
         //     interviewTimes:'03月09日 下午',
-        //     wellArr:JSON.stringify(['五险一金','全款皮肤','定期体检','比赛奖金','季度旅游','美女如云']),
+        //     wellArr:JSON.stringify(wellArr),
         //     interViewAddress:'合肥市蜀山区莲花路莲花电子商务产业园',
         //     jobAddress:'上海市浦东新区唐镇',
         //     jobDescribe:'英雄联盟》(简称LOL)是由美国拳头游戏(Riot Games)开发、中国大陆地区腾讯游戏代理运营的英雄对战MOBA竞技网游。' +
         //     '游戏里拥有数百个个性英雄，并拥有排位系统、符文系统等特色养成系统。《英雄联盟》还致力于推动全球电子竞技的发展，除了联动各赛区发展职业联赛、' +
         //     '打造电竞体系之外，每年还会举办“季中冠军赛”“全球总决赛”“All Star全明星赛”三大世界级赛事，获得了亿万玩家的喜爱，形成了自己独有的电子竞技文化',
         //     applyNum:8,
-        //     AdministratorId:'123'
+        //     minWorkExperience:'3年以上',
+        //     AdministratorId:'123',
+        //     salary:'5~10k'
         // }
         //
         // db.JobInfo.upsert(addSql).then(function (ress) {
         //     console.log(ress)
-        //     res.send(JSON.stringify(model));
+        //
         // }).catch(function (err) {
         //     console.log(err)
-        //     res.send(JSON.stringify(model));
+        //
         // })
         // for(var i=0 ; i<10 ; i ++){
         //     var jobInfo = new JOB.companyModel();

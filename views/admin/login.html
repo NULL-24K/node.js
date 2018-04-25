@@ -31,32 +31,13 @@
                     psd:psd
                 },
                 success:function (res) {
-                    if (res.code == 0 && res.data){
+                    var obj = JSON.parse(res);
+                    if (obj.code == 0 && obj.data){
                         console.log('登录成功')
                         window.location.href = 'http://localhost:3000/admin/main'
                     }
                 }
             })
-//            var xhr = new XMLHttpRequest();
-//            xhr.onreadystatechange = function () {
-//                // 这步为判断服务器是否正确响应
-//                 if (xhr.readyState == 4 && xhr.status == 200) {
-//                     var obj = JSON.parse(xhr.responseText);
-//                     console.log(obj)
-//                     if (obj.code == 0 && obj.data){
-//                         console.log('登录成功')
-//                        window.location.href = 'http://localhost:3000/admin/main'
-//                     }
-//                  }
-//            };
-//            xhr.open('post','http://localhost:3000/account/Login')
-//            xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-//            var data ={
-//                phoneNum:'13095515908',
-//                psd:'123456'
-//            }
-//            xhr.send("phoneNum=13095515908&psd=123456");
-
         }
     </script>
 </head>
