@@ -12,6 +12,7 @@ function companyModel() {
     this.workExperienc;
     this.ID;
     this.salary;
+    this.administratorId;
     this.time;
 }
 
@@ -30,6 +31,7 @@ function jobDetailModel() {
     this.jobDescribe;
     this.applyState;
     this.jobid;
+    this.companyName;
 }
 
 module.exports = {

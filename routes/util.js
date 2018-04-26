@@ -36,8 +36,14 @@ function workStatusENUM(status) {
     return statusObj[status];
 }
 
+function intentionViewStatus(status) {
+    var statusObj = ['立即申请','已申请','已邀请面试','已面试','没有获得面试机会','放弃面试'];
+    return statusObj[status];
+}
+
 module.exports = {
     _isPhoneNum:isPhoneNum,
     db_add:db_add,
-    workStatusENUM:workStatusENUM
+    workStatusENUM:workStatusENUM,
+    intentionStatusENUM:intentionViewStatus
 }

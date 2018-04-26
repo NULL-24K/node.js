@@ -4,20 +4,24 @@ var router = express.Router();
 var ejs = require('ejs');
 var URL = require('url');
 var db = require('../sqldb')
+var util = require('./util')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: '这是首页',name:'你妹'});
 });
 
+/*登录*/
 router.get('/admin/login',function (req,res,next) {
     res.render('admin/login',{name:'ssss',title:'这是title'});
 })
 
+/*首页*/
 router.get('/admin/main',function (req,res,next) {
     res.render('admin/main',{name:'大兵'})
 })
 
+/*职位管理*/
 router.get('/admin/jobs',function (req,res,next) {
     var params = URL.parse(req.url, true).query;
     console.log(params.data)
@@ -38,11 +42,7 @@ router.get('/admin/jobs',function (req,res,next) {
     }
 })
 
-router.get('/admin/post',function (req,res,next) {
-    res.render('admin/main',{name:'大兵'})
-   // console.log(req.headers);
-})
-
+/*职位列表*/
 router.get('/admin/joblist',function (req,res,next) {
     var params = URL.parse(req.url, true).query;
     if(!params.administratorId || params.administratorId.length ==0){
@@ -82,18 +82,38 @@ router.get('/admin/joblist',function (req,res,next) {
     }
 })
 
+/*简历处理*/
 router.get('/admin/handleCV',function (req,res,next) {
-    var adminId = req.body.AdministratorId;
+    var params = URL.parse(req.url, true).query;
+    var adminId = params.administratorId;
     if(adminId && adminId.length >0){
         db.Order.findAll({where:{administratorId:adminId}}).then(function (result) {
-            console.log(result)
+            var jobArr = new  Array();
+            for(var i =0;i <result.length; i++){
+                var  obj = result[i].dataValues;
+                var  newObj = {
+                    jobId:obj.jobId,
+                    orderId:obj.orderId,
+                    uuid:obj.uuid,
+                    companyName:obj.companyName,
+                    jobName:obj.jobName,
+                    intentionStatus:util.intentionStatusENUM(obj.intentionStatus),
+                    administratorId:obj.administratorId,
+                    userName:obj.userName,
+                    phoneNum:obj.phoneNum,
+                    createdAt:obj.createdAt,
+                    updatedAt:obj.updatedAt
+                }
+                jobArr.push(newObj);
+            }
+            //console.log(jobArr)
+            res.render(('admin/handleCV'),{obj:jobArr,name:'ss'})
         }).catch(function (err) {
 
         })
     }else {
         res.render('admin/login');
     }
-  res.render('admin/handleCV')
 })
 
 module.exports = router;

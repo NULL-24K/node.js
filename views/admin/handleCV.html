@@ -24,6 +24,66 @@
     </table>
 </div>
 <script type="text/javascript">
+    console.log("scb jacnajkcnasjc")
+
+    var json = '<%- JSON.stringify(obj)%>'
+    var jsonArr = JSON.parse(json);
+    var dataArr = handelData();
+    var table = document.getElementById('main');
+    setHtml();
+    addBtn();
+    function handelData() {
+        var newArr = new Array();
+        for (var i =0; i <jsonArr.length;i ++){
+            var liArr = new Array();
+            var obj = jsonArr[i];
+            liArr[0] = i;
+            liArr[1] = obj.userName;
+            liArr[2] = obj.phoneNum;
+            liArr[3] = obj.jobName;
+            liArr[4] = obj.companyName;
+            liArr[5] = obj.createdAt;
+            liArr[6] = obj.intentionStatus=='已申请'?'等待处理':obj.intentionStatus;
+            liArr[7] = '点击查看';
+            liArr[8] = obj.intentionStatus=='已申请'?'邀请面试':'再次邀请';
+            liArr[9] = obj.intentionStatus=='已申请'?'拒绝':'';
+            newArr.push(liArr);
+        }
+        return newArr;
+    }
+
+    function setHtml() {
+        for (var i =0;i < dataArr.length; i++){
+            var tr_ = document.createElement('tr')
+            for(var j=0; j<dataArr[i].length;j ++){
+                var td_ = document.createElement('td');
+                td_.innerHTML = dataArr[i][j];
+                td_.setAttribute('id',dataArr[i][0]);
+                td_.style.padding = '5px';
+                if(j ==dataArr[i].length -1 || j ==dataArr[i].length -2){
+                    td_.onclick = function () {
+                        console.log(this)
+                    }
+                }
+                tr_.appendChild(td_);
+            }
+            table.appendChild(tr_);
+        }
+    }
+
+    function addBtn() {
+        if(dataArr.length == 0){
+            var lastUL = document.createElement('tr');
+            var addBtn = document.createElement('td');
+            addBtn.setAttribute('id','123');
+            addBtn.setAttribute('style','text-align: center');
+            addBtn.setAttribute('colspan','10')
+            addBtn.style.backgroundColor = 'green'
+            addBtn.innerHTML  = '(您还任何简历,赶快去邀请小伙伴们使用吧)'
+            lastUL.appendChild(addBtn)
+            table.appendChild(lastUL);
+        }
+    }
 
 </script>
 </body>

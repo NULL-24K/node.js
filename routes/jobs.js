@@ -37,17 +37,14 @@ router.post('/jobDetail',function (req,res,next) {
         })
     }else if(req.body.type == 'delete'){//删除该职位
         db.JobInfo.destroy({where:{jobId:req.body.jobId}}).then(function (result) {
-            console.log(result)
+            model.code =0;
+            model.msg = '删除成功'
+            res.send(JSON.stringify(model))
         }).catch(function (err) {
-            
+            res.send(JSON.stringify(model))
         })
-    }else {
-        var jobDetailSql = {where:{jobId:req.body.jobID}}
-        if (req.headers.token && req.headers.token.length >0){//用户已登录 需要查找该用户是否已申请该职位
-
-        }else {
-
-        }
+    }else {//获取职位详情
+        var jobDetailSql = {where:{jobId:req.body.jobId}}
         db.JobInfo.findOne(jobDetailSql).then(function (result) {
             model.code = 0;
             if(result){
@@ -62,14 +59,31 @@ router.post('/jobDetail',function (req,res,next) {
                 _jobInfo.interViewLocation = result.dataValues.interViewAddress;
                 _jobInfo.jobLocation = result.dataValues.workAddress;
                 _jobInfo.jobDescribe = result.dataValues.jobDescribe;
-                _jobInfo.applyState = result.dataValues.jobName;
+                _jobInfo.applyState = '立即申请';
+                _jobInfo.administratorId = result.dataValues.AdministratorId;
                 _jobInfo.jobid = result.dataValues.jobId;
+                _jobInfo.companyName = result.dataValues.companyName;
                 model.data = _jobInfo;
                 model.msg = '请求成功'
             }else {
                 model.msg = '暂无数据'
             }
-            res.send(JSON.stringify(model))
+            //用户已登录 需要查找该用户是否已申请该职位
+            if (req.headers.token && req.headers.token.length >0){
+              //  console.log(req.body)
+                db.Order.findOne({where:{uuid:req.headers.token,jobId:req.body.jobId}}).then(function (result) {
+                    console.log(result)
+                    if(result){
+                     model.data.applyState = '已申请';//util.intentionStatusENUM(result.dataValues.intentionStatus)
+                    }
+                    res.send(JSON.stringify(model))
+                }).catch(function (err) {
+                    res.send(JSON.stringify(model))
+                })
+            }else {
+                res.send(JSON.stringify(model))
+            }
+
         }).catch(function (err) {
             res.send(JSON.stringify(model))
         })
@@ -166,7 +180,8 @@ router.post('/jobList',function(req,res,next) {
                     jobInfo.workExperienc = obj.minWorkExperience;
                     jobInfo.ID = obj.jobId;
                     jobInfo.salary = obj.salary;
-                    jobInfo.time = obj.interviewTimes
+                    jobInfo.time = obj.interviewTimes;
+                    jobInfo.administratorId = obj.AdministratorId;
                     jobArr.push(jobInfo);
                 }
                 model.data = jobArr;
