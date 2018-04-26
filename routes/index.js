@@ -82,4 +82,18 @@ router.get('/admin/joblist',function (req,res,next) {
     }
 })
 
+router.get('/admin/handleCV',function (req,res,next) {
+    var adminId = req.body.AdministratorId;
+    if(adminId && adminId.length >0){
+        db.Order.findAll({where:{administratorId:adminId}}).then(function (result) {
+            console.log(result)
+        }).catch(function (err) {
+
+        })
+    }else {
+        res.render('admin/login');
+    }
+  res.render('admin/handleCV')
+})
+
 module.exports = router;
