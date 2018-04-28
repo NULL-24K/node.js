@@ -98,6 +98,7 @@ router.get('/admin/handleCV',function (req,res,next) {
                     companyName:obj.companyName,
                     jobName:obj.jobName,
                     intentionStatus:util.intentionStatusENUM(obj.intentionStatus),
+                    intentionStatus_Int:obj.intentionStatus,
                     administratorId:obj.administratorId,
                     userName:obj.userName,
                     phoneNum:obj.phoneNum,
@@ -107,7 +108,7 @@ router.get('/admin/handleCV',function (req,res,next) {
                 jobArr.push(newObj);
             }
             //console.log(jobArr)
-            res.render(('admin/handleCV'),{obj:jobArr,name:'ss'})
+            res.render(('admin/handleCV'),{obj:jobArr,administratorId:params.administratorId})
         }).catch(function (err) {
 
         })
@@ -115,5 +116,6 @@ router.get('/admin/handleCV',function (req,res,next) {
         res.render('admin/login');
     }
 })
+
 
 module.exports = router;

@@ -24,12 +24,11 @@
     </table>
 </div>
 <script type="text/javascript">
-    console.log("scb jacnajkcnasjc")
-
     var json = '<%- JSON.stringify(obj)%>'
     var jsonArr = JSON.parse(json);
     var dataArr = handelData();
     var table = document.getElementById('main');
+    var administratorId = '<%=administratorId%>';
     setHtml();
     addBtn();
     function handelData() {
@@ -59,17 +58,63 @@
                 var td_ = document.createElement('td');
                 td_.innerHTML = dataArr[i][j];
                 td_.setAttribute('id',dataArr[i][0]);
-                td_.style.padding = '5px';
-                if(j ==dataArr[i].length -1 || j ==dataArr[i].length -2){
+                td_.style.padding = '5px'
+                if(j == dataArr[i].length -4){
+                    classFromStatus(td_,jsonArr[i].intentionStatus_Int,0);
+                }
+                if(j == dataArr[i].length -1){//拒绝
+                    td_.onclick = function () {
+
+                    }
+                }else if(j ==dataArr[i].length -2){//邀请
                     td_.onclick = function () {
                         console.log(this)
+                        var obj = jsonArr[this.id];
+                        ajax({
+                            method:'POST',
+                            url:'http://localhost:3000/apply/orderStatus',
+                            data:{
+                                orderId:obj.orderId,
+                                intentionStatus:2,
+                                administratorId:administratorId
+                            },
+                            success:function (res) {
+                                var obj = JSON.parse(res);
+                                if(obj.code ==0){
+                                    location.reload(true);
+                                }else {
+                                    alert(obj.msg)
+                                }
+                            }
+                        })
                     }
                 }
+
                 tr_.appendChild(td_);
             }
             table.appendChild(tr_);
         }
     }
+    /*转化class mhtml:元素  status:状态 type:0:当前状态1:简历处理(1) 2:简历处理(2)*/
+    function classFromStatus(mhtml,status,type) {
+       if(type ==0){
+           var statusObj = ['','等待处理','已邀请面试','已面试','简历被拒绝','放弃面试'];
+           var classArr = ['black','green','green','blue','red','red'];
+           mhtml.innerHTML = statusObj[status];
+           mhtml.style.color = classArr[status];
+       }else if(type ==1){
+           var statusObj = ['','邀请面试','再次邀请','已面试','简历被拒绝','放弃面试'];
+           var classArr = ['black','green','yellow','blue','red','red'];
+           mhtml.innerHTML = statusObj[status];
+           mhtml.style.color = classArr[status];
+       }else {
+
+       }
+    }
+//    function statusFormStr(str) {
+//        var statusObj = ['立即申请','已申请','已邀请面试','已面试','没有获得面试机会','放弃面试'];
+//
+//    }
 
     function addBtn() {
         if(dataArr.length == 0){

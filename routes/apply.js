@@ -73,24 +73,28 @@ router.post('/applyJob',function (req,res,next) {
         model.code = 1;
         res.send(JSON.stringify(model))
     }
-     
-    
-    if(0){
-        db.Order.update({where:{orderId:''},intentionStatus:''}).then(function (result) {
-            
-        }).catch(function (err) {
-            
-        })
-    }
-    
-   
 
 })
 
-router.post('/',function (req,res,next) {
-    var model = new ResModel();
 
-    var  token = req.headers.token;
+router.post('/orderStatus',function (req,res,next) {
+    var model = new ResModel();
+    var params = req.body;
+    if(params.administratorId && params.administratorId.length>0){
+        db.Order.update({intentionStatus:params.intentionStatus},{where:{orderId:params.orderId}}).then(function (result) {
+            model.code = 0;
+            model.msg = '操作成功'
+            console.log(result)
+            res.send(JSON.stringify(model));
+        }).catch(function (err) {
+            console.log(err)
+            res.send(JSON.stringify(model));
+        })
+    }else {
+        console.log('$$$')
+        model.msg = '你还不是管理员'
+        res.send(JSON.stringify(model));
+    }
 })
 
 module.exports = router;
