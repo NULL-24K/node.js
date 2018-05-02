@@ -117,5 +117,59 @@ router.get('/admin/handleCV',function (req,res,next) {
     }
 })
 
+router.get('/admin/cvdetail',function (req,res,next){
+    var params = URL.parse(req.url, true).query;
+    var adminId = params.administeratorId;
+    if(adminId && adminId.length >0){
+        var sqlInfo = {where:{
+            uuid:params.token
+        }}
+        db.User.findOne(sqlInfo).then(function (result) {
+            if (result && result.dataValues) {
+                var user_ = new User.userInfo();
+                var workArr = new Array();
+                var Arr = JSON.parse(result.dataValues.jobExpress)
+                if (Arr) {
+                    for (var i = 0; i < Arr.length; i++) {
+                        var userMode = new User.titleModel();
+                        userMode.title = Arr[i].title;
+                        userMode.detail = Arr[i].detail;
+                        userMode.id = Arr[i].id;
+                        workArr.push(userMode);
+                    }
+                }
+
+                var educationArr = new Array;
+                var Arr_ = JSON.parse(result.dataValues.educations)
+                if (Arr_) {
+                    for (var i = 0; i < Arr_.length; i++) {
+                        var userMode = new User.titleModel();
+                        userMode.title = Arr_[i].title;
+                        userMode.detail = Arr_[i].detail;
+                        userMode.id = Arr_[i].id;
+                        educationArr.push(userMode);
+                    }
+                }
+                user_.name = result.dataValues.nickName;
+                user_.education = result.dataValues.education;
+                user_.phoneNum = result.dataValues.phoneNum;
+                user_.iconUrl = result.dataValues.iconUrl;
+                user_.sex = result.dataValues.sex == 0 ? '女' : '男';
+                user_.workIntention = result.dataValues.jobIntenview;
+                user_.advantage = result.dataValues.advantage;
+                user_.workExperienceList = workArr;
+                user_.educationList = educationArr;
+                user_.workYears = result.dataValues.workExpressTimes;
+            }
+        }.catch(function (err) {
+
+        })
+        )
+        res.render(('admin/cvdetail'),{administratorId:params.administeratorId})
+    }else {
+        res.render('admin/login');
+    }
+})
+
 
 module.exports = router;

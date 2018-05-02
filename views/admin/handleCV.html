@@ -45,7 +45,7 @@
             liArr[6] = obj.intentionStatus=='已申请'?'等待处理':obj.intentionStatus;
             liArr[7] = '点击查看';
             liArr[8] = obj.intentionStatus=='已申请'?'邀请面试':'再次邀请';
-            liArr[9] = obj.intentionStatus=='已申请'?'拒绝':'';
+            liArr[9] = obj.intentionStatus=='已申请'?'拒绝面试':'';
             newArr.push(liArr);
         }
         return newArr;
@@ -63,10 +63,12 @@
                     classFromStatus(td_,jsonArr[i].intentionStatus_Int,0);
                 }
                 if(j == dataArr[i].length -1){//拒绝
+                    classFromStatus(td_,jsonArr[i].intentionStatus_Int,2);
                     td_.onclick = function () {
 
                     }
                 }else if(j ==dataArr[i].length -2){//邀请
+                    classFromStatus(td_,jsonArr[i].intentionStatus_Int,1);
                     td_.onclick = function () {
                         console.log(this)
                         var obj = jsonArr[this.id];
@@ -87,6 +89,10 @@
                                 }
                             }
                         })
+                    }
+                }else if(j ==dataArr[i].length -3){
+                    td_.onclick = function () {
+                        window.location.href = 'http://localhost:3000/admin/cvdetail?administeratorId='+administratorId
                     }
                 }
 
