@@ -3,11 +3,11 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="0f0df60c-0c7c-4605-b7d5-f9fc06a59a00" name="goldbee" url="http://193.112.186.75">
-        <fileTransfer host="193.112.186.75" port="3001" username="root">
+        <fileTransfer host="193.112.186.75" port="21" password="dfc9dfc2dfdfdfc8dfc3dfc4dfdddfcfdfc4dfd3dfcbdf9bdf98df9adf92" username="root">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>
-          <option name="port" value="3001" />
+          <option name="port" value="21" />
         </fileTransfer>
       </webServer>
     </option>

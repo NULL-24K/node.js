@@ -2,6 +2,8 @@
  * Created by chubin on 2018/4/17.
  */
 'use strict'
+var JobExperience = require('./jobExperience');
+var Education = require('./education')
 module.exports = function(sequelize,DataTypes){
     var User = sequelize.define('user',{ // 表里的具体字段
         id:{
@@ -36,11 +38,11 @@ module.exports = function(sequelize,DataTypes){
         },
         /*工作经验*/
         jobExpress:{
-          type:DataTypes.JSON
+          type:DataTypes.STRING
         },
         /*教育经历json(本质为数组) 后期*/
         educations:{
-          type:DataTypes.JSON
+          type:DataTypes.STRING
         },
         /*邮箱*/
         email:{
@@ -79,5 +81,8 @@ module.exports = function(sequelize,DataTypes){
     });
     //.同步数据模型到数据库
     //User.sync({force: true});
+   // // User.belongsTo(JobExperience,{foreignKey:'uuid',targetKey:'uuid'})
+   //  User.hasOne(JobExperience);
+   //  JobExperience.belongsTo(User);
     return User;
 };

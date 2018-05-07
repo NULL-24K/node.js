@@ -41,9 +41,39 @@ function intentionViewStatus(status) {
     return statusObj[status];
 }
 
+
+function updataImg(imagePath,callBack) {
+    if(!imagePath || imagePath.length == 0){
+        return;
+    }
+    var fs = require('fs');
+    var path = require('path');
+    var COS = require('cos-nodejs-sdk-v5');
+
+    var SecretId = 'AKID8A2iHgkzsa6QbfrFk3A5pOrpdIm47B0d'; // 替换为用户的 SecretId
+    var SecretKey = 'd63ueDbbQ4bwIf2SqKrKbhcLtJXdgqv1';    // 替换为用户的 SecretKey
+    var Bucket = 'goldbee-1256585845';                        // 替换为用户操作的 Bucket
+    var Region = 'ap-chengdu';                           // 替换为用户操作的 Region
+
+    var cos = new COS({SecretId: SecretId, SecretKey: SecretKey});
+    cos.putObject({
+        Bucket: Bucket,
+        Region: Region,
+        Key: imagePath,
+        Body: fs.readFileSync(path.resolve(__dirname, imagePath))
+    }, function (err, data) {
+        if(data){
+            callBack({status:0,url:data.Location})
+        }else {
+            callBack({status:1})
+        }
+    });
+}
+
 module.exports = {
     _isPhoneNum:isPhoneNum,
     db_add:db_add,
     workStatusENUM:workStatusENUM,
-    intentionStatusENUM:intentionViewStatus
+    intentionStatusENUM:intentionViewStatus,
+    updataImg:updataImg
 }

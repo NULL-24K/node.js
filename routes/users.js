@@ -55,7 +55,7 @@ router.post('/education',function (req,res,next) {
             model.code = 0;
             model.msg = '上传成功'
             res.send(JSON.stringify(model));
-            //.此时 查询教育信息 并更新User表中教育信息字段
+           // .此时 查询教育信息 并更新User表中教育信息字段
             db.Education.findAll({where:{uuid:req.headers.token}}).then(function (resul) {
                 if(resul){
                     var educationsArr = [];
@@ -127,7 +127,7 @@ router.post('/workExperience',function (req,res,next) {
             model.code = 0;
             model.msg = '提交成功'
             res.send(JSON.stringify(model));
-            //.更新User表中jobExpress字段
+           // .更新User表中jobExpress字段
             db.JobExperience.findAll({where:{uuid:req.headers.token}}).then(function (resul) {
                 if(resul){
                     var jobsArr = [];
@@ -184,36 +184,6 @@ router.post('/workList',function (req,res,next) {
 /* 获取用户信息*/
 router.get('/getUserInfo', function(req, res, next) {
 
-
-    //  var  addSql = {
-    //     companyName:'腾讯',
-    //     jobName:'软件开发',
-    //     companyImgUrl:'http://pic28.photophoto.cn/20130830/0005018667531249_b.jpg',
-    //     companyDescrie:'牛逼',
-    //     workAddress:'上海市浦东新区唐镇',
-    //     minEducation:'硕士',
-    //     interviewTimes:'03月09日 下午',
-    //     wellArr:JSON.stringify(['五险一金','全款皮肤','定期体检','比赛奖金','季度旅游','美女如云']),
-    //     interViewAddress:'上海市浦东新区',
-    //     jobDescribe:'战争学院是英雄联盟裁决瓦罗兰政治纠纷之地。这里是绝对中立的领土，严禁任何纷争。' +
-    //              '违反者将面对学院的士兵和魔法。学院坐落于一座巨型水晶枢纽之上，由黑曜石、贵金属和魔法塑形而成。它位于' +
-    //             '莫格罗恩关隘的北方入口，刚好位于相互敌对的城邦德玛西亚和诺克萨斯之间。',
-    //     applyNum:8,
-    //     salary:'20~30k',
-    //     minWorkExperience:'5年以上',
-    //     AdministratorId:'123'
-    // }
-    //
-    // db.JobInfo.upsert(addSql).then(function (ress) {
-    //     console.log(ress)
-    //
-    // }).catch(function (err) {
-    //     console.log(err)
-    //
-    // })
-
-
-
     if (!req.headers.token || req.headers.token.length == 0){
         model.msg = '该用户尚未登录';
         res.send(JSON.stringify(model));
@@ -224,13 +194,15 @@ router.get('/getUserInfo', function(req, res, next) {
         uuid:req.headers.token
     }}
     var model = new ResModel();
+
     db.User.findOne(sqlInfo).then(function (result) {
+      //  console.log(result)
         model.code = 0;
         model.msg = '请求成功'
         if(result && result.dataValues){
             var user_ = new User.userInfo();
             var workArr = new Array();
-            var Arr = JSON.parse(result.dataValues.jobExpress)
+           var Arr = JSON.parse(result.dataValues.jobExpress)
             if(Arr){
                 for (var i = 0 ; i < Arr.length; i ++){
                     var userMode = new  User.titleModel();
@@ -241,8 +213,8 @@ router.get('/getUserInfo', function(req, res, next) {
                 }
             }
 
-            var  educationArr = new  Array;
-            var Arr_ = JSON.parse(result.dataValues.educations)
+           var  educationArr = new  Array;
+           var Arr_ = JSON.parse(result.dataValues.educations)
             if(Arr_){
                 for (var i = 0 ; i < Arr_.length ; i ++){
                     var userMode = new  User.titleModel();
@@ -344,14 +316,14 @@ router.post('/persionInfo',function(req,res,next) {
                 _info.nickName = result.dataValues.nickName;
                 _info.sex = result.dataValues.sex ==0?'女':'男';
                 _info.phoneNum = result.dataValues.phoneNum;
-                _info.emaill = result.dataValues.email;
+                _info.email = result.dataValues.email;
                 _info.birthday = result.dataValues.birthday;
                 _info.education = result.dataValues.education;
                 _info.endEducationTime = result.dataValues.endEducationTime;
                 _info.workYears = result.dataValues.workExpressTimes;
                 _info.address = result.dataValues.address;
                 model.data = [[_info.iconUrl,_info.nickName,_info.sex],
-                    [_info.phoneNum,_info.emaill],
+                    [_info.phoneNum,_info.email],
                     [_info.birthday,_info.education,_info.endEducationTime,_info.workYears,_info.address]];
             }else {
 
@@ -369,7 +341,7 @@ router.post('/persionInfo',function(req,res,next) {
             nickName:req.body.nickName,
             sex:req.body.sex == '男'?1:0,
             phoneNum:req.body.phoneNum,
-            emaill:req.body.emaill,
+            email:req.body.email,
             birthday:req.body.birthday,
             education:req.body.education,
             endEducationTime:req.body.endEducationTime,

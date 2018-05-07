@@ -66,7 +66,7 @@ module.exports = function(sequelize,DataTypes) {
         },
         /*福利 json类型(本质是数组)*/
         wellArr:{
-            type:DataTypes.JSON,
+            type:DataTypes.STRING,
             allowNull:false,
         },
         /*面试地点*/

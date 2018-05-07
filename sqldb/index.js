@@ -19,6 +19,11 @@ db.JobExperience = db.sequelize.import('../model/jobExperience');
 db.JobIntention = db.sequelize.import('../model/jobIntention');
 db.JobInfo = db.sequelize.import('../model/jobInfo');
 db.Order = db.sequelize.import('../model/order');
+//ngjcltj5yr
+
+
+
+//db.User.hasMany(db.JobExperience,{foreignKey:'uuid', targetKey:'uuid'})
 
 
 module.exports = db; //通过common.js 来导出

@@ -32,7 +32,7 @@ function PersionInfo() {
     this.nickName;
     this.sex;
     this.phoneNum;
-    this.emaill;
+    this.email;
     this.birthday;
     this.education;
     this.endEducationTime;

@@ -8,6 +8,7 @@
   "dependencies": {
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
+    "cos-nodejs-sdk-v5": "^2.4.0",
     "debug": "~2.6.9",
     "ejs": "^2.5.9",
     "express": "~4.15.5",

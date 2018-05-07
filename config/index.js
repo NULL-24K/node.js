@@ -3,14 +3,15 @@
  */
 /**这里是配置数据库基础信息 */
 'use strict'
-
+//ngjcltj5yr
 var all = {
     sequelize:{
         username: 'root',
         password: 'chubinwenya1208',
         database: 'goldbee',
-        host: "localhost",
+        host: 'localhost',
         dialect: 'mysql',
+        operatorsAliases: false,
         define: {
             underscored: false,
             timestamps: true,

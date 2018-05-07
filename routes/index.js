@@ -49,7 +49,6 @@ router.get('/admin/joblist',function (req,res,next) {
         res.render('admin/login',{name:'ssss',title:'这是title'});
     }else {
         db.JobInfo.findAll({where:{AdministratorId:params.administratorId}}).then(function (result) {
-
             var jobArr = new  Array();
             for(var i =0;i <result.length; i++){
                 var  obj = result[i].dataValues;
@@ -73,6 +72,7 @@ router.get('/admin/joblist',function (req,res,next) {
                     updatedAt:obj.updatedAt,
                 }
                 jobArr.push(newObj);
+              //  console.log(typeof obj.wellArr)
             }
            // console.log(jobArr[0])
             res.render(('admin/joblist'),{obj:jobArr,name:'牛逼'})

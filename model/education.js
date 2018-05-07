@@ -1,7 +1,7 @@
 /**
  * Created by chubin on 2018/4/18.
  */
-/*工作经历表*/
+/*教育经历表*/
 module.exports = function(sequelize,DataTypes){
     var Education = sequelize.define('education',{ // 表里的具体字段
         id:{
