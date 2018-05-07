@@ -60,10 +60,11 @@ function updataImg(imagePath,callBack) {
         Bucket: Bucket,
         Region: Region,
         Key: imagePath,
-        Body: fs.readFileSync(path.resolve(__dirname, imagePath))
+        Body: fs.readFileSync(path.resolve(__dirname,imagePath))
     }, function (err, data) {
+        console.log(data);
         if(data){
-            callBack({status:0,url:data.Location})
+            callBack({status:0,imgUrl:data.Location})
         }else {
             callBack({status:1})
         }

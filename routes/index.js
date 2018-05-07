@@ -5,6 +5,8 @@ var ejs = require('ejs');
 var URL = require('url');
 var db = require('../sqldb')
 var util = require('./util')
+var ResModel = require('./responseModel');
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -18,6 +20,9 @@ router.get('/admin/login',function (req,res,next) {
 
 /*首页*/
 router.get('/admin/main',function (req,res,next) {
+    util.updataImg('1.PNG',function (result) {
+        console.log(result);
+    })
     res.render('admin/main',{name:'大兵'})
 })
 
@@ -168,6 +173,28 @@ router.get('/admin/cvdetail',function (req,res,next){
         res.render(('admin/cvdetail'),{administratorId:params.administeratorId})
     }else {
         res.render('admin/login');
+    }
+})
+
+router.post('/updata',function (req,res,next) {
+    var model = new ResModel();
+    var params = req.body;
+    if(req.body.imgUrl){
+        util.updataImg(req.body.img,function (result) {
+            if(result.status == 0){
+                model.code = 0;
+                model.msg = '上传成功'
+                model.data = {imgUrl:result.imgUrl}
+                res.send(JSON.stringify(model))
+            }else {
+                model.code = 1;
+                model.msg = '上传失败'
+                res.send(JSON.stringify(model))
+            }
+        })
+    }else {
+        model.msg = '请求无效,请选择图片'
+        res.send(JSON.stringify(model));
     }
 })
 
