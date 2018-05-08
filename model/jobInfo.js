@@ -82,6 +82,10 @@ module.exports = function(sequelize,DataTypes) {
         /*申请人数*/
         applyNum:{
             type:DataTypes.INTEGER,
+            allowNull:true,
+        },
+        defApplyNum:{
+            type:DataTypes.INTEGER,
             allowNull:false,
         },
         /*管理员ID*/

@@ -20,10 +20,8 @@ router.get('/admin/login',function (req,res,next) {
 
 /*首页*/
 router.get('/admin/main',function (req,res,next) {
-    util.updataImg('1.PNG',function (result) {
-        console.log(result);
-    })
-    res.render('admin/main',{name:'大兵'})
+    var adminId = 'superAdminister'
+    res.render('admin/main',{name:'大兵',adminId:adminId})
 })
 
 /*职位管理*/
@@ -72,6 +70,7 @@ router.get('/admin/joblist',function (req,res,next) {
                     interViewAddress:obj.interViewAddress,
                     jobDescribe:obj.jobDescribe,
                     applyNum:obj.applyNum,
+                    defApplyNum:obj.defApplyNum,
                     AdministratorId:obj.AdministratorId,
                     createdAt:obj.createdAt,
                     updatedAt:obj.updatedAt,
@@ -180,7 +179,7 @@ router.post('/updata',function (req,res,next) {
     var model = new ResModel();
     var params = req.body;
     if(req.body.imgUrl){
-        util.updataImg(req.body.img,function (result) {
+        util.updataImg__(params.imgUrl,params.imgName,function (result) {
             if(result.status == 0){
                 model.code = 0;
                 model.msg = '上传成功'
@@ -198,5 +197,31 @@ router.post('/updata',function (req,res,next) {
     }
 })
 
+
+router.get('/admin/setAdmin',function (req,res,next) {
+
+    var params = URL.parse(req.url, true).query;
+    if(params.administratorId !='superAdminister'){
+        res.render('admin/login');
+    }
+
+    //.获取
+        db.Administer.findAll().then(function (result) {
+            console.log(result +'$$$')
+            var jobArr = new  Array();
+            for(var i =0;i <result.length; i++){
+                var  obj = result[i].dataValues;
+                var  newObj = {
+                    name:obj.name,
+                    phoneNum:obj.phoneNum,
+                }
+                jobArr.push(newObj);
+            }
+            res.render(('admin/setAdmin'),{obj:jobArr});
+        }).catch(function (err) {
+            res.render('admin/setAdmin',{obj:null});
+        })
+
+})
 
 module.exports = router;

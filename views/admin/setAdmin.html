@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/jsDic/ajax.js"></script>
+    <title>管理员管理</title>
+</head>
+<body>
+<div>
+    <b style="color: red">添加管理员</b>
+    <input type="text" placeholder="请输入管理员姓名"  id="name"/>
+    <input type="text" placeholder="请输入管理员手机号码" id="phone"/>
+    <button onclick="addAdminister()">添加</button>
+    <table border="1" cellspacing="0" cellpadding="0" border-color="#999999"  id="main">
+        <tr>
+            <th>编号</th>
+            <th>姓名</th>
+            <th>手机号码</th>
+            <th style="color: red">删除</th>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+//    var json = '<%- JSON.stringify(obj)%>'
+//    var jsonArr = JSON.parse(json);
+
+    function addAdminister() {
+        var nameInput = document.getElementById('name');
+        var phoneInput = document.getElementById('phone');
+        var name = nameInput.value;
+        var phoneNum = phoneInput.value;
+        if(!name || name.length <2 || name.length >5){
+            alert('你他妈别瞎几把写')
+        }else if(!phoneNum || phoneNum.length != 11){
+            alert('手机号码格式不正确');
+        }else {
+            ajax({
+                method:'POST',
+                url:'http://localhost:3000/account/setAdmin',
+                data:{
+                    phoneNum:phoneNum,
+                    name:name,
+                    administerId:'superAdminister',
+                    type:1
+                },
+                success:function (res) {
+                    var obj = JSON.parse(res);
+                    if (obj.code == 0 && obj.data){
+                        console.log('登录成功')
+
+                    }
+                }
+            })
+        }
+    }
+</script>
+</body>
+</html>

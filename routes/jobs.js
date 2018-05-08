@@ -23,7 +23,6 @@ router.post('/jobDetail',function (req,res,next) {
         if(typeof params.wellArr != 'string'){
             params.wellArr = JSON.stringify(params.wellArr);
         }
-
         db.JobInfo.upsert(params).then(function (result) {
             model.code =0;
             if(result == false){
@@ -53,7 +52,7 @@ router.post('/jobDetail',function (req,res,next) {
                 _jobInfo.singerLocation = result.dataValues.workAddress;
                 _jobInfo.minEducation = result.dataValues.minEducation;
                 _jobInfo.workExperienc = result.dataValues.minWorkExperience;
-                _jobInfo.applyNum = result.dataValues.applyNum;
+                _jobInfo.applyNum = result.dataValues.applyNum +result.dataValues.defApplyNum;
                 _jobInfo.wellArr = JSON.parse(result.dataValues.wellArr);
                 _jobInfo.interviewTime = result.dataValues.interviewTimes;
                 _jobInfo.interViewLocation = result.dataValues.interViewAddress;

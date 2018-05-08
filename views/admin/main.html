@@ -10,6 +10,8 @@
                 window.location.href = 'http://localhost:3000/admin/joblist?administratorId=123'
             }else if(index ==1){
                 window.location.href = 'http://localhost:3000/admin/handleCV?administratorId=123'
+            }else {
+                window.location.href = 'http://localhost:3000/admin/setAdmin?administratorId=superAdminister'
             }
         }
     </script>
@@ -25,10 +27,18 @@
         <p class="bigTitleSty">简历处理</p>
         <p class="titleSty">早日处理您的简历,别让用户久等</p>
     </div>
-    <div class="cellBackSty" onclick="singTap(2)">
+    <div class="cellBackSty" onclick="singTap(2)" id="superAdmin">
         <p class="bigTitleSty">管理员管理</p>
         <p class="titleSty">添加/删除管理员</p>
     </div>
 </div>
+<script>
+
+    var admin_id = '<%-adminId %>'
+    if(admin_id != 'superAdminister'){
+       var adminView = document.getElementById('superAdmin');
+        adminView.style.display = 'none'
+    }
+</script>
 </body>
 </html>

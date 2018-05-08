@@ -97,3 +97,57 @@ Ajax.prototype.send = function(method,url,callback,data){
         return fasle;
     }
 }
+
+function updataImg(imagePath,callBack) {
+    if(!imagePath || imagePath.length == 0){
+        return;
+    }
+    var fs = require('fs');
+    var path = require('path');
+    var COS = require('cos-nodejs-sdk-v5');
+
+    var SecretId = 'AKID8A2iHgkzsa6QbfrFk3A5pOrpdIm47B0d'; // 替换为用户的 SecretId
+    var SecretKey = 'd63ueDbbQ4bwIf2SqKrKbhcLtJXdgqv1';    // 替换为用户的 SecretKey
+    var Bucket = 'goldbee-1256585845';                        // 替换为用户操作的 Bucket
+    var Region = 'ap-chengdu';                           // 替换为用户操作的 Region
+
+    var cos = new COS({SecretId: SecretId, SecretKey: SecretKey});
+    cos.putObject({
+        Bucket: Bucket,
+        Region: Region,
+        Key: imagePath,
+        Body: fs.readFileSync(path.resolve(__dirname,imagePath))
+    }, function (err, data) {
+        console.log(data);
+        if(data){
+            callBack({status:0,imgUrl:data.Location})
+        }else {
+            callBack({status:1})
+        }
+    });
+}
+
+
+function sss(filename,selectedFile,callBack) {
+    var COS = imported('cos-nodejs-sdk-v5');
+    var cos = new COS({
+        SecretId: 'AKID8A2iHgkzsa6QbfrFk3A5pOrpdIm47B0d',
+        SecretKey: 'd63ueDbbQ4bwIf2SqKrKbhcLtJXdgqv1',
+    })
+    cos.putObject({
+        Bucket: 'goldbee-1256585845',
+        Region: 'ap-chengdu',
+        Key: filename,
+        StorageClass: 'STANDARD',
+        Body: selectedFile, // 上传文件对象
+        onProgress: function(progressData) {
+            console.log(JSON.stringify(progressData));
+        }
+    }, function(err, data) {
+        callBack(1)
+        console.log(err || data);
+        console.log(data.Location);
+    });
+}
+
+

@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <link rel='stylesheet', href='/stylesheets/jobs.css' />
     <script src="/jsDic/ajax.js"></script>
+    <script src="/cos-js-sdk-v5/dist/cos-js-sdk-v5.min.js" ></script>
     <title>Title</title>
 </head>
 <body>
 <h1>职位管理</h1>
 
 <div>
-    <div class="cellBackSty" onclick="updataImg(this)">
+    <div class="cellBackSty">
         <b class="titleSty" id="10">企业图片:  </b>
-        <div class="imgSty"  id="1-10"/>点击上传图片</div>
+        <img class="imgSty"  id="1-10"/>
+        <input type="file"onchange="selectImage(this)"/>
     </div>
     <div class="cellBackSty">
         <b class="titleSty" id="0">公司名称:  </b>
@@ -105,7 +107,7 @@
         dataArr[8] = jsonDic.salary;
         dataArr[9] = jsonDic.wellArr;
         dataArr[10] = jsonDic.companyImgUrl;
-        dataArr[11] = jsonDic.applyNum;
+        dataArr[11] = jsonDic.defApplyNum;
         dataArr[12] = jsonDic.minWorkExperience;
         dataArr[13] = jsonDic.interviewTimes;
         for(var i = 0; i <dataArr.length -1;i ++){
@@ -215,7 +217,7 @@
             salary:dataArr[8],
             wellArr:JSON.stringify(dataArr[9]),
             companyImgUrl:dataArr[10],
-            applyNum:dataArr[11],
+            defApplyNum:dataArr[11],
             minWorkExperience:dataArr[12],
             interviewTimes:dataArr[13],
             AdministratorId:administeratorId,
@@ -224,6 +226,7 @@
         if(jsonDic && jsonDic.jobId){
             params['jobId'] = jsonDic.jobId;
         }
+        console.log(params)
         ajax({
             method:'POST',
             url:'http://localhost:3000/jobs/jobDetail',
@@ -243,42 +246,41 @@
         })
     }
 
-    function updataImg(view) {
-        setImagePreview();
+
+
+    var image = '';
+    function selectImage(file) {
+        if (!file.files || !file.files[0]) {
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+            document.getElementById('1-10').src = evt.target.result;
+            image = evt.target.result;
+
+        }
+        reader.readAsDataURL(file.files[0]);
+        var file__ = file.files[0];
+        var cos = new COS({
+            SecretId: 'AKID8A2iHgkzsa6QbfrFk3A5pOrpdIm47B0d',
+            SecretKey: 'd63ueDbbQ4bwIf2SqKrKbhcLtJXdgqv1',
+        })
+        cos.sliceUploadFile({
+            Bucket: 'goldbee-1256585845',
+            Region: 'ap-chengdu',
+            Key: file__.name,
+            Body: file__, // 上传文件对象
+//            onProgress: function(progressData) {
+//                console.log(JSON.stringify(progressData));
+//            }
+        }, function(err, data) {
+
+            console.log(err || data);
+           // console.log(data.Location);
+        });
     }
 
-    function setImagePreview() {
-        var docObj = document.getElementById("doc");
-        var imgObjPreview = document.getElementById("preview");
-        if (docObj.files && docObj.files[0]) {
-            //火狐下，直接设img属性
-            imgObjPreview.style.display = 'block';
-            imgObjPreview.style.width = '300px';
-            imgObjPreview.style.height = '500px';
-            imgObjPreview.style.margin = 'auto';
-            //imgObjPreview.src = docObj.files[0].getAsDataURL();
-            //火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式
-            imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
-        } else {
-            //IE下，使用滤镜
-            docObj.select();
-            var imgSrc = document.selection.createRange().text;
-            var localImagId = document.getElementById("localImag");
-            //必须设置初始大小
-            localImagId.style.width = "300px";
-            localImagId.style.height = "120px";
-            //图片异常的捕捉，防止用户修改后缀来伪造图片
-            try {
-                localImagId.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
-                localImagId.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
-            } catch (e) {
-                alert("您上传的图片格式不正确，请重新选择!");
-                return false;
-            }
-            imgObjPreview.style.display = 'none';
-            document.selection.empty();
-        }
-    }
+
 </script>
 </body>
 </html>

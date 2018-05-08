@@ -12,6 +12,7 @@ var jobs = require('./routes/jobs');
 var apply = require('./routes/apply');
 var sqldb = require('./sqldb');
 // var ajax = require('./routes/ajax')
+
 var ejs = require('ejs')
 
 var app = express();
@@ -59,6 +60,7 @@ sqldb.sequelize.sync({force: false}).then(function() {
 }).catch(function(err){
   console.log("Server failed to start due to error: %s", err);
 });
+
 
 module.exports = app;
 

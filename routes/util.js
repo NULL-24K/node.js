@@ -62,7 +62,38 @@ function updataImg(imagePath,callBack) {
         Key: imagePath,
         Body: fs.readFileSync(path.resolve(__dirname,imagePath))
     }, function (err, data) {
-        console.log(data);
+        console.log(data || err);
+        if(data){
+            callBack({status:0,imgUrl:data.Location})
+        }else {
+            callBack({status:1})
+        }
+    });
+}
+
+function updataImg__(image,imgName,callBack) {
+
+    if(!image ){
+        return;
+    }
+    var fs = require('fs');
+    var path = require('path');
+    var COS = require('cos-nodejs-sdk-v5');
+
+    var SecretId = 'AKID8A2iHgkzsa6QbfrFk3A5pOrpdIm47B0d'; // 替换为用户的 SecretId
+    var SecretKey = 'd63ueDbbQ4bwIf2SqKrKbhcLtJXdgqv1';    // 替换为用户的 SecretKey
+    var Bucket = 'goldbee-1256585845';                        // 替换为用户操作的 Bucket
+    var Region = 'ap-chengdu';                           // 替换为用户操作的 Region
+
+
+    var cos = new COS({SecretId: SecretId, SecretKey: SecretKey});
+    cos.putObject({
+        Bucket: Bucket,
+        Region: Region,
+        Key: imgName,
+        Body: image
+    }, function (err, data) {
+        console.log(data || err);
         if(data){
             callBack({status:0,imgUrl:data.Location})
         }else {
@@ -76,5 +107,6 @@ module.exports = {
     db_add:db_add,
     workStatusENUM:workStatusENUM,
     intentionStatusENUM:intentionViewStatus,
-    updataImg:updataImg
+    updataImg:updataImg,
+    updataImg__:updataImg__
 }

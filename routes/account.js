@@ -70,6 +70,39 @@ router.post('/Login',function(req,res,next) {
     isAsync?null:res.send(JSON.stringify(model));
 })
 
+router.post('/setAdmin',function (req,res,next) {
+    var params = req.body;
+    var model = new ResModel();
+    if(params.administerId !='superAdminister'){
+        model.msg = '对不起,您没有权限进行此项操作'
+        res.send(JSON.stringify(model))
+    }
+
+    //.获取
+    if(params.type == 1){//增加
+        var timestamp = Date.parse(new Date());
+        var sql = {administerId:'goldbeeAdmin'+params.phoneNum+'_'+timestamp,phoneNum:params.phoneNum,name:params.name}
+        db.Administer.create(sql).then(function (result) {
+            //成功 更新用户表 将account中shareID替换
+            console.log(result)
+            if(result){
+
+            }else {
+
+            }
+            res.send(JSON.stringify(model))
+        }).catch(function (err) {
+            res.send(JSON.stringify(model))
+        })
+    }else if(params.type == 2){//删除
+        db.Administer.destroy({where:{phoneNum:params.phoneNum}}).then(function (result) {
+            res.send(JSON.stringify(model))
+        }).catch(function (err) {
+            res.send(JSON.stringify(model))
+        })
+    }
+})
+
 
 module.exports = router;
 
