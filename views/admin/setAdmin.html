@@ -21,9 +21,80 @@
     </table>
 </div>
 <script type="text/javascript">
-//    var json = '<%- JSON.stringify(obj)%>'
-//    var jsonArr = JSON.parse(json);
+    var json = '<%- JSON.stringify(obj)%>'
+    var jsonArr = JSON.parse(json);
+    var table = document.getElementById('main');
+    var dataArr = handelData();
+    setHtml();
+    addBtn()
+    function handelData() {
+        var newArr = new Array();
+        for (var i =0; i <jsonArr.length;i ++){
+            var liArr = new Array();
+            var obj = jsonArr[i];
+            liArr[0] = i;
+            liArr[1] = obj.name;
+            liArr[2] = obj.phoneNum;
+            liArr[3] = '删除该管理员';
+            newArr.push(liArr);
+        }
+        return newArr;
+    }
+    function setHtml() {
+        for (var i =0;i < dataArr.length; i++){
+            var tr_ = document.createElement('tr')
+            for(var j=0; j<dataArr[i].length;j ++){
+                var td_ = document.createElement('td');
+                td_.innerHTML = dataArr[i][j];
+                td_.setAttribute('id',dataArr[i][0]);
+                td_.style.padding = '5px';
+                if(j ==dataArr[i].length -1){
+                    td_.onclick = function () {
+                        deleteJob(this.id)
+                    }
+                    td_.style.color = 'red'
+                }
+                tr_.appendChild(td_);
+            }
+            table.appendChild(tr_);
+        }
+    }
 
+    function deleteJob(index) {
+        var obj = jsonArr[index];
+        ajax({
+            method:'POST',
+            url:'http://localhost:3000/account/setAdmin',
+            data:{
+                phoneNum:obj.phoneNum,
+                name:obj.name,
+                administerId:'superAdminister',
+                shareId:obj.administerId,
+                type:2
+            },
+            success:function (res) {
+                var data = JSON.parse(res);
+                if (data.code == 0){
+                    console.log('删除成功')
+                    location.reload(true);
+                }
+            }
+        })
+    }
+
+    function addBtn() {
+        if(dataArr.length == 0){
+            var lastUL = document.createElement('tr');
+            var addBtn = document.createElement('td');
+            addBtn.setAttribute('id','123');
+            addBtn.setAttribute('style','text-align: center');
+            addBtn.setAttribute('colspan','10')
+            addBtn.style.backgroundColor = 'green'
+            addBtn.innerHTML  = '(您还没有任何管理员信息,赶快添加小伙伴吧)'
+            lastUL.appendChild(addBtn)
+            table.appendChild(lastUL);
+        }
+    }
     function addAdminister() {
         var nameInput = document.getElementById('name');
         var phoneInput = document.getElementById('phone');
@@ -45,9 +116,9 @@
                 },
                 success:function (res) {
                     var obj = JSON.parse(res);
-                    if (obj.code == 0 && obj.data){
-                        console.log('登录成功')
-
+                    if (obj.code == 0 ){
+                        console.log('添加成功')
+                        location.reload(true);
                     }
                 }
             })

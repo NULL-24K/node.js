@@ -3,6 +3,7 @@
  */
 
 var db = require('../sqldb');
+var QcloudSms = require("qcloudsms_js");
 
 function isPhoneNum(phoneNum) {
     var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
@@ -102,11 +103,37 @@ function updataImg__(image,imgName,callBack) {
     });
 }
 
+function sendMsg(phoneNumber,params,callback) {
+    var appid = 1400091097;
+    var appkey = "a88915ebf500988de475ce536a2b5151";
+   // var phoneNumbers = [phoneNumbers];
+    var templId = 118889;
+    var qcloudsms = QcloudSms(appid, appkey);
+    var ssender = qcloudsms.SmsSingleSender();
+    ssender.sendWithParam(86, phoneNumber, templId,
+        params,"", "", "",callback);
+}
+
+function createCode() {
+    // var codeInput = document.getElementsByClassName("code")[0];
+    var codeArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    var length = 6;
+    code = "";
+    for (var i = 0; i < length; i++) {
+        var randomI = Math.floor(Math.random() * 10);
+        code += codeArr[randomI];
+    }
+    console.log(code);
+    return code;
+}
+
 module.exports = {
     _isPhoneNum:isPhoneNum,
     db_add:db_add,
     workStatusENUM:workStatusENUM,
     intentionStatusENUM:intentionViewStatus,
     updataImg:updataImg,
-    updataImg__:updataImg__
+    updataImg__:updataImg__,
+    sendMsg:sendMsg,
+    createCode:createCode
 }

@@ -183,7 +183,6 @@ router.post('/workList',function (req,res,next) {
 
 /* 获取用户信息*/
 router.get('/getUserInfo', function(req, res, next) {
-
     if (!req.headers.token || req.headers.token.length == 0){
         model.msg = '该用户尚未登录';
         res.send(JSON.stringify(model));
@@ -196,7 +195,7 @@ router.get('/getUserInfo', function(req, res, next) {
     var model = new ResModel();
 
     db.User.findOne(sqlInfo).then(function (result) {
-      //  console.log(result)
+        console.log(result)
         model.code = 0;
         model.msg = '请求成功'
         if(result && result.dataValues){
@@ -304,6 +303,7 @@ router.post('/persionInfo',function(req,res,next) {
     if (!req.headers.token || req.headers.token.length == 0){
         model.msg = '该用户尚未登录';
         res.send(JSON.stringify(model));
+        return;
     }
     var _info = new User.persionInfo();
     if (req.body.type == 0){//.获取信息

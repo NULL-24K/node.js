@@ -30,7 +30,12 @@ module.exports = function(sequelize,DataTypes){
             defaultValue:DataTypes.UUIDV4,
         },
         /*微信openID 用来进行联合登录*/
-        weixinopenId:{
+        openid:{
+            type:DataTypes.STRING,
+            unique:true,
+        },
+        /*微信session_key*/
+        session_key:{
             type:DataTypes.STRING,
             unique:true,
         },
@@ -48,6 +53,6 @@ module.exports = function(sequelize,DataTypes){
     },{
         freezeTableName: true
     });
-  //  Account.sync({force:true})
+   // Account.sync({force:true})
     return Account;
 };

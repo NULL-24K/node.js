@@ -20,6 +20,7 @@ db.JobIntention = db.sequelize.import('../model/jobIntention');
 db.JobInfo = db.sequelize.import('../model/jobInfo');
 db.Order = db.sequelize.import('../model/order');
 db.Administer = db.sequelize.import('../model/administer')
+db.MsgCode = db.sequelize.import('../model/msgCode');
 //ngjcltj5yr
 
 
