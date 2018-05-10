@@ -195,7 +195,7 @@ router.get('/getUserInfo', function(req, res, next) {
     var model = new ResModel();
 
     db.User.findOne(sqlInfo).then(function (result) {
-        console.log(result)
+
         model.code = 0;
         model.msg = '请求成功'
         if(result && result.dataValues){
@@ -356,7 +356,6 @@ router.post('/persionInfo',function(req,res,next) {
             console.log(err)
             res.send(JSON.stringify(model));
         })
-
     }
 });
 

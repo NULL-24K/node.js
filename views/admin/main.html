@@ -4,17 +4,6 @@
     <meta charset="UTF-8">
     <link rel='stylesheet', href='/stylesheets/main.css' />
     <title>Title</title>
-    <script type="text/javascript" >
-        function singTap(index) {
-            if(index ==0){
-                window.location.href = 'http://localhost:3000/admin/joblist?administratorId=123'
-            }else if(index ==1){
-                window.location.href = 'http://localhost:3000/admin/handleCV?administratorId=123'
-            }else {
-                window.location.href = 'http://localhost:3000/admin/setAdmin?administratorId=superAdminister'
-            }
-        }
-    </script>
 </head>
 <body>
 <h1 class="h1titleSty"><%=name%>  欢迎您进入蜜蜂直聘管理系统</h1>
@@ -38,6 +27,15 @@
     if(admin_id != 'superAdminister'){
        var adminView = document.getElementById('superAdmin');
         adminView.style.display = 'none'
+    }
+    function singTap(index) {
+        if(index ==0){
+            window.location.href = 'http://localhost:3000/admin/joblist?administratorId='+admin_id
+        }else if(index ==1){
+            window.location.href = 'http://localhost:3000/admin/handleCV?administratorId='+admin_id
+        }else {
+            window.location.href = 'http://localhost:3000/admin/setAdmin?administratorId='+admin_id
+        }
     }
 </script>
 </body>

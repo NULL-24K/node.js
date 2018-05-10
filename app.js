@@ -11,6 +11,7 @@ var account = require('./routes/account');
 var jobs = require('./routes/jobs');
 var apply = require('./routes/apply');
 var sqldb = require('./sqldb');
+var message = require('./routes/message');
 // var ajax = require('./routes/ajax')
 
 var ejs = require('ejs')
@@ -36,6 +37,7 @@ app.use('/users', users);
 app.use('/account',account);
 app.use('/jobs',jobs);
 app.use('/apply',apply);
+app.use('/message',message);
 
 
 // catch 404 and forward to error handler
@@ -54,6 +56,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
  // res.render('error');
 });
+
 
 sqldb.sequelize.sync({force: false}).then(function() {
   console.log("Server successed to start");

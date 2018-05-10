@@ -89,7 +89,7 @@ module.exports = function(sequelize,DataTypes) {
             allowNull:false,
         },
         /*管理员ID*/
-        AdministratorId:{
+        administratorId:{
             type:DataTypes.STRING,
             allowNull:false,
         },

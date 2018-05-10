@@ -25,7 +25,7 @@
             }
             ajax({
                 method:'POST',
-                url:'http://localhost:3000/account/Login',
+                url:'http://localhost:3000/account/adminLogin',
                 data:{
                     phoneNum:phoneNum,
                     psd:psd
@@ -34,7 +34,10 @@
                     var obj = JSON.parse(res);
                     if (obj.code == 0 && obj.data){
                         console.log('登录成功')
-                        window.location.href = 'http://localhost:3000/admin/main'
+                        var administratorId = obj.data.administratorId;
+                        window.location.href = 'http://localhost:3000/admin/main?administratorId=' +administratorId;
+                    }else {
+                        alert(obj.msg)
                     }
                 }
             })

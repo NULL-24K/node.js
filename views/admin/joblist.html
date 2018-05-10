@@ -23,6 +23,7 @@
 </div>
 <script type="text/javascript">
     var json = '<%- JSON.stringify(obj)%>'
+    var administratorId = '<%- administratorId %>';
     var jsonArr = JSON.parse(json);
     var dataArr = handelData();
     var table = document.getElementById('main');
@@ -58,7 +59,7 @@
                             deleteJob(this.id)
                         }else {
                             var data = {
-                                administratorId:'123',
+                                administratorId:administratorId,
                                 jobId:jsonArr[this.id].jobId
                             }
                             var jsonStr = JSON.stringify(data);
@@ -85,7 +86,7 @@
         addBtn.innerHTML = addStr;
         lastUL.appendChild(addBtn)  
         lastUL.onclick = function () {
-            window.location.href = 'http://localhost:3000/admin/jobs?administeratorId=' +'123'
+            window.location.href = 'http://localhost:3000/admin/jobs?administratorId=' +administratorId
         }
         table.appendChild(lastUL);
     }
@@ -99,11 +100,15 @@
             method:'POST',
             url:'http://localhost:3000/jobs/jobDetail',
             data:{
+                administratorId:administratorId,
                 type:'delete',
                 jobId:obj.jobId
             },
             success:function (res) {
-                console.log(res)
+                var obj = JSON.parse(res);
+                if(obj.code ==0){
+                    location.reload(true);
+                }
             }
         })
     }

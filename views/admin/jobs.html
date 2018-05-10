@@ -72,7 +72,7 @@
     <button style="font-size: 24px;margin-left: 100px;margin-top: 20px;" onclick="subMit()">提交</button>
 </div>
 <script type="text/javascript">
-    var administeratorId ='';
+    var administratorId ='';
     var defwellArr = ['五险一金','全款皮肤','定期体检','绩效奖金','季度旅游','美女如云','工作餐','提供住宿','交通补贴','出差补贴','节日福利'];
     var json = '<%-JSON.stringify(obj)%>';
     var jsonDic = JSON.parse(json);
@@ -82,10 +82,10 @@
     createWellCell()
     if(jsonDic){
         handelData();
-        administeratorId = jsonDic.AdministratorId;
+        administratorId = jsonDic.administratorId;
     }else {
         var a_ = GetRequest();
-        administeratorId = a_['administeratorId'];
+        administratorId = a_['administratorId'];
 
         //后期注释掉
         dataArr[10] = 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1894384757,2976799759&fm=27&gp=0.jpg'
@@ -220,7 +220,7 @@
             defApplyNum:dataArr[11],
             minWorkExperience:dataArr[12],
             interviewTimes:dataArr[13],
-            AdministratorId:administeratorId,
+            administratorId:administratorId,
             type:1
         }
         if(jsonDic && jsonDic.jobId){
@@ -237,7 +237,7 @@
                 if(obj.code ==0){
                   //  alert(obj.msg)
                     setTimeout(function () {
-                        window.location.href = 'http://localhost:3000/admin/joblist?administratorId='+administeratorId;
+                        window.location.href = 'http://localhost:3000/admin/joblist?administratorId='+administratorId;
                     },1500)
                 }else {
                     alert(obj.msg);

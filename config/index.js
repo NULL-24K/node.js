@@ -15,7 +15,8 @@ var all = {
         define: {
             underscored: false,
             timestamps: true,
-            paranoid: true
+            paranoid: true,
+            timezone: '+08:00'
         }
     }
 };

@@ -127,6 +127,15 @@ function createCode() {
     return code;
 }
 
+function initConfig() {
+   var sql ={administratorId:'superAdminister',phoneNum:'18767090623',name:'洪大鹏',psd:'goldbee'}
+    db.Administer.upsert(sql).then(function (res) {
+        console.log('添加超级管理员成功')
+    }).catch(function (err) {
+        console.log('添加超级管理员失败')
+    })
+}
+
 module.exports = {
     _isPhoneNum:isPhoneNum,
     db_add:db_add,
@@ -135,5 +144,6 @@ module.exports = {
     updataImg:updataImg,
     updataImg__:updataImg__,
     sendMsg:sendMsg,
-    createCode:createCode
+    createCode:createCode,
+    initConfig:initConfig
 }

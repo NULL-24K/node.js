@@ -11,7 +11,7 @@ module.exports = function(sequelize,DataTypes){
             autoIncrement:true
         },
         /*管理员ID 该ID是唯一值*/
-        administerId:{
+        administratorId:{
             type:DataTypes.STRING,
             unique:true,
             allowNull:false,
@@ -25,6 +25,11 @@ module.exports = function(sequelize,DataTypes){
         name:{
             type:DataTypes.STRING,
             allowNull:false
+        },
+        psd:{
+            type:DataTypes.STRING,
+            allowNull:false,
+            defaultValue:'123456'
         }
     },{
         freezeTableName: true

@@ -101,21 +101,22 @@ router.post('/Login',function(req,res,next) {
 router.post('/setAdmin',function (req,res,next) {
     var params = req.body;
     var model = new ResModel();
-    if(params.administerId !='superAdminister'){
+    if(params.administratorId !='superAdminister'){
         model.msg = '对不起,您没有权限进行此项操作'
         res.send(JSON.stringify(model))
+        return;
     }
-//{intentionStatus:params.intentionStatus},{where:{orderId:params.orderId}}
+
     if(params.type == 1){//增加
         var timestamp = Date.parse(new Date());
-        var sql = {administerId:'goldbeeAdmin'+params.phoneNum+'_'+timestamp,phoneNum:params.phoneNum,name:params.name}
+        var sql = {administratorId:'goldbeeAdmin'+params.phoneNum+'_'+timestamp,phoneNum:params.phoneNum,name:params.name}
         db.Administer.create(sql).then(function (result) {
             //成功 更新用户表 将account中shareID替换
             console.log(result)
             if(result){
                 model.code = 0;
                 model.msg = '添加成功'
-                db.Account.upsert({phoneNum:params.phoneNum,shareId:result.dataValues.administerId},{where:{phoneNum:params.phoneNum}}).then(function (addres) {
+                db.Account.upsert({phoneNum:params.phoneNum,shareId:result.dataValues.administratorId},{where:{phoneNum:params.phoneNum}}).then(function (addres) {
 
                 })
             }else {
@@ -204,6 +205,43 @@ router.post('/weChatLogin',function (req,res,next) {
     })
 
 })
+
+/*管理员登录*/
+router.post('/adminLogin',function (req,res,next) {
+    var params = req.body;
+    var model = new ResModel();
+    if(!params.phoneNum || params.phoneNum.length != 11){
+        model.msg = '手机号码格式不正确'
+        res.send(JSON.stringify(model));
+        return;
+    }
+
+    db.Administer.findOne({where:{phoneNum:params.phoneNum}}).then(function (result) {
+        if(result){
+            if(params.psd != result.dataValues.psd){
+                model.msg = '密码错误'
+            }else {
+                model.msg = '登录成功'
+                var obj = {
+                    administratorId:result.dataValues.administratorId,
+                    phoneNum:result.dataValues.phoneNum,
+                    name:result.dataValues.name
+                }
+                model.data = obj;
+                model.code = 0;
+            }
+            res.send(JSON.stringify(model));
+        }else {
+            model.msg = '您还不是管理员,请联系超级管理员添加';
+            res.send(JSON.stringify(model));
+        }
+    }).catch(function (err) {
+        model.msg = '网络异常,请稍后重试'
+        console.log(err)
+        res.send(JSON.stringify(model));
+    })
+})
+
 
 
 module.exports = router;

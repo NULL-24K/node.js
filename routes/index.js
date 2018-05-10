@@ -8,20 +8,36 @@ var util = require('./util')
 var ResModel = require('./responseModel');
 
 
+util.initConfig();
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: '这是首页',name:'你妹'});
+  res.render('index');
 });
 
 /*登录*/
 router.get('/admin/login',function (req,res,next) {
-    res.render('admin/login',{name:'ssss',title:'这是title'});
+    res.render('admin/login');
 })
 
 /*首页*/
 router.get('/admin/main',function (req,res,next) {
-    var adminId = 'superAdminister'
-    res.render('admin/main',{name:'大兵',adminId:adminId})
+    //administratorId
+    var params = URL.parse(req.url, true).query;
+    var adminId = params.administratorId;
+    if(!adminId || adminId.length ==0){
+        res.render('admin/login',{name:'ssss',title:'这是title'});
+    }else {
+        db.Administer.findOne({where:{administratorId:adminId}}).then(function (result) {
+            if(result){
+                res.render('admin/main',{name:result.dataValues.name,adminId:adminId})
+            }else {
+                res.render('admin/login');
+            }
+        }).catch(function (err) {
+            res.render('admin/login');
+        })
+    }
 })
 
 /*职位管理*/
@@ -51,7 +67,7 @@ router.get('/admin/joblist',function (req,res,next) {
     if(!params.administratorId || params.administratorId.length ==0){
         res.render('admin/login',{name:'ssss',title:'这是title'});
     }else {
-        db.JobInfo.findAll({where:{AdministratorId:params.administratorId}}).then(function (result) {
+        db.JobInfo.findAll({where:{administratorId:params.administratorId}}).then(function (result) {
             var jobArr = new  Array();
             for(var i =0;i <result.length; i++){
                 var  obj = result[i].dataValues;
@@ -71,7 +87,7 @@ router.get('/admin/joblist',function (req,res,next) {
                     jobDescribe:obj.jobDescribe,
                     applyNum:obj.applyNum,
                     defApplyNum:obj.defApplyNum,
-                    AdministratorId:obj.AdministratorId,
+                    administratorId:obj.administratorId,
                     createdAt:obj.createdAt,
                     updatedAt:obj.updatedAt,
                 }
@@ -79,9 +95,10 @@ router.get('/admin/joblist',function (req,res,next) {
               //  console.log(typeof obj.wellArr)
             }
            // console.log(jobArr[0])
-            res.render(('admin/joblist'),{obj:jobArr,name:'牛逼'})
+            res.render(('admin/joblist'),{obj:jobArr,administratorId:params.administratorId})
         }).catch(function (err) {
-
+            console.log(err)
+            res.render('admin/main',{name:'',adminId:params.administratorId})
         })
     }
 })
@@ -123,7 +140,7 @@ router.get('/admin/handleCV',function (req,res,next) {
 
 router.get('/admin/cvdetail',function (req,res,next){
     var params = URL.parse(req.url, true).query;
-    var adminId = params.administeratorId;
+    var adminId = params.administratorId;
     if(adminId && adminId.length >0){
         var sqlInfo = {where:{
             uuid:params.token
@@ -169,7 +186,7 @@ router.get('/admin/cvdetail',function (req,res,next){
 
         })
         )
-        res.render(('admin/cvdetail'),{administratorId:params.administeratorId})
+        res.render(('admin/cvdetail'),{administratorId:params.administratorId})
     }else {
         res.render('admin/login');
     }
@@ -213,7 +230,7 @@ router.get('/admin/setAdmin',function (req,res,next) {
                 var  newObj = {
                     name:obj.name,
                     phoneNum:obj.phoneNum,
-                    administerId:obj.administerId
+                    administratorId:obj.administratorId
                 }
                 jobArr.push(newObj);
             }
