@@ -43,6 +43,32 @@ router.post('/msgList',function (req,res,next) {
 
 /*获取简历处理状态明细*/
 router.post('/msgDetail',function (req,res,next) {
+   var model = new ResModel();
+    var params = req.body;
+    if(!req.headers.token || req.headers.token.length == 0){
+        model.msg = '请登录';
+        res.send(JSON.stringify(model));
+        return;
+    }
+    var orderLisSql = {where:{uuid:req.headers.token,orderId:params.orderId}};
+    db.OrderApplyList.findAll(orderLisSql).then(function (result) {
+        model.msg = '获取成功'
+        model.code = 0;
+        var objArr = new Array();
+        if(result){
+            for(var i =0;i <result.length;i ++){
+                var obj = result[i].dataValues;
+                obj.intentionStatus = util.intentionStatusENUM(obj.intentionStatus)
+                obj.createdAt = moment(obj.createdAt).format('YYYY-MM-DD HH:mm:ss');
+                objArr.push(obj);
+            }
+        }
+        model.data = objArr;
+        res.send(JSON.stringify(model))
+    }).catch(function (err) {
+        console.log(err +'获取简历处理详情-')
+        res.send(JSON.stringify(model))
+    })
 
 })
 

@@ -21,6 +21,7 @@ db.JobInfo = db.sequelize.import('../model/jobInfo');
 db.Order = db.sequelize.import('../model/order');
 db.Administer = db.sequelize.import('../model/administer')
 db.MsgCode = db.sequelize.import('../model/msgCode');
+db.OrderApplyList = db.sequelize.import('../model/orderApplyList');
 //ngjcltj5yr
 
 

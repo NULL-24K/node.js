@@ -2,7 +2,7 @@
  * Created by chubin on 2018/4/20.
  */
 
-
+/*职位信息表*/
 module.exports = function(sequelize,DataTypes) {
     var JobInfo = sequelize.define('jobInfo',{ // 表里的具体字段
         id:{

@@ -49,6 +49,12 @@ router.post('/applyJob',function (req,res,next) {
                             phoneNum:userResrlt.dataValues.phoneNum
                         }
                         db.Order.upsert(orderSql).then(function (result) {
+                            //.修改之后 向简历处理详情中插入一条数据
+                            db.OrderApplyList.create(params).then(function (addRes) {
+                                console.log('简历处理' +addRes)
+                            }).catch(function (adderr) {
+                                console.log('简历处理' +adderr)
+                            })
                             model.code = 0;
                             if(result){
                                 model.msg = '添加成功';
@@ -60,6 +66,7 @@ router.post('/applyJob',function (req,res,next) {
                         }).catch(function (err) {
                             res.send(JSON.stringify(model))
                         })
+
                     }
                 }).catch(function (userErr) {
                     res.send(JSON.stringify(model))
@@ -85,6 +92,12 @@ router.post('/orderStatus',function (req,res,next) {
             model.code = 0;
             model.msg = '操作成功'
             console.log(result)
+            //.修改之后 向简历处理详情中插入一条数据
+            db.OrderApplyList.create(params).then(function (addRes) {
+                console.log('简历处理' +addRes)
+            }).catch(function (adderr) {
+                console.log('简历处理' +adderr)
+            })
             res.send(JSON.stringify(model));
         }).catch(function (err) {
             console.log(err)

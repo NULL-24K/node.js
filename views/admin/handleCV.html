@@ -72,20 +72,24 @@
                     td_.onclick = function () {
                         console.log(this)
                         var obj = jsonArr[this.id];
+                        obj.intentionStatus =2;
+                        obj.administratorId
+                        /*
+                        * {
+                         orderId:obj.orderId,
+                         intentionStatus:2,
+                         administratorId:administratorId
+                         }*/
                         ajax({
                             method:'POST',
                             url:'http://localhost:3000/apply/orderStatus',
-                            data:{
-                                orderId:obj.orderId,
-                                intentionStatus:2,
-                                administratorId:administratorId
-                            },
+                            data:obj,
                             success:function (res) {
-                                var obj = JSON.parse(res);
-                                if(obj.code ==0){
+                                var resobj = JSON.parse(res);
+                                if(resobj.code ==0){
                                     location.reload(true);
                                 }else {
-                                    alert(obj.msg)
+                                    alert(resobj.msg)
                                 }
                             }
                         })
