@@ -58,7 +58,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-sqldb.sequelize.sync({force: true}).then(function() {
+sqldb.sequelize.sync({force: false}).then(function() {
   console.log("Server successed to start");
 }).catch(function(err){
   console.log("Server failed to start due to error: %s", err);

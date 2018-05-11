@@ -88,7 +88,7 @@
         administratorId = a_['administratorId'];
 
         //后期注释掉
-        dataArr[10] = 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1894384757,2976799759&fm=27&gp=0.jpg'
+        dataArr[10] = 'http://pic.qiantucdn.com/58pic/26/00/19/58ab4edd37583_1024.jpg'
         endEdit(dataArr[10],10);
         var htmlId = '1-' +10;
         var html_ = document.getElementById(htmlId);
@@ -229,7 +229,7 @@
         console.log(params)
         ajax({
             method:'POST',
-            url:'http://localhost:3000/jobs/jobDetail',
+            url:baseUrl+'jobs/jobDetail',
             data:params,
             success:function (res) {
                 var obj = JSON.parse(res);
@@ -237,7 +237,7 @@
                 if(obj.code ==0){
                   //  alert(obj.msg)
                     setTimeout(function () {
-                        window.location.href = 'http://localhost:3000/admin/joblist?administratorId='+administratorId;
+                        window.location.href = baseUrl+'joblist?administratorId='+administratorId;
                     },1500)
                 }else {
                     alert(obj.msg);

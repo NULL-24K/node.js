@@ -7,7 +7,7 @@
     <title>Title</title>
     <script type="text/javascript">
 
-        //  var util = require('../routes/util');
+        //  var util = require('../routes/util')
         function login() {
             var phoneNum = document.getElementById('phoneNum').value;
             var  psd = document.getElementById('psd').value;
@@ -25,7 +25,7 @@
             }
             ajax({
                 method:'POST',
-                url:'http://localhost:3000/account/adminLogin',
+                url: baseUrl+'account/adminLogin',
                 data:{
                     phoneNum:phoneNum,
                     psd:psd
@@ -35,7 +35,7 @@
                     if (obj.code == 0 && obj.data){
                         console.log('登录成功')
                         var administratorId = obj.data.administratorId;
-                        window.location.href = 'http://localhost:3000/admin/main?administratorId=' +administratorId;
+                        window.location.href = baseUrl+'admin/main?administratorId=' +administratorId;
                     }else {
                         alert(obj.msg)
                     }

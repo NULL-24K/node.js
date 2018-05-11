@@ -64,7 +64,7 @@
         var obj = jsonArr[index];
         ajax({
             method:'POST',
-            url:'http://localhost:3000/account/setAdmin',
+            url:baseUrl+'account/setAdmin',
             data:{
                 phoneNum:obj.phoneNum,
                 name:obj.name,
@@ -107,7 +107,7 @@
         }else {
             ajax({
                 method:'POST',
-                url:'http://localhost:3000/account/setAdmin',
+                url:baseUrl+'account/setAdmin',
                 data:{
                     phoneNum:phoneNum,
                     name:name,

@@ -98,6 +98,8 @@ Ajax.prototype.send = function(method,url,callback,data){
     }
 }
 
+var baseUrl = 'http://193.112.186.75:3000/';
+
 function updataImg(imagePath,callBack) {
     if(!imagePath || imagePath.length == 0){
         return;

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel='stylesheet', href='/stylesheets/main.css' />
+    <script src="/jsDic/ajax.js"></script>
     <title>Title</title>
 </head>
 <body>
@@ -30,11 +31,11 @@
     }
     function singTap(index) {
         if(index ==0){
-            window.location.href = 'http://localhost:3000/admin/joblist?administratorId='+admin_id
+            window.location.href = baseUrl+'admin/joblist?administratorId='+admin_id
         }else if(index ==1){
-            window.location.href = 'http://localhost:3000/admin/handleCV?administratorId='+admin_id
+            window.location.href = baseUrl+'admin/handleCV?administratorId='+admin_id
         }else {
-            window.location.href = 'http://localhost:3000/admin/setAdmin?administratorId='+admin_id
+            window.location.href = baseUrl+'admin/setAdmin?administratorId='+admin_id
         }
     }
 </script>

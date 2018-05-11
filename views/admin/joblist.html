@@ -63,7 +63,7 @@
                                 jobId:jsonArr[this.id].jobId
                             }
                             var jsonStr = JSON.stringify(data);
-                            window.location.href = 'http://localhost:3000/admin/jobs?data='+jsonStr;
+                            window.location.href = baseUrl+'admin/jobs?data='+jsonStr;
                         }
                     }
                 }
@@ -86,7 +86,7 @@
         addBtn.innerHTML = addStr;
         lastUL.appendChild(addBtn)  
         lastUL.onclick = function () {
-            window.location.href = 'http://localhost:3000/admin/jobs?administratorId=' +administratorId
+            window.location.href = baseUrl+'admin/jobs?administratorId=' +administratorId
         }
         table.appendChild(lastUL);
     }
@@ -98,7 +98,7 @@
         var obj = jsonArr[index];
         ajax({
             method:'POST',
-            url:'http://localhost:3000/jobs/jobDetail',
+            url:baseUrl+'jobs/jobDetail',
             data:{
                 administratorId:administratorId,
                 type:'delete',

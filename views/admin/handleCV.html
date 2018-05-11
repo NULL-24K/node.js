@@ -82,7 +82,7 @@
                          }*/
                         ajax({
                             method:'POST',
-                            url:'http://localhost:3000/apply/orderStatus',
+                            url:baseUrl+'apply/orderStatus',
                             data:obj,
                             success:function (res) {
                                 var resobj = JSON.parse(res);
@@ -96,7 +96,7 @@
                     }
                 }else if(j ==dataArr[i].length -3){
                     td_.onclick = function () {
-                        window.location.href = 'http://localhost:3000/admin/cvdetail?administratorId='+administratorId
+                        window.location.href = baseUrl+ 'admin/cvdetail?administratorId='+administratorId
                     }
                 }
 
