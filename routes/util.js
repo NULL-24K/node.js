@@ -4,6 +4,7 @@
 
 var db = require('../sqldb');
 var QcloudSms = require("qcloudsms_js");
+var sequelize = require('sequelize')
 
 function isPhoneNum(phoneNum) {
     var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;

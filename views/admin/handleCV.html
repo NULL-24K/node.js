@@ -25,6 +25,7 @@
 </div>
 <script type="text/javascript">
     var json = '<%- JSON.stringify(obj)%>'
+    console.log(json)
     var jsonArr = JSON.parse(json);
     var dataArr = handelData();
     var table = document.getElementById('main');

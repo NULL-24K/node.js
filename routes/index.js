@@ -51,6 +51,7 @@ router.get('/admin/jobs',function (req,res,next) {
                 var resObj = result.dataValues;
                 console.log(resObj.wellArr)
                 resObj.wellArr = JSON.parse(resObj.wellArr);
+                resObj.jobDescribe = resObj.jobDescribe.replace(new RegExp("\n","gm"),"\\n")
                 res.render('admin/jobs',{obj:resObj})
             }
         }).catch(function (err) {
@@ -65,7 +66,7 @@ router.get('/admin/jobs',function (req,res,next) {
 router.get('/admin/joblist',function (req,res,next) {
     var params = URL.parse(req.url, true).query;
     if(!params.administratorId || params.administratorId.length ==0){
-        res.render('admin/login',{name:'ssss',title:'这是title'});
+        res.render('admin/login');
     }else {
         db.JobInfo.findAll({where:{administratorId:params.administratorId}}).then(function (result) {
             var jobArr = new  Array();
@@ -82,9 +83,8 @@ router.get('/admin/joblist',function (req,res,next) {
                     minWorkExperience:obj.minWorkExperience,
                     interviewTimes:obj.interviewTimes,
                     salary:obj.salary,
-                    wellArr:JSON.parse(obj.wellArr),
+                    //wellArr:JSON.parse(obj.wellArr),
                     interViewAddress:obj.interViewAddress,
-                    jobDescribe:obj.jobDescribe,
                     applyNum:obj.applyNum,
                     defApplyNum:obj.defApplyNum,
                     administratorId:obj.administratorId,
@@ -95,7 +95,7 @@ router.get('/admin/joblist',function (req,res,next) {
               //  console.log(typeof obj.wellArr)
             }
            // console.log(jobArr[0])
-            res.render(('admin/joblist'),{obj:jobArr,administratorId:params.administratorId})
+            res.render(('admin/joblist'),{obj:JSON.stringify(jobArr),administratorId:params.administratorId})
         }).catch(function (err) {
             console.log(err)
             res.render('admin/main',{name:'',adminId:params.administratorId})

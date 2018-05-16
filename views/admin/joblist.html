@@ -22,7 +22,8 @@
   </table>
 </div>
 <script type="text/javascript">
-    var json = '<%- JSON.stringify(obj)%>'
+    var json = '<%- obj%>'
+    console.log(json)
     var administratorId = '<%- administratorId %>';
     var jsonArr = JSON.parse(json);
     var dataArr = handelData();

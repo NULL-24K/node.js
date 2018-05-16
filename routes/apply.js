@@ -9,6 +9,7 @@ var URL = require('url');
 var ResModel = require('./responseModel');
 var util = require('./util');
 var db = require('../sqldb');
+var sequelize = require('sequelize')
 
 
 /*工作申请*/
@@ -21,14 +22,14 @@ router.post('/applyJob',function (req,res,next) {
     if (token.length > 0){
         //.判断用户是否有权限申请(是否申请/申请次数是否超过限制)
         db.Order.findOne({where:{uuid:req.headers.token,jobId:req.body.jobId}}).then(function (result) {
-            console.log(result +'***')
+
             if(result){
                 model.msg = '您已申请该职位,无需再申请'
                 res.send(JSON.stringify(model))
             }else {//向order表中插入数据
                 //.查询用户的基本信息
                 db.User.findOne({where:{uuid:req.headers.token}}).then(function (userResrlt) {
-                    if(!userResrlt || !userResrlt.dataValues.nickName ||!userResrlt.dataValues.jobExpress ||!userResrlt.dataValues.educations||!userResrlt.dataValues.jobIntenview){
+                    if(!userResrlt || !userResrlt.dataValues.nickName  ||!userResrlt.dataValues.educations||!userResrlt.dataValues.jobIntenview){
                         model.code = -1;
                         model.msg = '您尚未完善您的简历,请先完成您的简历'
                         res.send(JSON.stringify(model))
@@ -48,20 +49,22 @@ router.post('/applyJob',function (req,res,next) {
                             userName:userResrlt.dataValues.nickName,
                             phoneNum:userResrlt.dataValues.phoneNum
                         }
-                        db.Order.upsert(orderSql).then(function (result) {
+                        console.log(sequelize.DataTypes.UUIDV1() +'####')
+                        db.Order.create(orderSql).then(function (result) {
                             //.修改之后 向简历处理详情中插入一条数据
-                            db.OrderApplyList.create(params).then(function (addRes) {
-                                console.log('简历处理' +addRes)
-                            }).catch(function (adderr) {
-                                console.log('简历处理' +adderr)
-                            })
                             model.code = 0;
                             if(result){
+                                db.OrderApplyList.create(result.dataValues).then(function (addRes) {
+                                    console.log('简历处理' +addRes)
+                                }).catch(function (adderr) {
+                                    console.log('简历处理错误' +adderr)
+                                })
                                 model.msg = '添加成功';
                             }else {
                                 model.msg = '修改成功'
                             }
                             model.data = {};
+
                             res.send(JSON.stringify(model))
                         }).catch(function (err) {
                             res.send(JSON.stringify(model))
