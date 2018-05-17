@@ -241,4 +241,13 @@ router.get('/admin/setAdmin',function (req,res,next) {
 
 })
 
+router.get('/admin/web_one',function (req,res,next) {
+   res.render('admin/web_one') ;
+})
+
+
+router.get('/admin/web_two',function (req,res,next) {
+    res.render('admin/web_two') ;
+})
+
 module.exports = router;
