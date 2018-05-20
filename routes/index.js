@@ -247,7 +247,16 @@ router.get('/admin/web_one',function (req,res,next) {
 
 
 router.get('/admin/web_two',function (req,res,next) {
+
     res.render('admin/web_two') ;
+})
+
+router.get('/test',function (req,res,next) {
+    var  model = new ResModel();
+    model.data = {vcName:'native_dyvc'}
+    model.code =0;
+    model.msg = '成功'
+    res.send(JSON.stringify(model))
 })
 
 module.exports = router;

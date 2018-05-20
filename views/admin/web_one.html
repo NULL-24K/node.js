@@ -7,19 +7,24 @@
 </head>
 <body>
  <p>这是H5_one</p>
- <button onclick="pushNative()">跳转至原生界面two</button>
- <button onclick="pushNative_web()">跳转至原生webVC</button>
- <button onclick="pushH5()">跳转至H5界面</button>
+ <p>h5</p>
+ <p>h5</p>
+ <p>h5</p>
+ <button onclick="pushNative()" style="font-size: 30px">跳转至原生界面two</button>
+ <button onclick="pushNative_web()" style="font-size: 30px">跳转至原生webVC</button>
+ <button onclick="pushH5()" style="font-size: 30px">跳转至H5界面</button>
+ <script type="text/javascript">
+     function pushNative() {
+
+         window.location.href = baseUrl+'admin/web_two?option=' +'native_two#0'
+     }
+     function pushNative_web() {
+
+         window.location.href = baseUrl+'admin/web_two?option=' +'web_one#1#webVC跳转至原生'
+     }
+     function pushH5() {
+         window.location.href = baseUrl+'admin/web_two'
+     }
+ </script>
 </body>
-<script type="text/javascript">
-    function pushNative() {
-        window.location.href = baseUrl+'admin/web_two?'
-    }
-    function pushNative_web() {
-        window.location.href = baseUrl+'admin/web_two?'
-    }
-    function pushH5() {
-        window.location.href = baseUrl+'admin/web_two'
-    }
-</script>
 </html>
