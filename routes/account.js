@@ -188,7 +188,9 @@ router.post('/weChatLogin',function (req,res,next) {
             model.code = 0;
             model.msg = '获取成功'
             var obj = JSON.parse(body);
+
             db.Account.findOne({where:{openid:obj.openid}}).then(function (accountRes) {
+                console.log(accountRes +'###');
                 if(accountRes){
                     obj.token = accountRes.dataValues.uuid
                 }
@@ -203,7 +205,6 @@ router.post('/weChatLogin',function (req,res,next) {
             res.send(JSON.stringify(model))
         }
     })
-
 })
 
 /*管理员登录*/
