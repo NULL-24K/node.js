@@ -65,9 +65,14 @@
                 }
                 if(j == dataArr[i].length -1){//拒绝
                     classFromStatus(td_,jsonArr[i].intentionStatus_Int,2);
-                    td_.onclick = function () {
+                    if(window.confirm('确定拒绝该申请?')){
+                        td_.onclick = function () {
+
+                        }
+                    }else {
 
                     }
+
                 }else if(j ==dataArr[i].length -2){//邀请
                     classFromStatus(td_,jsonArr[i].intentionStatus_Int,1);
                     td_.onclick = function () {

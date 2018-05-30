@@ -88,12 +88,12 @@
         administratorId = a_['administratorId'];
 
         //后期注释掉
-        dataArr[10] = 'http://pic.qiantucdn.com/58pic/26/00/19/58ab4edd37583_1024.jpg'
-        endEdit(dataArr[10],10);
-        var htmlId = '1-' +10;
-        var html_ = document.getElementById(htmlId);
-        html_.style.backgroundImage = "url('" +dataArr[10] +"')";
-        html_.style.backgroundSize = 'cover'
+//        dataArr[10] = 'http://pic.qiantucdn.com/58pic/26/00/19/58ab4edd37583_1024.jpg'
+//        endEdit(dataArr[10],10);
+//        var htmlId = '1-' +10;
+//        var html_ = document.getElementById(htmlId);
+//        html_.style.backgroundImage = "url('" +dataArr[10] +"')";
+//        html_.style.backgroundSize = 'cover'
     }
     function handelData() {
         dataArr[0] = jsonDic.companyName;
@@ -265,18 +265,22 @@
             SecretId: 'AKID8A2iHgkzsa6QbfrFk3A5pOrpdIm47B0d',
             SecretKey: 'd63ueDbbQ4bwIf2SqKrKbhcLtJXdgqv1',
         })
+
         cos.sliceUploadFile({
             Bucket: 'goldbee-1256585845',
             Region: 'ap-chengdu',
             Key: file__.name,
-            Body: file__, // 上传文件对象
+            Body: file__ // 上传文件对象
 //            onProgress: function(progressData) {
 //                console.log(JSON.stringify(progressData));
 //            }
         }, function(err, data) {
-
-            console.log(err || data);
-           // console.log(data.Location);
+            console.log(data||err);
+            if (data){
+                dataArr[10]= 'https://'+data.Location;
+                console.log(data.Location);
+                endEdit(dataArr[10],10);
+            }
         });
     }
 

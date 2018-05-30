@@ -93,6 +93,11 @@ module.exports = function(sequelize,DataTypes) {
             type:DataTypes.STRING,
             allowNull:false,
         },
+        /*删除操作 默认未删除 0:正常 其他:删除*/
+        deleteType:{
+            type:DataTypes.INTEGER,
+            defaultValue:0
+        }
     },{
         freezeTableName: true
     });

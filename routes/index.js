@@ -223,7 +223,7 @@ router.get('/admin/setAdmin',function (req,res,next) {
     }
 
     //.获取
-        db.Administer.findAll().then(function (result) {
+        db.Administer.findAll({where:{deleteType:0}}).then(function (result) {
             var jobArr = new  Array();
             for(var i =0;i <result.length; i++){
                 var  obj = result[i].dataValues;

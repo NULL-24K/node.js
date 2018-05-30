@@ -50,7 +50,11 @@
                 td_.style.padding = '5px';
                 if(j ==dataArr[i].length -1){
                     td_.onclick = function () {
-                        deleteJob(this.id)
+                        if(window.confirm('确定要删除该超级管理员?一旦删除 该管理员所有的关系信息将被转移到超级管理员下')){
+                            deleteAdmin(this.id)
+                        }else {
+
+                        }
                     }
                     td_.style.color = 'red'
                 }
@@ -60,7 +64,7 @@
         }
     }
 
-    function deleteJob(index) {
+    function deleteAdmin(index) {
         var obj = jsonArr[index];
         ajax({
             method:'POST',
@@ -105,23 +109,27 @@
         }else if(!phoneNum || phoneNum.length != 11){
             alert('手机号码格式不正确');
         }else {
-            ajax({
-                method:'POST',
-                url:baseUrl+'account/setAdmin',
-                data:{
-                    phoneNum:phoneNum,
-                    name:name,
-                    administratorId:'superAdminister',
-                    type:1
-                },
-                success:function (res) {
-                    var obj = JSON.parse(res);
-                    if (obj.code == 0 ){
-                        console.log('添加成功')
-                        location.reload(true);
+            if(window.confirm('确定添加该管理员?')){
+                ajax({
+                    method:'POST',
+                    url:baseUrl+'account/setAdmin',
+                    data:{
+                        phoneNum:phoneNum,
+                        name:name,
+                        administratorId:'superAdminister',
+                        type:1
+                    },
+                    success:function (res) {
+                        var obj = JSON.parse(res);
+                        if (obj.code == 0 ){
+                            console.log('添加成功')
+                            location.reload(true);
+                        }
                     }
-                }
-            })
+                })
+            }else {
+
+            }
         }
     }
 </script>

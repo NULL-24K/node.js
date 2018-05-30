@@ -31,6 +31,7 @@ router.post('/Login',function(req,res,next) {
             var obj = msgResult.dataValues;
             var timestamp = Date.parse(new Date());
             var msgCreatetime = obj.msgCreatetime;
+           // console.log(obj.msgCreatetime +'时间'+timestamp);
             if((timestamp -msgCreatetime) > 1800000){//超时
                 model.msg = '验证码已失效'
                 res.send(JSON.stringify(model));
@@ -109,25 +110,31 @@ router.post('/setAdmin',function (req,res,next) {
 
     if(params.type == 1){//增加
         var timestamp = Date.parse(new Date());
-        var sql = {administratorId:'goldbeeAdmin'+params.phoneNum+'_'+timestamp,phoneNum:params.phoneNum,name:params.name}
-        db.Administer.create(sql).then(function (result) {
+        var sql = {administratorId:'goldbeeAdmin'+params.phoneNum+'_'+timestamp,phoneNum:params.phoneNum,name:params.name,deleteType:0}
+        db.Administer.upsert(sql).then(function (result) {
             //成功 更新用户表 将account中shareID替换
             console.log(result)
-            if(result){
+
                 model.code = 0;
                 model.msg = '添加成功'
                 db.Account.upsert({phoneNum:params.phoneNum,shareId:result.dataValues.administratorId},{where:{phoneNum:params.phoneNum}}).then(function (addres) {
 
                 })
-            }else {
-                model.msg = '您已经添加该管理员,无需重复添加'
-            }
+
+                //model.msg = '您已经添加该管理员,无需重复添加'
+
             res.send(JSON.stringify(model))
         }).catch(function (err) {
             res.send(JSON.stringify(model))
         })
+
     }else if(params.type == 2){//删除
-        db.Administer.destroy({where:{phoneNum:params.phoneNum}}).then(function (result) {
+        if(params.phoneNum == 18767090623){
+            model.msg = '超级管理员无法删除,如需要删除 请联系开发'
+            res.send(JSON.stringify(model))
+            return;
+        }
+        db.Administer.update({deleteType:1},{where:{phoneNum:params.phoneNum}}).then(function (result) {
             db.Account.upsert({phoneNum:params.phoneNum,shareId:'goldbee'},{where:{phoneNum:params.phoneNum}}).then(function (addres) {
 
             })
@@ -168,8 +175,10 @@ router.post('/getMsg',function (req,res,next) {
                 model.msg = '短信发送成功'
                 model.code = 0;
                 res.send(JSON.stringify(model))
-                db.MsgCode.upsert({inputNum:0,phoneNum:req.body.phoneNum,msgCode:msgcode_,msgCreatetime:Date.parse(new Date())}).then(function (msgRes) {
-                    console.log(msgRes)
+                db.MsgCode.upsert({inputNum:0,phoneNum:req.body.phoneNum,msgCode:msgcode_,msgCreatetime:Date.parse(new Date())},{where:{phoneNum:req.body.phoneNum}}).then(function (msgRes) {
+                    console.log(msgRes +'生成短信')
+                }).catch(function (msgerr) {
+                    console.log(msgerr+'修改短信错误')
                 })
             }
                 console.log("response data:", resData);
@@ -217,7 +226,7 @@ router.post('/adminLogin',function (req,res,next) {
         return;
     }
 
-    db.Administer.findOne({where:{phoneNum:params.phoneNum}}).then(function (result) {
+    db.Administer.findOne({where:{phoneNum:params.phoneNum,deleteType:0}}).then(function (result) {
         if(result){
             if(params.psd != result.dataValues.psd){
                 model.msg = '密码错误'

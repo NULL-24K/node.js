@@ -57,7 +57,12 @@
                 if(j ==dataArr[i].length -1 || j ==dataArr[i].length -2){
                     td_.onclick = function () {
                         if(this.innerHTML == '删除该职位'){//删除职位
-                            deleteJob(this.id)
+                            if(window.confirm('确定要删除该职位?')){
+                                deleteJob(this.id)
+                            }else {
+
+                            }
+
                         }else {
                             var data = {
                                 administratorId:administratorId,
