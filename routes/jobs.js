@@ -138,6 +138,7 @@ router.post('/jobList',function(req,res,next) {
                     jobInfo.salary = obj.salary;
                     jobInfo.time = obj.interviewTimes;
                     jobInfo.administratorId = obj.administratorId;
+                    jobInfo.applyNum = obj.applyNum +obj.defApplyNum;
                     jobArr.push(jobInfo);
                 }
                 model.data = jobArr;

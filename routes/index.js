@@ -143,7 +143,7 @@ router.get('/admin/cvdetail',function (req,res,next){
     var adminId = params.administratorId;
     if(adminId && adminId.length >0){
         var sqlInfo = {where:{
-            uuid:params.token
+            uuid:adminId
         }}
         db.User.findOne(sqlInfo).then(function (result) {
             if (result && result.dataValues) {
@@ -192,34 +192,13 @@ router.get('/admin/cvdetail',function (req,res,next){
     }
 })
 
-router.post('/updata',function (req,res,next) {
-    var model = new ResModel();
-    var params = req.body;
-    if(req.body.imgUrl){
-        util.updataImg__(params.imgUrl,params.imgName,function (result) {
-            if(result.status == 0){
-                model.code = 0;
-                model.msg = '上传成功'
-                model.data = {imgUrl:result.imgUrl}
-                res.send(JSON.stringify(model))
-            }else {
-                model.code = 1;
-                model.msg = '上传失败'
-                res.send(JSON.stringify(model))
-            }
-        })
-    }else {
-        model.msg = '请求无效,请选择图片'
-        res.send(JSON.stringify(model));
-    }
-})
-
 
 router.get('/admin/setAdmin',function (req,res,next) {
 
     var params = URL.parse(req.url, true).query;
     if(params.administratorId !='superAdminister'){
         res.render('admin/login');
+        return;
     }
 
     //.获取
@@ -240,6 +219,33 @@ router.get('/admin/setAdmin',function (req,res,next) {
         })
 
 })
+/*配置管理*/
+router.get('/admin/config',function (req,res,next) {
+
+    var params = URL.parse(req.url, true).query;
+    if(params.administratorId !='superAdminister'){
+        res.render('admin/login');
+        return;
+    }
+
+    //.获取
+    db.Config.findAll().then(function (result) {
+        var jobArr = new  Array();
+        for(var i =0;i <result.length; i++){
+            var  obj = result[i].dataValues;
+            var  newObj = {
+                configName:obj.configName,
+                configValue:obj.configValue,
+            }
+            jobArr.push(newObj);
+        }
+        res.render(('admin/config'),{obj:jobArr});
+    }).catch(function (err) {
+        console.log(err)
+        res.render('admin/config',{obj:null});
+    })
+})
+
 
 router.get('/admin/web_one',function (req,res,next) {
    res.render('admin/web_one') ;

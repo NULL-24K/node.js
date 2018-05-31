@@ -12,6 +12,7 @@ var jobs = require('./routes/jobs');
 var apply = require('./routes/apply');
 var sqldb = require('./sqldb');
 var message = require('./routes/message');
+var config = require('./routes/config');
 // var ajax = require('./routes/ajax')
 
 var ejs = require('ejs')
@@ -41,6 +42,7 @@ app.use('/account',account);
 app.use('/jobs',jobs);
 app.use('/apply',apply);
 app.use('/message',message);
+app.use('/config',config);
 
 
 // catch 404 and forward to error handler

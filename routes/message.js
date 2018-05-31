@@ -59,7 +59,7 @@ router.post('/msgDetail',function (req,res,next) {
             for(var i =0;i <result.length;i ++){
                 var obj = result[i].dataValues;
                 obj.intentionStatus = util.intentionStatusENUM(obj.intentionStatus)
-                obj.createdAt = moment(obj.createdAt).format('YYYY-MM-DD HH:mm:ss');
+                obj.updatedAt = moment(obj.updatedAt).format('YYYY-MM-DD HH:mm:ss');
                 objArr.push(obj);
             }
         }

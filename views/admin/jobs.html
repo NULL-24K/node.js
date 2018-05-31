@@ -5,7 +5,7 @@
     <link rel='stylesheet', href='/stylesheets/jobs.css' />
     <script src="/jsDic/ajax.js"></script>
     <script src="/cos-js-sdk-v5/dist/cos-js-sdk-v5.min.js" ></script>
-    <title>Title</title>
+    <title>职位详情</title>
 </head>
 <body>
 <h1>职位管理</h1>
@@ -34,11 +34,13 @@
     </div>
     <div class="cellBackSty">
         <b class="titleSty" id="4">最低学历要求:  </b>
-        <input type="text" placeholder="请输入最低学历要求" onblur="endEdit(this.value,4)" id="1-4"/>
+        <select onchange="selectChanged(this.value,4)" id="1-4"></select>
+        <!--<input type="text" placeholder="请输入最低学历要求" onblur="endEdit(this.value,4)" id="1-4"/>-->
     </div>
     <div class="cellBackSty">
          <b class="titleSty" id="12">最低工作年限要求:  </b>
-        <input type="text" placeholder="请输入最低工作年限要求" onblur="endEdit(this.value,12)" id="1-12"/>
+        <select onchange="selectChanged(this.value,12)" id="1-12"></select>
+        <!--<input type="text" placeholder="请输入最低工作年限要求" onblur="endEdit(this.value,12)" id="1-12"/>-->
     </div>
     <div class="cellBackSty">
         <b class="titleSty" id="5">公司地址:  </b>
@@ -54,11 +56,13 @@
     </div>
     <div class="cellBackSty">
          <b class="titleSty" id="13">面试截止日期:  </b>
-         <input type="text" placeholder="请输入面试地截止日期:(如05-08 上午)" style="width: 280px" onblur="endEdit(this.value,13)" id="1-13"/>
+        <input id="1-13" type="date" />
+         <!--<input type="text" placeholder="请输入面试地截止日期:(如05-08 上午)" style="width: 280px" onblur="endEdit(this.value,13)" id="1-13"/>-->
     </div>
     <div class="cellBackSty">
         <b class="titleSty" id="8">薪资范围:  </b>
-        <input type="text" placeholder="请输入薪资范围" onblur="endEdit(this.value,8)" id="1-8"/>
+        <select onchange="selectChanged(this.value,8)" id="1-8"></select>
+        <!--<input type="text" placeholder="请输入薪资范围" onblur="endEdit(this.value,8)" id="1-8"/>-->
     </div>
     <div class="cellBackSty">
         <b class="titleSty" id="9">公司福利:  </b>
@@ -73,28 +77,55 @@
 </div>
 <script type="text/javascript">
     var administratorId ='';
-    var defwellArr = ['五险一金','全款皮肤','定期体检','绩效奖金','季度旅游','美女如云','工作餐','提供住宿','交通补贴','出差补贴','节日福利'];
+    var defwellArr = [];//['五险一金','全款皮肤','定期体检','绩效奖金','季度旅游','美女如云','工作餐','提供住宿','交通补贴','出差补贴','节日福利'];
+    var defDopArr =[];
+    var defWorkyearsArr =[];
+    var defIncomArr =[];
     var json = '<%-JSON.stringify(obj)%>';
     var jsonDic = JSON.parse(json);
     var dataArr = [];
     dataArr[14] = '';
     dataArr[9] = []
-    createWellCell()
+    getConfigData();
     if(jsonDic){
         handelData();
         administratorId = jsonDic.administratorId;
     }else {
         var a_ = GetRequest();
         administratorId = a_['administratorId'];
-
-        //后期注释掉
-//        dataArr[10] = 'http://pic.qiantucdn.com/58pic/26/00/19/58ab4edd37583_1024.jpg'
-//        endEdit(dataArr[10],10);
-//        var htmlId = '1-' +10;
-//        var html_ = document.getElementById(htmlId);
-//        html_.style.backgroundImage = "url('" +dataArr[10] +"')";
-//        html_.style.backgroundSize = 'cover'
     }
+
+    /*获取配置*/
+    function getConfigData() {
+        ajax({
+            method:'POST',
+            url:baseUrl+'config/config',
+            data:{type:0},
+            success:function (res) {
+                var obj = JSON.parse(res);
+                console.log(obj)
+                if(obj.code ==0){
+                    for (var  i=0; i<obj.data.length;i ++){
+                        var dic = obj.data[i];
+                        if (dic.configName =='well'){
+                            defwellArr = dic.configValue.split("/");
+                        }else if (dic.configName =='dop'){
+                            defDopArr = dic.configValue.split("/");
+                        }else if (dic.configName =='icom'){
+                            defIncomArr = dic.configValue.split("/");
+                        }else if (dic.configName =='workYears'){
+                            defWorkyearsArr=dic.configValue.split("/");
+                        }
+                    }
+                    createSelect();
+                    createWellCell()
+                }else {
+                    alert(obj.msg);
+                }
+            }
+        })
+    }
+
     function handelData() {
         dataArr[0] = jsonDic.companyName;
         dataArr[1] = jsonDic.companyDescrie;
@@ -246,6 +277,46 @@
         })
     }
 
+    /*动态添加下拉选择框内容*/
+    function createSelect() {
+        var  dopArr = ['不限','小学','初中','高中','本科','硕士']
+        var selectDiv_xl = document.getElementById('1-4');
+        for(var i=0;i <dopArr.length;i ++){
+           var option = document.createElement('option');
+            option.value = dopArr[i]
+            option.innerHTML=dopArr[i]
+            selectDiv_xl.appendChild(option);
+        }
+
+        var selectDiv_money = document.getElementById('1-8');
+        var moneyArr = ['1000~3000','3000~5000','5000~8000','8000~12000','12000~15000','15000以上']
+        for(var i=0;i <moneyArr.length;i ++){
+            var option = document.createElement('option');
+            option.value = moneyArr[i]
+            option.innerHTML=moneyArr[i]
+            selectDiv_money.appendChild(option);
+        }
+
+
+        var selectDiv_workYears = document.getElementById('1-12');
+        var workArr = ['不限','1年以内','1~3年','3~5年','5~10年','10年以上']
+        for(var i=0;i <workArr.length;i ++){
+            var option = document.createElement('option');
+            option.value = workArr[i]
+            option.innerHTML=workArr[i]
+            selectDiv_workYears.appendChild(option);
+        }
+
+        var timeDiv = document.getElementById('1-13');
+        console.log(CurentTime())
+        timeDiv.value = CurentTime();
+        timeDiv.min = CurentTime();
+    }
+    /*下拉框选择*/
+   function selectChanged(e,index) {
+       console.log(e,index);
+       endEdit(e,index);
+   }
 
 
     var image = '';
@@ -284,6 +355,28 @@
         });
     }
 
+    function CurentTime()
+    {
+        var now = new Date();
+
+        var year = now.getFullYear();       //年
+        var month = now.getMonth() + 1;     //月
+        var day = now.getDate();            //日
+
+        var clock = year + "-";
+
+        if(month < 10)
+            clock += "0";
+
+        clock += month + "-";
+
+        if(day < 10)
+            clock += "0";
+
+        clock += day + "";
+
+        return(clock);
+    }
 
 </script>
 </body>

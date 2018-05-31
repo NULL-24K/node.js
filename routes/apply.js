@@ -49,7 +49,20 @@ router.post('/applyJob',function (req,res,next) {
                             userName:userResrlt.dataValues.nickName,
                             phoneNum:userResrlt.dataValues.phoneNum
                         }
-                        console.log(sequelize.DataTypes.UUIDV1() +'####')
+                       // console.log(sequelize.DataTypes.UUIDV1() +'####')
+                        db.JobInfo.findOne({where:{jobId:req.body.jobId}}).then(function (findJobRes) {
+                            if (findJobRes){
+                                console.log(findJobRes.dataValues)
+                                db.JobInfo.update({applyNum:findJobRes.dataValues.applyNum+1},{where:{jobId:req.body.jobId}}).then(function (jobRest) {
+                                    console.log('修改申请人数成功'+jobRest)
+                                }).catch(function (jobErr) {
+                                    console.log('修改申请人数错误'+jobErr)
+                                })
+                            }
+                        }).catch(function (findJobErr) {
+                            console.log('查询申请人数错误'+jobErr)
+                        })
+
                         db.Order.create(orderSql).then(function (result) {
                             //.修改之后 向简历处理详情中插入一条数据
                             model.code = 0;

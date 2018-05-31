@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/jsDic/ajax.js"></script>
+    <link rel='stylesheet', href='/stylesheets/jobs.css' />
+    <title>配置管理</title>
+</head>
+<body>
+
+<h1>配置管理</h1>
+<h2 style="color: red">注意:所有配置不能为空,必须有值,如果配置为多个值,中间以/分割</h2>
+
+<div>
+    <div class="cellBackSty">
+        <p class="titleSty" id="well">公司福利配置:  </p>
+        <p style="margin-left: 20px;color: green" id="well_lab"></p>
+        <textarea class="textAreSty"  placeholder="请输入公司福利配置" onblur="endEdit(this.value,'well_lab')" id="well_input"></textarea>
+        <button style="font-size: 24px;margin-left: 100px;margin-top: 20px;" onclick="subMit('well')">提交</button>
+    </div>
+    <div class="cellBackSty">
+        <p class="titleSty" id="dop">学历配置:  </p>
+        <p style="margin-left: 20px;color: green" id="dop_lab"></p>
+        <textarea class="textAreSty"  placeholder="请输入学历配置" onblur="endEdit(this.value,'dop_lab')" id="dop_input"></textarea>
+        <button style="font-size: 24px;margin-left: 100px;margin-top: 20px;" onclick="subMit('dop')">提交</button>
+    </div>
+    <div class="cellBackSty">
+        <p class="titleSty" id="incom">薪资配置:  </p>
+        <p style="margin-left: 20px;color: green" id="incom_lab"></p>
+        <textarea class="textAreSty"  placeholder="请输入薪资配置" onblur="endEdit(this.value,'incom_lab')" id="incom_input"></textarea>
+        <button style="font-size: 24px;margin-left: 100px;margin-top: 20px;" onclick="subMit('incom')">提交</button>
+    </div>
+    <div class="cellBackSty">
+        <p class="titleSty" id="workYears">工作年限配置:  </p>
+        <p style="margin-left: 20px;color: green" id="workYears_lab"></p>
+        <textarea class="textAreSty"  placeholder="请输入工作年限配置" onblur="endEdit(this.value,'workYears_lab')" id="workYears_input"></textarea>
+        <button style="font-size: 24px;margin-left: 100px;margin-top: 20px;" onclick="subMit('workYears')">提交</button>
+    </div>
+
+</div>
+
+    <script type="text/javascript">
+        var json = '<%-JSON.stringify(obj)%>';
+        var jsonDicArr = JSON.parse(json);
+        setNomData();
+
+        function setNomData() {
+            for(var i =0;i <jsonDicArr.length;i ++){
+                var obj = jsonDicArr[i];
+                endEdit(obj.configValue,obj.configName+'_lab')
+                var inputDiv = document.getElementById(obj.configName+'_input');
+                inputDiv.value = obj.configValue;
+            }
+        }
+
+        function endEdit(value,id) {
+            var lab = document.getElementById(id);
+            lab.innerHTML = value;
+        }
+        function subMit(configName) {
+            var div = document.getElementById(configName+'_input');
+            if (div.value.length <1){
+                alert('参数不能为空')
+                return;
+            }
+            var params = {
+                configName:configName,
+                configValue:div.value,
+                administratorId:'superAdminister',
+                type:1
+            }
+            console.log(params)
+            ajax({
+                method:'POST',
+                url:baseUrl+'config/config',
+                data:params,
+                success:function (res) {
+                    var obj = JSON.parse(res);
+                    console.log(obj)
+                    if(obj.code ==0){
+                       alert(obj.msg)
+                    }else {
+                        alert(obj.msg);
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>

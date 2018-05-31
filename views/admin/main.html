@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel='stylesheet', href='/stylesheets/main.css' />
     <script src="/jsDic/ajax.js"></script>
-    <title>Title</title>
+    <title>首页</title>
 </head>
 <body>
 <h1 class="h1titleSty"><%=name%>  欢迎您进入蜜蜂直聘管理系统</h1>
@@ -21,21 +21,29 @@
         <p class="bigTitleSty">管理员管理</p>
         <p class="titleSty">添加/删除管理员</p>
     </div>
+    <div class="cellBackSty" onclick="singTap(3)" id="config">
+        <p class="bigTitleSty">配置设置</p>
+        <p class="titleSty">添加/修改配置</p>
+    </div>
 </div>
 <script>
 
     var admin_id = '<%-adminId %>'
     if(admin_id != 'superAdminister'){
        var adminView = document.getElementById('superAdmin');
+        var configView = document.getElementById('superAdmin');
         adminView.style.display = 'none'
+        configView.style.display = 'none'
     }
     function singTap(index) {
         if(index ==0){
             window.location.href = baseUrl+'admin/joblist?administratorId='+admin_id
         }else if(index ==1){
             window.location.href = baseUrl+'admin/handleCV?administratorId='+admin_id
-        }else {
+        }else if(index ==2){
             window.location.href = baseUrl+'admin/setAdmin?administratorId='+admin_id
+        }else {
+            window.location.href = baseUrl+'admin/config?administratorId='+admin_id
         }
     }
 </script>
