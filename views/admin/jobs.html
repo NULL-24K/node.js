@@ -56,7 +56,7 @@
     </div>
     <div class="cellBackSty">
          <b class="titleSty" id="13">面试截止日期:  </b>
-        <input id="1-13" type="date" />
+        <input id="1-13" type="date" onblur="endEdit(this.value,13)"/>
          <!--<input type="text" placeholder="请输入面试地截止日期:(如05-08 上午)" style="width: 280px" onblur="endEdit(this.value,13)" id="1-13"/>-->
     </div>
     <div class="cellBackSty">
@@ -111,7 +111,7 @@
                             defwellArr = dic.configValue.split("/");
                         }else if (dic.configName =='dop'){
                             defDopArr = dic.configValue.split("/");
-                        }else if (dic.configName =='icom'){
+                        }else if (dic.configName =='incom'){
                             defIncomArr = dic.configValue.split("/");
                         }else if (dic.configName =='workYears'){
                             defWorkyearsArr=dic.configValue.split("/");
@@ -279,7 +279,7 @@
 
     /*动态添加下拉选择框内容*/
     function createSelect() {
-        var  dopArr = ['不限','小学','初中','高中','本科','硕士']
+        var  dopArr = defDopArr;// ['不限','小学','初中','高中','本科','硕士']
         var selectDiv_xl = document.getElementById('1-4');
         for(var i=0;i <dopArr.length;i ++){
            var option = document.createElement('option');
@@ -289,7 +289,8 @@
         }
 
         var selectDiv_money = document.getElementById('1-8');
-        var moneyArr = ['1000~3000','3000~5000','5000~8000','8000~12000','12000~15000','15000以上']
+
+        var moneyArr = defIncomArr;//['1000~3000','3000~5000','5000~8000','8000~12000','12000~15000','15000以上']
         for(var i=0;i <moneyArr.length;i ++){
             var option = document.createElement('option');
             option.value = moneyArr[i]
@@ -299,7 +300,7 @@
 
 
         var selectDiv_workYears = document.getElementById('1-12');
-        var workArr = ['不限','1年以内','1~3年','3~5年','5~10年','10年以上']
+        var workArr = defWorkyearsArr;//['不限','1年以内','1~3年','3~5年','5~10年','10年以上']
         for(var i=0;i <workArr.length;i ++){
             var option = document.createElement('option');
             option.value = workArr[i]

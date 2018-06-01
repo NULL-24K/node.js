@@ -12,8 +12,12 @@ util.initConfig();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index');
+   res.render('index');
 });
+
+router.get('/favicon.ico', function(req, res, next) {
+   console.log('无效请求')
+})
 
 /*登录*/
 router.get('/admin/login',function (req,res,next) {
@@ -51,7 +55,8 @@ router.get('/admin/jobs',function (req,res,next) {
                 var resObj = result.dataValues;
                 console.log(resObj.wellArr)
                 resObj.wellArr = JSON.parse(resObj.wellArr);
-                resObj.jobDescribe = resObj.jobDescribe.replace(new RegExp("\n","gm"),"\\n")
+                resObj.jobDescribe = resObj.jobDescribe.replace(new RegExp("\n","gm"),"\\n");
+                resObj.companyDescrie = resObj.companyDescrie.replace(new RegExp("\n","gm"),"\\n");
                 res.render('admin/jobs',{obj:resObj})
             }
         }).catch(function (err) {
@@ -77,7 +82,7 @@ router.get('/admin/joblist',function (req,res,next) {
                     companyName:obj.companyName,
                     jobName:obj.jobName,
                     companyImgUrl:obj.companyImgUrl,
-                    companyDescrie:obj.companyDescrie,
+                 //   companyDescrie:obj.companyDescrie,
                     workAddress:obj.workAddress,
                     minEducation:obj.minEducation,
                     minWorkExperience:obj.minWorkExperience,

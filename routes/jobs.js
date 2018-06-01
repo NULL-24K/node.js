@@ -79,6 +79,7 @@ router.post('/jobDetail',function (req,res,next) {
                 _jobInfo.jobLocation = result.dataValues.workAddress;
                 _jobInfo.jobDescribe = result.dataValues.jobDescribe;
                 _jobInfo.applyState = '立即申请';
+                _jobInfo.companyDescribe = result.dataValues.companyDescrie;
                 _jobInfo.administratorId = result.dataValues.administratorId;
                 _jobInfo.jobid = result.dataValues.jobId;
                 _jobInfo.companyName = result.dataValues.companyName;
@@ -115,9 +116,15 @@ router.post('/jobList',function(req,res,next) {
     var  model = new ResModel();
 
     var page = 1, pageSize = 10;
+    var adminId = req.body.adminId;
+    var sql_where = {administratorId:'superAdminister'}
+    if (adminId && adminId !='goldbee'){
+        sql_where = {administratorId:adminId|'superAdminister'}
+    }
+    console.log(sql_where)
     if (req.body.type == 0){
         var jobsSql = {
-            where:'',
+            where:sql_where,
             offset:(page - 1) * pageSize,
             limit:pageSize
         }

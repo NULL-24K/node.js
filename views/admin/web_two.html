@@ -17,6 +17,15 @@
         var div = document.getElementById('getTitle');
         div.innerHTML = title+'___'+content;
     }
+
+     //客户端首先调用你的函数 并将参数传给你 你收到客户端的调用后 调用客户端的函数 将参数回传给客户端
+     function nativeUserFun(option) {//option是客户端传给你的参数
+         //这里可以对option进行判断
+         var callBackValue = '你回传给客户端的参数'
+         window.webkit.messageHandlers.AppModel.postMessage(callBackValue)
+     }
+
+
 </script>
 </body>
 </html>
