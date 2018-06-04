@@ -3,8 +3,9 @@ var jade = require('jade')
 var router = express.Router();
 var ejs = require('ejs');
 var URL = require('url');
-var db = require('../sqldb')
-var util = require('./util')
+var db = require('../sqldb');
+var util = require('./util');
+var User = require('./UserModel.js');
 var ResModel = require('./responseModel');
 
 
@@ -148,50 +149,50 @@ router.get('/admin/cvdetail',function (req,res,next){
     var adminId = params.administratorId;
     if(adminId && adminId.length >0){
         var sqlInfo = {where:{
-            uuid:adminId
+            uuid:params.uuid
         }}
         db.User.findOne(sqlInfo).then(function (result) {
-            if (result && result.dataValues) {
-                var user_ = new User.userInfo();
-                var workArr = new Array();
-                var Arr = JSON.parse(result.dataValues.jobExpress)
-                if (Arr) {
-                    for (var i = 0; i < Arr.length; i++) {
-                        var userMode = new User.titleModel();
-                        userMode.title = Arr[i].title;
-                        userMode.detail = Arr[i].detail;
-                        userMode.id = Arr[i].id;
-                        workArr.push(userMode);
-                    }
-                }
 
-                var educationArr = new Array;
-                var Arr_ = JSON.parse(result.dataValues.educations)
-                if (Arr_) {
-                    for (var i = 0; i < Arr_.length; i++) {
-                        var userMode = new User.titleModel();
-                        userMode.title = Arr_[i].title;
-                        userMode.detail = Arr_[i].detail;
-                        userMode.id = Arr_[i].id;
-                        educationArr.push(userMode);
-                    }
+            var user_ = new User.userInfo();
+            var workArr = new Array();
+            var Arr = JSON.parse(result.dataValues.jobExpress)
+            if (Arr) {
+                for (var i = 0; i < Arr.length; i++) {
+                    var userMode = new User.titleModel();
+                    userMode.title = Arr[i].title;
+                    userMode.detail = Arr[i].detail;
+                    userMode.id = Arr[i].id;
+                    workArr.push(userMode);
                 }
-                user_.name = result.dataValues.nickName;
-                user_.education = result.dataValues.education;
-                user_.phoneNum = result.dataValues.phoneNum;
-                user_.iconUrl = result.dataValues.iconUrl;
-                user_.sex = result.dataValues.sex == 0 ? '女' : '男';
-                user_.workIntention = result.dataValues.jobIntenview;
-                user_.advantage = result.dataValues.advantage;
-                user_.workExperienceList = workArr;
-                user_.educationList = educationArr;
-                user_.workYears = result.dataValues.workExpressTimes;
             }
-        }.catch(function (err) {
 
+            var educationArr = new Array;
+            var Arr_ = JSON.parse(result.dataValues.educations)
+            if (Arr_) {
+                for (var i = 0; i < Arr_.length; i++) {
+                    var userMode = new User.titleModel();
+                    userMode.title = Arr_[i].title;
+                    userMode.detail = Arr_[i].detail;
+                    userMode.id = Arr_[i].id;
+                    educationArr.push(userMode);
+                }
+            }
+            user_.name = result.dataValues.nickName;
+            user_.education = result.dataValues.education;
+            user_.phoneNum = result.dataValues.phoneNum;
+            user_.iconUrl = result.dataValues.iconUrl;
+            user_.sex = result.dataValues.sex == 0 ? '女' : '男';
+            user_.workIntention = result.dataValues.jobIntenview;
+            user_.advantage = result.dataValues.advantage;
+            user_.workExperienceList = workArr;
+            user_.educationList = educationArr;
+            user_.workYears = result.dataValues.workExpressTimes;
+            console.log('什么👻')
+            res.render(('admin/cvdetail'),{obj:user_})
+        }).catch(function (err) {
+            console.log(err+'错误')
+            res.render(('admin/cvdetail'),{obj:null})
         })
-        )
-        res.render(('admin/cvdetail'),{administratorId:params.administratorId})
     }else {
         res.render('admin/login');
     }

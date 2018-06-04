@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <link rel='stylesheet', href='/stylesheets/cvdetail.css' />
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <!--<script src="http://code.jquery.com/jquery-latest.js"></script>-->
     <script src="/jsDic/ajax.js"></script>
     <title>简历详情</title>
 </head>
 <body>
     <div class="backSty">
         <h2>简历详情</h2>
-        <b>姓名:</b><b></b>
-        <b>手机号码:</b><b></b>
-        <b>邮箱:</b><b></b>
+        <img class="iconSty" id="icon">
+        <b>姓名:</b><b id="name"></b>
+        <b>手机号码:</b><b id="phoneNum"></b>
+        <b>邮箱:</b><b id=""></b>
         <b>年龄:</b><b></b>
         <b>学历:</b><b></b>
         <b>期望薪资:</b><b></b>
@@ -22,6 +23,18 @@
         <b>工作经历</b><b></b>
     </div>
     <script type="text/javascript">
+        var json = '<%- JSON.stringify(obj)%>';
+        var jsonDic = JSON.parse(json);
+        console.log(jsonDic);
+        setHtml();
+        function setHtml() {
+            var img = document.getElementById('icon');
+            img.src = jsonDic.iconUrl;
+            var nameLab = document.getElementById('name')
+            nameLab.innerHTML = jsonDic.name;
+            var phoneLab = document.getElementById('phoneNum')
+            phoneLab.innerHTML = jsonDic.phoneNum;
+        }
 
     </script>
 </body>
