@@ -148,3 +148,17 @@ module.exports = {
     createCode:createCode,
     initConfig:initConfig
 }
+
+/*
+*
+* server {
+ listen       443;
+ server_name  ahgoldbee.cn;
+ charset utf-8;
+ ssl on;
+ ssl_certificate /data/home/key_dir/1_www.ahgoldbee.cn_bundle.crt;
+ ssl_certificate_key /data/home/key_dir/2_www.ahgoldbee.cn.key;
+ }
+*
+* */
+

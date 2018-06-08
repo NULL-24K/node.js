@@ -26,6 +26,7 @@ router.post('/jobDetail',function (req,res,next) {
         }
 
         db.Administer.findOne({where:{administratorId:params.administratorId }}).then(function (result) {
+
             if(result){
                 if(req.body.type == 1){
                     if(req.body.type){
@@ -34,6 +35,7 @@ router.post('/jobDetail',function (req,res,next) {
                     if(typeof params.wellArr != 'string'){
                         params.wellArr = JSON.stringify(params.wellArr);
                     }
+                    console.log(params)
                     db.JobInfo.upsert(params).then(function (result) {
                         model.code =0;
                         if(result == false){
@@ -59,6 +61,7 @@ router.post('/jobDetail',function (req,res,next) {
                 res.send(JSON.stringify(model))
             }
         }).catch(function (err) {
+            console.log(err +cuw)
             res.send(JSON.stringify(model))
         })
 
@@ -124,7 +127,7 @@ router.post('/jobList',function(req,res,next) {
     console.log(sql_where)
     if (req.body.type == 0){
         var jobsSql = {
-            where:sql_where,
+            where:'',
             offset:(page - 1) * pageSize,
             limit:pageSize
         }
