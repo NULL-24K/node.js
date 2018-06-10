@@ -171,11 +171,23 @@ router.post('/jobList',function(req,res,next) {
 router.post('/adminPhoneNum',function (req,res,next) {
     var token = req.headers.token;
     var model = new ResModel();
+
     if (token.length >0){
         db.User.findOne({where:{uuid:token}}).then(function (userResrlt) {
             if(!userResrlt || !userResrlt.dataValues.nickName  ||!userResrlt.dataValues.educations||!userResrlt.dataValues.jobIntenview){
-                model.code = 1;
-                model.msg = '您尚未完善您的简历,请先完成您的简历';
+                if (!userResrlt){
+                    model.code = -1;
+                    model.msg = '您尚未完善您的简历,请先完成您的简历'
+                }else if(!userResrlt.dataValues.nickName){
+                    model.code = -2;
+                    model.msg = '您尚未完善您的基本信息,请先完成您的基本信息'
+                }else if(!userResrlt.dataValues.educations){
+                    model.code = -3;
+                    model.msg = '您尚未完善您的教育信息,请先完成您的教育信息'
+                }else if(!userResrlt.dataValues.jobIntenview){
+                    model.code = -4;
+                    model.msg = '您尚未完善您的求职意向,请先完成您的求职意向'
+                }
                 res.send(JSON.stringify(model))
             } else {
                 db.Administer.findOne({where:{administratorId:req.body.administratorId}}).then(function (adminRes) {
