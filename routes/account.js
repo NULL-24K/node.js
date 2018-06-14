@@ -190,7 +190,7 @@ router.post('/getMsg',function (req,res,next) {
 router.post('/weChatLogin',function (req,res,next) {
     var model = new ResModel()
     var params = req.body;
-    var reqUrl = 'https://api.weixin.qq.com/sns/jscode2session?appid=wxb516fc2328c18cea&secret=c61463205e4791a8bf15ff4af9771f5c&grant_type=authorization_code&js_code='+params.code;
+    var reqUrl = 'https://api.weixin.qq.com/sns/jscode2session?appid=wx00055f7fcfe5a043&secret=f718ecc9666de9aa86803636fede4d01&grant_type=authorization_code&js_code='+params.code;
     request(reqUrl, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             console.log(body) // Show the HTML for the baidu homepage.
