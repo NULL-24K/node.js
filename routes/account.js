@@ -53,6 +53,14 @@ router.post('/Login',function(req,res,next) {
                         model.code = 0;
                         model.msg = '登录成功'
                         res.send(JSON.stringify(model));
+                        console.log(result.dataValues)
+                        //.判断是否携带openID且数据库未存储没有openId
+                        if(!result.dataValues.openid && params.openid){
+                            db.Account.update({openid:params.openid,session_key:params.session_key},{where:{phoneNum:params.phoneNum}}).then(function (upsult) {
+                                console.log('插入openID成功')
+                            })
+                        }
+
                     }else {
                         var saveInfo = {phoneNum:params.phoneNum}
                         if(params.session_key){
