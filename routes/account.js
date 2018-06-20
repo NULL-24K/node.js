@@ -113,12 +113,14 @@ router.post('/setAdmin',function (req,res,next) {
         var sql = {administratorId:'goldbeeAdmin'+params.phoneNum+'_'+timestamp,phoneNum:params.phoneNum,name:params.name,deleteType:0}
         db.Administer.upsert(sql).then(function (result) {
             //成功 更新用户表 将account中shareID替换
-            console.log(result)
+            console.log('更新超级管理员信息'+result)
 
                 model.code = 0;
                 model.msg = '添加成功'
-                db.Account.upsert({phoneNum:params.phoneNum,shareId:result.dataValues.administratorId},{where:{phoneNum:params.phoneNum}}).then(function (addres) {
-
+                db.Account.upsert({phoneNum:params.phoneNum,shareId:sql.administratorId},{where:{phoneNum:params.phoneNum}}).then(function (addres) {
+                    console.log('修改管理员shareID成功'+addres.dataValues)
+                }).catch(function (upErr) {
+                    console.log(upErr+'修改错误')
                 })
 
                 //model.msg = '您已经添加该管理员,无需重复添加'
@@ -190,7 +192,7 @@ router.post('/getMsg',function (req,res,next) {
 router.post('/weChatLogin',function (req,res,next) {
     var model = new ResModel()
     var params = req.body;
-    var reqUrl = 'https://api.weixin.qq.com/sns/jscode2session?appid=wx00055f7fcfe5a043&secret=f718ecc9666de9aa86803636fede4d01&grant_type=authorization_code&js_code='+params.code;
+    var reqUrl = 'https://api.weixin.qq.com/sns/jscode2session?appid=wxb516fc2328c18cea&secret=c61463205e4791a8bf15ff4af9771f5c&grant_type=authorization_code&js_code='+params.code;
     request(reqUrl, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             console.log(body) // Show the HTML for the baidu homepage.
