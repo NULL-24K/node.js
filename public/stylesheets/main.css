@@ -11,6 +11,7 @@ a{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     margin-top: 50px;
 }
 
@@ -22,6 +23,7 @@ a{
     border-width: 2px;
     border-color: #db8621;
     background-color: black;
+    margin-top: 20px;
 }
 
 .bigTitleSty{

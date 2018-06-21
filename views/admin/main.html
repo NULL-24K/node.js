@@ -17,6 +17,10 @@
         <p class="bigTitleSty">简历处理</p>
         <p class="titleSty">早日处理您的简历,别让用户久等</p>
     </div>
+    <div class="cellBackSty" onclick="singTap(4)">
+        <p class="bigTitleSty">我的用户</p>
+        <p class="titleSty">你的所有用户信息</p>
+    </div>
     <div class="cellBackSty" onclick="singTap(2)" id="superAdmin">
         <p class="bigTitleSty">管理员管理</p>
         <p class="titleSty">添加/删除管理员</p>
@@ -25,13 +29,14 @@
         <p class="bigTitleSty">配置设置</p>
         <p class="titleSty">添加/修改配置</p>
     </div>
+
 </div>
 <script>
 
     var admin_id = '<%-adminId %>'
     if(admin_id != 'superAdminister'){
        var adminView = document.getElementById('superAdmin');
-        var configView = document.getElementById('superAdmin');
+        var configView = document.getElementById('config');
         adminView.style.display = 'none'
         configView.style.display = 'none'
     }

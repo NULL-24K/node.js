@@ -10,3 +10,12 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+b{
+    color: red;
+}
+
+.iconSty{
+    width: 150px;
+    height: 150px;
+}

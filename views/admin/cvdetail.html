@@ -11,16 +11,14 @@
     <div class="backSty">
         <h2>简历详情</h2>
         <img class="iconSty" id="icon">
-        <b>姓名:</b><b id="name"></b>
-        <b>手机号码:</b><b id="phoneNum"></b>
-        <b>邮箱:</b><b id=""></b>
-        <b>年龄:</b><b></b>
-        <b>学历:</b><b></b>
-        <b>期望薪资:</b><b></b>
-        <b>期望行业:</b><b></b>
-        <b>工作年限</b><b></b>
-        <p>教育经历:</p><b></b>
-        <b>工作经历</b><b></b>
+        <p>姓名:</p><b id="name"></b>
+        <p>手机号码:</p><b id="phoneNum"></b>
+        <p>性别:</p><b id="sex"></b>
+        <p>学历:</p><b id="education"></b>
+        <p>期望行业:</p><b id="workIntention"></b>
+        <p>工作年限</p><b id="workYears"></b>
+        <p>教育经历:</p><b id="educationList"></b>
+        <p>工作经历</p><b id="workExperienceList"></b>
     </div>
     <script type="text/javascript">
         var json = '<%- JSON.stringify(obj)%>';
@@ -30,10 +28,18 @@
         function setHtml() {
             var img = document.getElementById('icon');
             img.src = jsonDic.iconUrl;
-            var nameLab = document.getElementById('name')
+            var nameLab = document.getElementById('name');
             nameLab.innerHTML = jsonDic.name;
-            var phoneLab = document.getElementById('phoneNum')
+            var phoneLab = document.getElementById('phoneNum');
             phoneLab.innerHTML = jsonDic.phoneNum;
+            var sexLab = document.getElementById('sex');
+            sexLab.innerHTML = jsonDic.sex;
+            var educationLab = document.getElementById('education');
+            educationLab.innerHTML = jsonDic.education;
+            var workIntentionLab = document.getElementById('workIntention');
+            workIntentionLab.innerHTML = jsonDic.workIntention;
+            var workYearsLab = document.getElementById('workYears');
+            workYearsLab.innerHTML = jsonDic.workYears
         }
 
     </script>
