@@ -39,7 +39,25 @@
             var workIntentionLab = document.getElementById('workIntention');
             workIntentionLab.innerHTML = jsonDic.workIntention;
             var workYearsLab = document.getElementById('workYears');
-            workYearsLab.innerHTML = jsonDic.workYears
+            workYearsLab.innerHTML = jsonDic.workYears;
+            var educationListLab = document.getElementById('educationList');
+            var educationListText = '';
+            for (var  i =0;i <jsonDic.educationList.length;i ++){
+                if (i !=0){educationListText += "///"}
+                educationListText += jsonDic.educationList[i].title;
+                educationListText += '-';
+                educationListText += jsonDic.educationList[i].detail;
+            }
+            educationListLab.innerHTML = educationListText;
+            var workExperienceListLab = document.getElementById('workExperienceList');
+            var workExperienceListText = '';
+            for (var  i =0;i <jsonDic.workExperienceList.length;i ++){
+                if (i !=0){workExperienceListText += "///"}
+                workExperienceListText += jsonDic.workExperienceList[i].title;
+                workExperienceListText += '-';
+                workExperienceListText += jsonDic.workExperienceList[i].detail;
+            }
+            workExperienceListLab.innerHTML = workExperienceListText;
         }
 
     </script>
