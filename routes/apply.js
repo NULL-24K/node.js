@@ -9,7 +9,7 @@ var URL = require('url');
 var ResModel = require('./responseModel');
 var util = require('./util');
 var db = require('../sqldb');
-var sequelize = require('sequelize')
+var sequelize = require('sequelize');
 
 
 /*工作申请*/
@@ -21,6 +21,22 @@ router.post('/applyJob',function (req,res,next) {
     var token = req.headers.token;
     if (token.length > 0){
         //.判断用户是否有权限申请(是否申请/申请次数是否超过限制)
+        var applyListSql = {
+            order: [['createdAt', 'DESC']],where:{uuid:req.headers.token}
+        }
+        db.Order.findAll(applyListSql).then(function (allRes) {
+            var applytimeaArr = new Array();
+            for (var i=0;i<allRes.length;i++){
+                applytimeaArr.push(allRes[i].dataValues.createdAt);
+            }
+
+            console.log(applytimeaArr);
+        }).catch(function (allErr) {
+            console.log(allErr);
+        })
+
+
+
         db.Order.findOne({where:{uuid:req.headers.token,jobId:req.body.jobId}}).then(function (result) {
 
             if(result){

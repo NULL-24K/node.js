@@ -56,7 +56,8 @@ module.exports = function(sequelize,DataTypes){
             defaultValue:0
         }
     },{
-        freezeTableName: true
+        freezeTableName: true,
+        paranoid:true,
     });
    // Account.sync({force:true})
     return Account;

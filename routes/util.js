@@ -137,6 +137,11 @@ function initConfig() {
     })
 }
 
+function cleanApplyNum() {
+    
+}
+
+
 module.exports = {
     _isPhoneNum:isPhoneNum,
     db_add:db_add,

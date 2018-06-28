@@ -19,7 +19,7 @@ router.post('/msgList',function (req,res,next) {
         return;
     }
     var intentionListSql = {
-        where:{uuid:req.headers.token}
+        order: [['updatedAt', 'DESC']],where:{uuid:req.headers.token}
     }
     db.Order.findAll(intentionListSql).then(function (result) {
         var jobArr = new  Array();
@@ -28,10 +28,12 @@ router.post('/msgList',function (req,res,next) {
         if(result){
             for(var i =0;i <result.length; i++){
                 var  obj = result[i].dataValues;
-                obj.intentionStatus = util.intentionStatusENUM(obj.intentionStatus)
+                obj.intentionStatus = util.intentionStatusENUM(obj.intentionStatus);
                 obj.updatedAt = moment(obj.updatedAt).format('YYYY-MM-DD HH:mm:ss');
-                jobArr.push(obj)
+                jobArr.push(obj);
+                console.log(obj.createdAt);
             }
+
         }
         model.data = jobArr;
         model.msg = '请求成功'
