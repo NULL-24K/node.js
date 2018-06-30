@@ -52,7 +52,7 @@ router.post('/msgDetail',function (req,res,next) {
         res.send(JSON.stringify(model));
         return;
     }
-    var orderLisSql = {where:{uuid:req.headers.token,orderId:params.orderId}};
+    var orderLisSql = {order: [['createdAt', 'DESC']],where:{uuid:req.headers.token,orderId:params.orderId}};
     db.OrderApplyList.findAll(orderLisSql).then(function (result) {
         model.msg = '获取成功'
         model.code = 0;
