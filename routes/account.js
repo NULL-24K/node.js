@@ -118,7 +118,7 @@ router.post('/setAdmin',function (req,res,next) {
 
     if(params.type == 1){//增加
         var timestamp = Date.parse(new Date());
-        var sql = {administratorId:'goldbeeAdmin'+params.phoneNum+'_'+timestamp,phoneNum:params.phoneNum,name:params.name,deleteType:0}
+        var sql = {administratorId:'goldbeeAdmin'+params.phoneNum+'_',phoneNum:params.phoneNum,name:params.name,deleteType:0}
         db.Administer.upsert(sql).then(function (result) {
             //成功 更新用户表 将account中shareID替换
             console.log('更新超级管理员信息'+result)

@@ -35,7 +35,7 @@ router.post('/jobDetail',function (req,res,next) {
                     if(typeof params.wellArr != 'string'){
                         params.wellArr = JSON.stringify(params.wellArr);
                     }
-                    console.log(params)
+                    console.log(params +'///')
                     db.JobInfo.upsert(params).then(function (result) {
                         model.code =0;
                         if(result == false){
@@ -45,6 +45,8 @@ router.post('/jobDetail',function (req,res,next) {
                         }
                         res.send(JSON.stringify(model))
                     }).catch(function (err) {
+                        console.log(err)
+                        console.log('###')
                         res.send(JSON.stringify(model))
                     })
                 }else {
@@ -61,7 +63,7 @@ router.post('/jobDetail',function (req,res,next) {
                 res.send(JSON.stringify(model))
             }
         }).catch(function (err) {
-            console.log(err +cuw)
+            console.log(err +'错误')
             res.send(JSON.stringify(model))
         })
 
@@ -91,11 +93,12 @@ router.post('/jobDetail',function (req,res,next) {
             }else {
                 model.msg = '暂无数据'
             }
+
             //用户已登录 需要查找该用户是否已申请该职位
             if (req.headers.token && req.headers.token.length >0){
-              //  console.log(req.body)
+               // console.log(req.body)
                 db.Order.findOne({where:{uuid:req.headers.token,jobId:req.body.jobId}}).then(function (result) {
-                    console.log(result)
+
                     if(result){
                      model.data.applyState = '已申请';//util.intentionStatusENUM(result.dataValues.intentionStatus)
                     }
@@ -127,7 +130,7 @@ router.post('/jobList',function(req,res,next) {
     console.log(sql_where)
     if (req.body.type == 0){
         var jobsSql = {
-            where:'',
+            where:sql_where,
             offset:(page - 1) * pageSize,
             limit:pageSize
         }

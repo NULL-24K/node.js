@@ -36,7 +36,7 @@ module.exports = function(sequelize,DataTypes) {
         },
         /*公司描述*/
         companyDescrie:{
-            type:DataTypes.STRING,
+            type:DataTypes.STRING(1000),
             allowNull:true,
         },
         /*工作地址*/
@@ -76,7 +76,7 @@ module.exports = function(sequelize,DataTypes) {
         },
         /*职位描述*/
         jobDescribe:{
-            type:DataTypes.STRING,
+            type:DataTypes.STRING(1000),
             allowNull:false,
         },
         /*申请人数*/
