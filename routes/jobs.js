@@ -125,7 +125,7 @@ router.post('/jobList',function(req,res,next) {
     var adminId = req.body.adminId;
     var sql_where = {administratorId:'superAdminister'}
     if (adminId && adminId !='goldbee'){
-        sql_where = {administratorId:adminId|'superAdminister'}
+        sql_where = {administratorId:[adminId,'superAdminister']}
     }
     console.log(sql_where)
     if (req.body.type == 0){

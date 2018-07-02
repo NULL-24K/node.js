@@ -47,8 +47,11 @@
             window.location.href = baseUrl+'admin/handleCV?administratorId='+admin_id
         }else if(index ==2){
             window.location.href = baseUrl+'admin/setAdmin?administratorId='+admin_id
-        }else {
+        }else if(index ==3){
             window.location.href = baseUrl+'admin/config?administratorId='+admin_id
+        }else {
+            alert('暂未开放')
+           // window.location.href = baseUrl+'admin/config?administratorId='+admin_id
         }
     }
 </script>

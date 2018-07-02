@@ -12,12 +12,13 @@
 
 <div>
     <div class="cellBackSty">
-        <b class="titleSty" id="10">企业图片:  </b>
+        <b class="titleSty" id="10">企业图片:</b>
+        <b style="font-size: 30px;color: red">(为保证照片质量,请先裁剪图片为1:1后上传)</b>
         <img class="imgSty"  id="1-10"/>
-        <input type="file"onchange="selectImage(this)"/>
+        <input type="file" onchange="selectImage(this)"/>
     </div>
     <div class="cellBackSty">
-        <b class="titleSty" id="0">公司名称:  </b>
+        <b class="titleSty" id="0">职位名称:  </b>
         <input type="text" placeholder="请输入公司名称" onblur="endEdit(this.value,0)" id="1-0"/>
     </div>
     <div class="cellBackSty">
@@ -25,7 +26,7 @@
         <textarea class="textAreSty"  placeholder="请输入公司简介" onblur="endEdit(this.value,1)" id="1-1"></textarea>
     </div>
     <div class="cellBackSty">
-        <b class="titleSty" id="2">职位名称:  </b>
+        <b class="titleSty" id="2">公司名称:  </b>
         <input type="text" placeholder="请输入职位名称" onblur="endEdit(this.value,2)" id="1-2"/>
     </div>
     <div class="cellBackSty">
@@ -222,6 +223,13 @@
         }
     }
 
+    function repalceHtml(str){
+        var dd=str.replace(/<\/?.+?>%/g,"");
+        var dds=dd.replace(/ /g,"");//dds为得到后的内容
+        var value_ = dds.replace(/%/g,"%25");
+        return value_;
+    }
+
     function subMit() {
         var alertStr = '';
         for(var i=0;i <dataArr.length -1;i ++){
@@ -239,9 +247,9 @@
         }
         var params = {
             companyName:dataArr[0],
-            companyDescrie:dataArr[1],
+            companyDescrie:repalceHtml(dataArr[1]),
             jobName:dataArr[2],
-            jobDescribe:dataArr[3],
+            jobDescribe:repalceHtml(dataArr[3]),
             minEducation:dataArr[4],
             workAddress:dataArr[5],
             interViewAddress:dataArr[7],
@@ -254,6 +262,7 @@
             administratorId:administratorId,
             type:1
         }
+
         if(jsonDic && jsonDic.jobId){
             params['jobId'] = jsonDic.jobId;
         }
