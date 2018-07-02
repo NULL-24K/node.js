@@ -109,10 +109,11 @@ function sendMsg(phoneNumber,params,callback) {
     var appkey = "a88915ebf500988de475ce536a2b5151";
    // var phoneNumbers = [phoneNumbers];
     var templId = 118889;
+    var smsSign = "蜜蜂直聘";
     var qcloudsms = QcloudSms(appid, appkey);
     var ssender = qcloudsms.SmsSingleSender();
     ssender.sendWithParam(86, phoneNumber, templId,
-        params,"", "", "",callback);
+        params,smsSign, "", "",callback);
 }
 
 function createCode() {
