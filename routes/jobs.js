@@ -72,7 +72,7 @@ router.post('/jobDetail',function (req,res,next) {
         db.JobInfo.findOne(jobDetailSql).then(function (result) {
             model.code = 0;
             if(result){
-                _jobInfo.jobName = result.dataValues.jobName;
+                _jobInfo.jobName = result.dataValues.companyName;//由于交换了职位名称和公司名称 这里也交换过来
                 _jobInfo.jobIncom = result.dataValues.salary;
                 _jobInfo.singerLocation = result.dataValues.workAddress;
                 _jobInfo.minEducation = result.dataValues.minEducation;
@@ -87,7 +87,7 @@ router.post('/jobDetail',function (req,res,next) {
                 _jobInfo.companyDescribe = result.dataValues.companyDescrie;
                 _jobInfo.administratorId = result.dataValues.administratorId;
                 _jobInfo.jobid = result.dataValues.jobId;
-                _jobInfo.companyName = result.dataValues.companyName;
+                _jobInfo.companyName = result.dataValues.jobName;//由于交换了职位名称和公司名称 这里也交换过来
                 model.data = _jobInfo;
                 model.msg = '请求成功'
             }else {

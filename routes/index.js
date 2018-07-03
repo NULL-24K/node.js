@@ -7,7 +7,7 @@ var db = require('../sqldb');
 var util = require('./util');
 var User = require('./UserModel.js');
 var ResModel = require('./responseModel');
-
+var moment = require('moment');
 
 util.initConfig();
 
@@ -48,7 +48,7 @@ router.get('/admin/main',function (req,res,next) {
 /*职位管理*/
 router.get('/admin/jobs',function (req,res,next) {
     var params = URL.parse(req.url, true).query;
-    console.log(params.data)
+  //  console.log(params.data)
     if(params.data){
         var obj = JSON.parse(params.data);
         db.JobInfo.findOne({where:{jobId:obj.jobId}}).then(function (result) {
@@ -94,7 +94,7 @@ router.get('/admin/joblist',function (req,res,next) {
                     applyNum:obj.applyNum,
                     defApplyNum:obj.defApplyNum,
                     administratorId:obj.administratorId,
-                    createdAt:obj.createdAt,
+                    createdAt:moment(obj.createdAt).format('YYYY-MM-DD HH:mm:ss'),
                     updatedAt:obj.updatedAt,
                 }
                 jobArr.push(newObj);
