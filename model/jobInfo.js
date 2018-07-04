@@ -88,7 +88,7 @@ module.exports = function(sequelize,DataTypes) {
             type:DataTypes.INTEGER,
             allowNull:false,
         },
-        /*管理员ID*/
+        /*管理员ID(发布者ID)*/
         administratorId:{
             type:DataTypes.STRING,
             allowNull:false,
@@ -101,6 +101,7 @@ module.exports = function(sequelize,DataTypes) {
     },{
         freezeTableName: true
     });
+   // JobInfo.sync({ alter: true });
     //JobInfo.sync({force:true})
     return JobInfo;
 }

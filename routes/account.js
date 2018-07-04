@@ -200,8 +200,8 @@ router.post('/getMsg',function (req,res,next) {
 router.post('/weChatLogin',function (req,res,next) {
     var model = new ResModel()
     var params = req.body;
-    var reqUrl = 'https://api.weixin.qq.com/sns/jscode2session?appid=wxb516fc2328c18cea&secret=c61463205e4791a8bf15ff4af9771f5c&grant_type=authorization_code&js_code='+params.code;
-    request(reqUrl, function (error, response, body) {
+    var reqUrl = 'https://api.weixin.qq.com/sns/jscode2session?appid=wx00055f7fcfe5a043&secret=9c551050a085e321b60164c793f88fdd&grant_type=authorization_code&js_code='+params.code;
+    request(reqUrl, function (error, response, body) {//9c551050a085e321b60164c793f88fdd 秘钥 2018-7-4
         if (!error && response.statusCode == 200) {
             console.log(body) // Show the HTML for the baidu homepage.
             model.code = 0;

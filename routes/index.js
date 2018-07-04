@@ -74,7 +74,7 @@ router.get('/admin/joblist',function (req,res,next) {
     if(!params.administratorId || params.administratorId.length ==0){
         res.render('admin/login');
     }else {
-        db.JobInfo.findAll({where:{administratorId:params.administratorId}}).then(function (result) {
+        db.JobInfo.findAll({order: [['createdAt', 'DESC']],where:{administratorId:params.administratorId}}).then(function (result) {
             var jobArr = new  Array();
             for(var i =0;i <result.length; i++){
                 var  obj = result[i].dataValues;

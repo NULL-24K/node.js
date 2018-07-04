@@ -130,6 +130,7 @@ router.post('/jobList',function(req,res,next) {
     console.log(sql_where)
     if (req.body.type == 0){
         var jobsSql = {
+            order: [['createdAt', 'DESC']],
             where:sql_where,
             offset:(page - 1) * pageSize,
             limit:pageSize

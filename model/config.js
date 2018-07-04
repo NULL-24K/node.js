@@ -23,10 +23,15 @@ module.exports = function(sequelize,DataTypes){
         configValue:{
             type:DataTypes.STRING,
             allowNull:false,
+        },
+        testValue:{
+            type:DataTypes.STRING,
+            defaultValue:'test'
         }
     },{
         freezeTableName: true
     });
+    //Config.sync({ alter: true });
     // Config.sync({force:true})
     return Config;
 };
