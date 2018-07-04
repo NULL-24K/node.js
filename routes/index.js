@@ -253,6 +253,26 @@ router.get('/admin/config',function (req,res,next) {
 })
 
 
+router.get('/admin/servePhoneSetting',function (req,res,next) {
+    var params = URL.parse(req.url, true).query;
+    if (!params.administratorId || params.administratorId.length ==0){
+        res.render('admin/main');
+        return;
+    }else {
+        db.Administer.findOne({where:{administratorId:params.administratorId}}).then(function (result) {
+            if(result){
+                res.render('admin/servePhoneSetting');
+            }else {
+                res.render('admin/main');
+            }
+        }).catch(function (error) {
+            res.render('admin/main');
+        })
+    }
+})
+
+
+
 router.get('/admin/web_one',function (req,res,next) {
    res.render('admin/web_one') ;
 })

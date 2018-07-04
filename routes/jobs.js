@@ -121,7 +121,7 @@ router.post('/jobDetail',function (req,res,next) {
 router.post('/jobList',function(req,res,next) {
     var  model = new ResModel();
 
-    var page = 1, pageSize = 10;
+    var page = 1, pageSize = 50;
     var adminId = req.body.adminId;
     var sql_where = {administratorId:'superAdminister'}
     if (adminId && adminId !='goldbee'){

@@ -35,10 +35,16 @@ module.exports = function(sequelize,DataTypes){
         deleteType:{
             type:DataTypes.INTEGER,
             defaultValue:0
+        },
+        /*管理员客户电话*/
+        servePhoneNum:{
+            type:DataTypes.STRING,
+            defaultValue:''
         }
     },{
         freezeTableName: true
     });
+   // Administer.sync({ alter: true })
     // Administer.sync({force:true})
     return Administer;
 };

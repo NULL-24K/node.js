@@ -262,6 +262,23 @@ router.post('/adminLogin',function (req,res,next) {
     })
 })
 
+router.post('/setServePhone',function (req,res,next) {
+    var params = req.body;
+    var model = new ResModel();
+    if(!params.phoneNum || params.phoneNum.length != 11){
+        model.msg = '手机号码格式不正确'
+        res.send(JSON.stringify(model));
+        return;
+    }
+    db.Administer.upsert({servePhoneNum:params.phoneNum},{where:{administratorId:params.administratorId,deleteType:0}}).then(function (result) {
+        model.msg = '重置成功'
+        model.code = 0;
+        res.send(JSON.stringify(model));
+    }).catch(function (error) {
+        res.send(JSON.stringify(model));
+    })
+})
+
 
 
 module.exports = router;
