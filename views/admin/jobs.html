@@ -8,8 +8,11 @@
     <title>职位详情</title>
 </head>
 <body>
+<nav>
+    <b style="background-color: #00d6b2;width: 60px;height: 30px;color: white;font-size: 18px" onclick="backMain()">返回首页</b>
+    <a style="background-color: #00d6b2;width: 60px;height: 30px;color: white;font-size: 18px" onclick="backJobList()">职位列表</a>
+</nav>
 <h1>职位管理</h1>
-
 <div>
     <div class="cellBackSty">
         <b class="titleSty" id="10">企业图片:</b>
@@ -401,6 +404,15 @@
         clock += day + "";
 
         return(clock);
+    }
+
+    //.返回首页
+    function backMain() {
+        window.location.href = baseUrl+'admin/main?administratorId='+administratorId;
+    }
+
+    function backJobList() {
+        window.location.href = baseUrl+'admin/joblist?administratorId='+administratorId;
     }
 
 </script>

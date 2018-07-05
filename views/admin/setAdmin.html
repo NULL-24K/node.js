@@ -6,6 +6,9 @@
     <title>管理员管理</title>
 </head>
 <body>
+<nav>
+    <b style="background-color: #00d6b2;width: 60px;height: 30px;color: white;font-size: 18px" onclick="backMain()">返回首页</b>
+</nav>
 <div>
     <b style="color: red">添加管理员</b>
     <input type="text" placeholder="请输入管理员姓名"  id="name"/>
@@ -131,6 +134,12 @@
 
             }
         }
+    }
+
+
+    //.返回首页
+    function backMain() {
+        window.location.href = baseUrl+'admin/main?administratorId='+'superAdminister';
     }
 </script>
 </body>

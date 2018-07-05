@@ -127,7 +127,6 @@ router.post('/jobList',function(req,res,next) {
     if (adminId && adminId !='goldbee'){
         sql_where = {administratorId:[adminId,'superAdminister']}
     }
-    console.log(sql_where)
     if (req.body.type == 0){
         var jobsSql = {
             order: [['createdAt', 'DESC']],
@@ -198,7 +197,12 @@ router.post('/adminPhoneNum',function (req,res,next) {
                     if (adminRes){
                         model.code = 0;
                         model.msg = '获取成功';
-                        model.data = {phoneNum:adminRes.dataValues.phoneNum}
+                        if (adminRes.dataValues.servePhoneNum && adminRes.dataValues.servePhoneNum.length ==11){
+                            servePhone =  adminRes.dataValues.servePhoneNum
+                        }else {
+                            servePhone =  adminRes.dataValues.phoneNum
+                        }
+                        model.data = {phoneNum:servePhone}
                     }else {
                         model.msg = '暂未获取该HR联系方式';
                     }

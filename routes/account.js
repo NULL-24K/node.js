@@ -270,11 +270,14 @@ router.post('/setServePhone',function (req,res,next) {
         res.send(JSON.stringify(model));
         return;
     }
-    db.Administer.upsert({servePhoneNum:params.phoneNum},{where:{administratorId:params.administratorId,deleteType:0}}).then(function (result) {
+    console.log(params);
+    db.Administer.update({servePhoneNum:params.phoneNum},{where:{administratorId:params.administratorId,deleteType:0}}).then(function (result) {
+        console.log(result);
         model.msg = '重置成功'
         model.code = 0;
         res.send(JSON.stringify(model));
     }).catch(function (error) {
+        console.log(error)
         res.send(JSON.stringify(model));
     })
 })

@@ -8,6 +8,10 @@
     <title>简历详情</title>
 </head>
 <body>
+<nav>
+    <b style="background-color: #00d6b2;width: 60px;height: 30px;color: white;font-size: 18px" onclick="backMain()">返回首页</b>
+    <a style="background-color: #00d6b2;width: 60px;height: 30px;color: white;font-size: 18px" onclick="backJobList()">简历列表</a>
+</nav>
     <div class="backSty">
         <h2>简历详情</h2>
         <img class="iconSty" id="icon">
@@ -23,7 +27,7 @@
     <script type="text/javascript">
         var json = '<%- JSON.stringify(obj)%>';
         var jsonDic = JSON.parse(json);
-        console.log(jsonDic);
+       var administratorId = jsonDic.administratorId
         setHtml();
         function setHtml() {
             var img = document.getElementById('icon');
@@ -58,6 +62,15 @@
                 workExperienceListText += jsonDic.workExperienceList[i].detail;
             }
             workExperienceListLab.innerHTML = workExperienceListText;
+        }
+
+        //.返回首页
+        function backMain() {
+            window.location.href = baseUrl+'admin/main?administratorId='+administratorId;
+        }
+        //.返回简历列表
+        function backJobList() {
+            window.location.href = baseUrl+'admin/handleCV?administratorId='+administratorId;
         }
 
     </script>

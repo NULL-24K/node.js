@@ -5,6 +5,8 @@
 var db = require('../sqldb');
 var QcloudSms = require("qcloudsms_js");
 var sequelize = require('sequelize')
+var request = require('request');
+var path = require('path')//把path模块导入进来
 
 function isPhoneNum(phoneNum) {
     var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
@@ -136,6 +138,47 @@ function initConfig() {
     }).catch(function (err) {
         console.log('添加超级管理员失败')
     })
+
+    getAdminShareCode();
+}
+
+
+function getAdminShareCodeToken(callBack) {
+    callBack('11_AeHYkcONMGvy-q8fUV7Ib1uweLzxR2I99ymefpsDtepmpYsNvC9RTCc5_oCHD2I24lzjXiUZarfKJhuhNhQMciUQg7Im-zkmKc3JbP2TZAh9s2MzbNpia-ahTYORNI0WtERc2PfCda3KliJsZTWcAAANHK')
+    return;
+    var reqUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx00055f7fcfe5a043&secret=9c551050a085e321b60164c793f88fdd';
+    request(reqUrl, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body)
+            callBack(body.access_token);
+        }
+    })
+}
+
+function getAdminShareCode() {
+    var fs = require('fs');
+    getAdminShareCodeToken(function (token) {
+        var url = 'https://api.weixin.qq.com/wxa/getwxacode?access_token='+token;
+        var requestData = {
+            path:'pages/index/index/goldbeeAdmin17315828372_'
+        }
+        request({
+            url: url,
+            method: "POST",
+            json: true,
+            responseType:'stream',
+            headers: {
+                "content-type": "application/json"
+            },
+            body: requestData
+        }, function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                 var qrData = body;
+                 qrData.pipe(fs.createWriteStream('./' + 1 + '.png'));
+
+            }
+        });
+    })
 }
 
 function cleanApplyNum() {
@@ -152,7 +195,8 @@ module.exports = {
     updataImg__:updataImg__,
     sendMsg:sendMsg,
     createCode:createCode,
-    initConfig:initConfig
+    initConfig:initConfig,
+    getAdminShareCode:getAdminShareCode
 }
 
 /*

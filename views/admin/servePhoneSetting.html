@@ -6,17 +6,63 @@
     <title>设置服务号码</title>
 </head>
 <body>
+<nav>
+    <b style="background-color: #00d6b2;width: 60px;height: 30px;color: white;font-size: 18px" onclick="backMain()">返回首页</b>
+</nav>
 <div>
     <h2 style="color: red">重置服务号码</h2>
-    <input type="text" placeholder="请输入您的服务号码"  id="name" style="width: 180px"/>
-    <button onclick="addAdminister()">确定重置</button>
+    <b>您当前的服务号码是:</b>
+    <b style="color: green" id="phoneNum"></b>
+    <h2> </h2>
+    <div>
+        <input type="text" placeholder="请输入您的服务号码"  id="phoneInput" style="width: 180px"/>
+        <button onclick="addAdminister()">确定重置</button>
+    </div>
 </div>
 
 
 <script type="text/javascript">
+    var jsonStr = '<%-JSON.stringify(obj)%>';
+    var jsonDic = JSON.parse(jsonStr);
+    var phoneNum = jsonDic.phoneNum
+    var administratorId = jsonDic.administratorId
+    var phoneLab = document.getElementById('phoneNum')
+    phoneLab.innerHTML = phoneNum
+
+    var inputTF = document.getElementById('phoneInput');
 
     function addAdminister() {
+        if (inputTF.value == phoneNum){
+            alert('号码不能重复')
+            return;
+        }
 
+        if(window.confirm('确定重置联系方式?')){
+            ajax({
+                method:'POST',
+                url:baseUrl+'account/setServePhone',
+                data:{
+                    phoneNum:inputTF.value,
+                    administratorId:administratorId
+                },
+                success:function (res) {
+                    var obj = JSON.parse(res);
+                    if (obj.code == 0 ){
+                        console.log('添加成功')
+                        window.history.go(-1);
+                    }else {
+                        alert(obj.msg);
+                    }
+                }
+            })
+        }else {
+
+        }
+    }
+
+    //.返回首页
+    function backMain() {
+        window.location.href = baseUrl+'admin/main?administratorId='+administratorId;
     }
 
 

@@ -7,7 +7,9 @@
     <title>配置管理</title>
 </head>
 <body>
-
+<nav>
+    <b style="background-color: #00d6b2;width: 60px;height: 30px;color: white;font-size: 18px" onclick="backMain()">返回首页</b>
+</nav>
 <h1>配置管理</h1>
 <h2 style="color: red">注意:所有配置不能为空,必须有值,如果配置为多个值,中间以/分割</h2>
 
@@ -84,6 +86,10 @@
                     }
                 }
             })
+        }
+        //.返回首页
+        function backMain() {
+            window.location.href = baseUrl+'admin/main?administratorId='+'superAdminister';
         }
     </script>
 </body>

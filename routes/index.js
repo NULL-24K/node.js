@@ -187,6 +187,7 @@ router.get('/admin/cvdetail',function (req,res,next){
             user_.workExperienceList = workArr;
             user_.educationList = educationArr;
             user_.workYears = result.dataValues.workExpressTimes;
+            user_.administratorId = params.administratorId
             console.log('什么👻')
             res.render(('admin/cvdetail'),{obj:user_})
         }).catch(function (err) {
@@ -261,7 +262,17 @@ router.get('/admin/servePhoneSetting',function (req,res,next) {
     }else {
         db.Administer.findOne({where:{administratorId:params.administratorId}}).then(function (result) {
             if(result){
-                res.render('admin/servePhoneSetting');
+                var servePhone = ''
+                if (result.dataValues.servePhoneNum && result.dataValues.servePhoneNum.length ==11){
+                    servePhone =  result.dataValues.servePhoneNum
+                }else {
+                    servePhone =  result.dataValues.phoneNum
+                }
+                var dataObj = {
+                    phoneNum:servePhone,
+                    administratorId:params.administratorId
+                }
+                res.render('admin/servePhoneSetting',{obj:dataObj});
             }else {
                 res.render('admin/main');
             }

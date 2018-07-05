@@ -15,6 +15,7 @@ function User() {
     this.workExperienceList;
     this.educationList;
     this.workYears;
+    this.administratorId;
 }
 
 function workAndEducationModel() {
