@@ -212,6 +212,7 @@ router.post('/weChatLogin',function (req,res,next) {
                 console.log(accountRes +'###');
                 if(accountRes){
                     obj.token = accountRes.dataValues.uuid
+                    obj.shareId =accountRes.dataValues.shareId
                 }
                 model.data = obj
                 res.send(JSON.stringify(model))

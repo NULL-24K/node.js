@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/jsDic/ajax.js"></script>
+    <title>管理员二维码</title>
+</head>
+<body>
+<h2 style="color: red;">我的二维码</h2>
+<p style="color: green">1:此二维码长期有效</p>
+<p style="color: green">2:目前暂不支持下载功能,请使用截图工具截图(ps:下载功能最晚下周一上线)</p>
+<p style="color: green">3:如果获取失败,返回重试</p>
+<img id="qrimg" src=""/>
+<script type="text/javascript">
+    var json = '<%- JSON.stringify(obj)%>';
+    var obj = JSON.parse(json);
+    var administratorId = obj.administratorId;
+    var imagePath = obj.imagePath;
+    var img = document.getElementById('qrimg')
+    img.src = imagePath
+</script>
+</body>
+</html>

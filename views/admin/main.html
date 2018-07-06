@@ -28,6 +28,10 @@
         <p class="bigTitleSty">服务设置</p>
         <p class="titleSty">设置您的联系方式</p>
     </div>
+    <div class="cellBackSty" onclick="singTap(6)">
+        <p class="bigTitleSty">管理员码</p>
+        <p class="titleSty">获取专属于您的管理员二维码</p>
+    </div>
     <div class="cellBackSty" onclick="singTap(2)" id="superAdmin">
         <p class="bigTitleSty">管理员管理</p>
         <p class="titleSty">添加/删除管理员</p>
@@ -58,6 +62,8 @@
             window.location.href = baseUrl+'admin/config?administratorId='+admin_id
         }else  if(index ==5){
             window.location.href = baseUrl+'admin/servePhoneSetting?administratorId='+admin_id
+        }else  if(index ==6){
+            window.location.href = baseUrl+'admin/getAdminQrCodeImg?administratorId='+admin_id
         }else {
             alert('暂未开放')
            // window.location.href = baseUrl+'admin/config?administratorId='+admin_id

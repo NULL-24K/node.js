@@ -253,7 +253,7 @@ router.get('/admin/config',function (req,res,next) {
     })
 })
 
-
+/*管理员 服务号码设置*/
 router.get('/admin/servePhoneSetting',function (req,res,next) {
     var params = URL.parse(req.url, true).query;
     if (!params.administratorId || params.administratorId.length ==0){
@@ -281,7 +281,24 @@ router.get('/admin/servePhoneSetting',function (req,res,next) {
         })
     }
 })
-
+/*获取管理员 分享二维码*/
+router.get('/admin/getAdminQrCodeImg',function (req,res,next) {
+    var timestamp = Date.parse(new Date());
+    var params = URL.parse(req.url, true).query;
+    if (!params.administratorId || params.administratorId.length ==0){
+        res.render('admin/main');
+        return;
+    }else {
+        //判断本地是否存在已生成的二维码
+        util.getAdminQrImg(params.administratorId,function (isSuccess) {
+            var data = {administratorId:params.administratorId}
+            if (isSuccess){
+                data.imagePath = '/resources/qrDataImg/'+params.administratorId +'.png';
+            }
+            res.render('admin/getAdminQrCodeImg',{obj:data})
+        })
+    }
+})
 
 
 router.get('/admin/web_one',function (req,res,next) {

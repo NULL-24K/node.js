@@ -138,51 +138,91 @@ function initConfig() {
     }).catch(function (err) {
         console.log('添加超级管理员失败')
     })
-
-    getAdminShareCode();
+    // getAdminQrImg('goldbeeAdmin17315828372_',function (imgPath) {
+    //     console.log(imgPath)
+    // })
 }
+/*生成管理员二维码 返回true表示当前存在或者已生成*/
+function getAdminQrImg(adminId,callBack) {
+    var imgPath = './public/resources/qrDataImg/'+adminId+'.png';
+    var fs = require('fs');
 
-
-function getAdminShareCodeToken(callBack) {
-    callBack('11_AeHYkcONMGvy-q8fUV7Ib1uweLzxR2I99ymefpsDtepmpYsNvC9RTCc5_oCHD2I24lzjXiUZarfKJhuhNhQMciUQg7Im-zkmKc3JbP2TZAh9s2MzbNpia-ahTYORNI0WtERc2PfCda3KliJsZTWcAAANHK')
-    return;
-    var reqUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx00055f7fcfe5a043&secret=9c551050a085e321b60164c793f88fdd';
-    request(reqUrl, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            console.log(body)
-            callBack(body.access_token);
+    fs.exists(imgPath,function(exists){
+        if (exists){
+            callBack(true)
+        }else {
+            //本地暂无管理员分享码 调用生成二维码函数
+            getAdminShareCode(adminId,function (getCodeImgRes) {
+                callBack(true)
+            });
         }
     })
 }
 
-function getAdminShareCode() {
+
+function getAdminShareCode(administratorId,callback) {
     var fs = require('fs');
     getAdminShareCodeToken(function (token) {
-        var url = 'https://api.weixin.qq.com/wxa/getwxacode?access_token='+token;
-        var requestData = {
-            path:'pages/index/index/goldbeeAdmin17315828372_'
-        }
-        request({
-            url: url,
-            method: "POST",
-            json: true,
-            responseType:'stream',
-            headers: {
-                "content-type": "application/json"
-            },
-            body: requestData
-        }, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-                 var qrData = body;
-                 qrData.pipe(fs.createWriteStream('./' + 1 + '.png'));
-
+        if (token){
+            var url = 'https://api.weixin.qq.com/wxa/getwxacode?access_token='+token;
+            var requestData = {
+                path:'pages/index/index?shareId='+administratorId
             }
-        });
+            request({
+                url: url,
+                method: "POST",
+                json: true,
+                responseType:'stream',
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: requestData
+            }).pipe(fs.createWriteStream('./public/resources/qrDataImg/' + administratorId + '.png'));
+            callback(true)
+        }else {
+            callback(false)
+        }
     })
 }
 
-function cleanApplyNum() {
-    
+/*获取token*/
+function getAdminShareCodeToken(callBack) {
+    wechatTokenIsEnable(function (result) {
+        if (result){
+            callBack(result);
+        }else {
+            var reqUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx00055f7fcfe5a043&secret=9c551050a085e321b60164c793f88fdd';
+            request(reqUrl, function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    //获取成功 将该参数添加至数据库
+                    db.WeChatAccessToken.upsert({accessToken:JSON.parse(body).access_token}).then(function (addRes) {
+                        console.log(addRes);
+                    })
+                    callBack(JSON.parse(body).access_token);
+                }else {
+                    callBack(false);
+                }
+            })
+        }
+    })
+}
+/*判断token是否过期*/
+function wechatTokenIsEnable(callBack) {
+    db.WeChatAccessToken.findOne({where:{markStr:'goldbee'}}).then(function (tokenRes) {
+        if (tokenRes){
+            var timestamp = Date.parse(new Date());
+            var lastTokentimestamp = Date.parse(tokenRes.dataValues.updatedAt);
+            if (lastTokentimestamp -timestamp < 7200){
+                callBack(tokenRes.dataValues.accessToken)
+            }else {
+                callBack(false)
+            }
+        }else {
+            callBack(false);
+        }
+    }).catch(function (tokenErr) {
+        callBack(false);
+    })
 }
 
 
@@ -196,7 +236,7 @@ module.exports = {
     sendMsg:sendMsg,
     createCode:createCode,
     initConfig:initConfig,
-    getAdminShareCode:getAdminShareCode
+    getAdminQrImg:getAdminQrImg
 }
 
 /*
