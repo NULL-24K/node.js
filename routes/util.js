@@ -148,6 +148,8 @@ function getAdminQrImg(adminId,callBack) {
     var fs = require('fs');
 
     fs.exists(imgPath,function(exists){
+        console.log(exists);
+        console.log('###')
         if (exists){
             callBack(true)
         }else {
@@ -188,6 +190,8 @@ function getAdminShareCode(administratorId,callback) {
 /*获取token*/
 function getAdminShareCodeToken(callBack) {
     wechatTokenIsEnable(function (result) {
+        console.log(result.dataValues)
+        console.log("*****")
         if (result){
             callBack(result);
         }else {
@@ -196,11 +200,11 @@ function getAdminShareCodeToken(callBack) {
                 if (!error && response.statusCode == 200) {
                     //获取成功 将该参数添加至数据库
                     db.WeChatAccessToken.upsert({accessToken:JSON.parse(body).access_token}).then(function (addRes) {
-                        console.log(addRes);
+                        console.log(addRes.dataValues)
                     })
                     callBack(JSON.parse(body).access_token);
                 }else {
-                    callBack(false);
+                    callBack(false); 
                 }
             })
         }
@@ -212,7 +216,8 @@ function wechatTokenIsEnable(callBack) {
         if (tokenRes){
             var timestamp = Date.parse(new Date());
             var lastTokentimestamp = Date.parse(tokenRes.dataValues.updatedAt);
-            if (lastTokentimestamp -timestamp < 7200){
+            console.log(tokenRes)
+            if (timestamp -lastTokentimestamp < 7200){
                 callBack(tokenRes.dataValues.accessToken)
             }else {
                 callBack(false)
