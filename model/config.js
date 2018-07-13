@@ -26,12 +26,12 @@ module.exports = function(sequelize,DataTypes){
         },
         testValue:{
             type:DataTypes.STRING,
-            defaultValue:'test'
+            defaultValue:'test',
         }
     },{
         freezeTableName: true
     });
-    //Config.sync({ alter: true });
+    //Config.sync({ alter: false });
     // Config.sync({force:true})
     return Config;
 };

@@ -144,9 +144,9 @@ function initConfig() {
 }
 /*生成管理员二维码 返回true表示当前存在或者已生成*/
 function getAdminQrImg(adminId,callBack) {
+
     var imgPath = './public/resources/qrDataImg/'+adminId+'.png';
     var fs = require('fs');
-
     fs.exists(imgPath,function(exists){
         if (exists){
             callBack(true)
@@ -161,6 +161,7 @@ function getAdminQrImg(adminId,callBack) {
 
 
 function getAdminShareCode(administratorId,callback) {
+
     var fs = require('fs');
     getAdminShareCodeToken(function (token) {
         if (token){
