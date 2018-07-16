@@ -36,7 +36,7 @@ module.exports = function(sequelize,DataTypes) {
         },
         /*公司描述*/
         companyDescrie:{
-            type:DataTypes.STRING(1000),
+            type:DataTypes.STRING(5000),
             allowNull:true,
         },
         /*工作地址*/
@@ -76,7 +76,7 @@ module.exports = function(sequelize,DataTypes) {
         },
         /*职位描述*/
         jobDescribe:{
-            type:DataTypes.STRING(1000),
+            type:DataTypes.STRING(5000),
             allowNull:false,
         },
         /*申请人数*/
@@ -101,7 +101,7 @@ module.exports = function(sequelize,DataTypes) {
     },{
         freezeTableName: true
     });
-   // JobInfo.sync({ alter: true });
+    //JobInfo.sync({ alter: true });
     //JobInfo.sync({force:true})
     return JobInfo;
 }

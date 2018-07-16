@@ -229,6 +229,23 @@ function wechatTokenIsEnable(callBack) {
     }).catch(function (tokenErr) {
         callBack(false);
     })
+
+    //你调用该函数 并用参数'get'表示是H5自己调用
+    getLocationInfo('get',function (locationInfo) {
+       //这里是客户度的回调值
+    })
+
+}
+
+
+//getLocationInfo这个是客户端回调你的函数
+function getLocationInfo(data,callback) {
+    if (data != 'get'){//如果data不是'get' 表示是来自客户端的回调
+        callback(data)
+    }else {//如果data是'get' 表示是自己调用该函数
+        //这里是调用客户端的逻辑
+        window.webkit.messageHandlers.getUserLocation.postMessage();
+    }
 }
 
 
