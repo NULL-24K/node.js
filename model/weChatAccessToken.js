@@ -23,7 +23,7 @@ module.exports = function(sequelize,DataTypes){
     },{
         freezeTableName: true
     });
-    //WeChatAccessToken.sync({ alter: true });
+   // WeChatAccessToken.sync({ alter: true });
     // WeChatAccessToken.sync({force:true})
     return WeChatAccessToken;
 };

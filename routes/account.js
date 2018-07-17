@@ -115,7 +115,6 @@ router.post('/setAdmin',function (req,res,next) {
         res.send(JSON.stringify(model))
         return;
     }
-
     if(params.type == 1){//增加
         var timestamp = Date.parse(new Date());
         var sql = {administratorId:'goldbeeAdmin'+params.phoneNum+'_',phoneNum:params.phoneNum,name:params.name,deleteType:0}

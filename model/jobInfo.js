@@ -36,7 +36,7 @@ module.exports = function(sequelize,DataTypes) {
         },
         /*公司描述*/
         companyDescrie:{
-            type:DataTypes.STRING(1000),
+            type:DataTypes.STRING(5000),
             allowNull:true,
         },
         /*工作地址*/
@@ -76,7 +76,7 @@ module.exports = function(sequelize,DataTypes) {
         },
         /*职位描述*/
         jobDescribe:{
-            type:DataTypes.STRING(1000),
+            type:DataTypes.STRING(5000),
             allowNull:false,
         },
         /*申请人数*/
@@ -97,11 +97,21 @@ module.exports = function(sequelize,DataTypes) {
         deleteType:{
             type:DataTypes.INTEGER,
             defaultValue:0
+        },
+        /*该职位的发布状态 0表示展示 其他暂时表示隐藏*/
+        showStatus:{
+            type:DataTypes.INTEGER,
+            defaultValue:0
+        },
+        /*置顶状态 0:未置顶 1:置顶 2:长期置顶(长期置顶每个管理员仅仅能够设置三个)*/
+        topStatus: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
         }
     },{
         freezeTableName: true
     });
-   // JobInfo.sync({ alter: true });
+    //JobInfo.sync({ alter: true });
     //JobInfo.sync({force:true})
     return JobInfo;
 }
