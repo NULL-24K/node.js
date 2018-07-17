@@ -13,9 +13,15 @@
     function getList() {
         window.webkit.messageHandlers.getFriends.postMessage('获取客户端通讯录')
     }
+
+
     function shareResult(title,content) {
         var div = document.getElementById('getTitle');
         div.innerHTML = title+'___'+content;
+    }
+    
+    function getUserMoible(alertStr) {
+        alert(alertStr)
     }
 
      //客户端首先调用你的函数 并将参数传给你 你收到客户端的调用后 调用客户端的函数 将参数回传给客户端
