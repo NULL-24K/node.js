@@ -96,9 +96,10 @@ router.get('/admin/joblist',function (req,res,next) {
                     administratorId:obj.administratorId,
                     createdAt:moment(obj.createdAt).format('YYYY-MM-DD HH:mm:ss'),
                     updatedAt:obj.updatedAt,
+                    showStatus:obj.showStatus,
+                    topStatus:obj.topStatus
                 }
                 jobArr.push(newObj);
-              //  console.log(typeof obj.wellArr)
             }
            // console.log(jobArr[0])
             res.render(('admin/joblist'),{obj:JSON.stringify(jobArr),administratorId:params.administratorId})
