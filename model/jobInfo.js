@@ -77,6 +77,7 @@ module.exports = function(sequelize,DataTypes) {
         /*职位描述*/
         jobDescribe:{
             type:DataTypes.STRING(5000),
+
             allowNull:false,
         },
         /*申请人数*/

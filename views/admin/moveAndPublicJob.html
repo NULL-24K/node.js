@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>转让/共享职位</title>
+    <script src="/jsDic/ajax.js"></script>
+</head>
+<nav>
+    <b style="background-color: #00d6b2;width: 60px;height: 30px;color: white;font-size: 18px" onclick="backMain()">返回首页</b>
+</nav>
+<body>
+<div>
+    <b style="color: red">添加管理员</b>
+    <input type="text" placeholder="请输入管理员姓名"  id="name"/>
+    <input type="text" placeholder="请输入管理员手机号码" id="phone"/>
+    <button onclick="addAdminister()">添加</button>
+    <table border="1" cellspacing="0" cellpadding="0" border-color="#999999"  id="main">
+        <tr>
+            <th>编号</th>
+            <th>姓名</th>
+            <th>手机号码</th>
+            <th style="color: red">操作</th>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+    var json = '<%- JSON.stringify(obj)%>'
+    var jsonArr = JSON.parse(json);
+    var table = document.getElementById('main');
+    var dataArr = handelData();
+    setHtml();
+    addBtn()
+    function handelData() {
+        var newArr = new Array();
+        for (var i =0; i <jsonArr.length;i ++){
+            var liArr = new Array();
+            var obj = jsonArr[i];
+            liArr[0] = i;
+            liArr[1] = obj.name;
+            liArr[2] = obj.phoneNum;
+            liArr[3] = '删除该管理员';
+            newArr.push(liArr);
+        }
+        return newArr;
+    }
+    function setHtml() {
+        for (var i =0;i < dataArr.length; i++){
+            var tr_ = document.createElement('tr')
+            for(var j=0; j<dataArr[i].length;j ++){
+                var td_ = document.createElement('td');
+                td_.innerHTML = dataArr[i][j];
+                td_.setAttribute('id',dataArr[i][0]);
+                td_.style.padding = '5px';
+                if(j ==dataArr[i].length -1){
+                    td_.onclick = function () {
+                        if(window.confirm('确定要删除该管理员?一旦删除 该管理员所有的关系信息将被转移到超级管理员下')){
+                            deleteAdmin(this.id)
+                        }else {
+
+                        }
+                    }
+                    td_.style.color = 'red'
+                }
+                tr_.appendChild(td_);
+            }
+            table.appendChild(tr_);
+        }
+    }
+
+    //.返回首页
+    function backMain() {
+        window.location.href = baseUrl+'admin/main?administratorId='+'superAdminister';
+    }
+</script>
+</body>
+</html>

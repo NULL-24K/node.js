@@ -26,7 +26,7 @@
     </div>
     <div class="cellBackSty">
         <p class="titleSty" id="1">公司描述:  </p>
-        <textarea class="textAreSty"  placeholder="请输入公司简介(不超过一千字符 [注]:每个汉字计算为一个字符,空格以及标点符号计算在内)" onblur="endEdit(this.value,1)" id="1-1"></textarea>
+        <textarea class="textAreSty"  placeholder="请输入公司简介(不超过5000字符 [注]:每个汉字计算为一个字符,空格以及标点符号计算在内)" onblur="endEdit(this.value,1)" id="1-1"></textarea>
     </div>
     <div class="cellBackSty">
         <b class="titleSty" id="2">公司名称:  </b>
@@ -34,7 +34,7 @@
     </div>
     <div class="cellBackSty">
         <p class="titleSty" id="3">职位描述:  </p>
-        <textarea class="textAreSty" placeholder="请输入职位描述(不超过一千字符 [注]:每个汉字计算为一个字符,空格以及标点符号计算在内)" onblur="endEdit(this.value,3)" id="1-3"></textarea>
+        <textarea class="textAreSty" placeholder="请输入职位描述(不超过5000字符 [注]:每个汉字计算为一个字符,空格以及标点符号计算在内)" onblur="endEdit(this.value,3)" id="1-3"></textarea>
     </div>
     <div class="cellBackSty">
         <b class="titleSty" id="4">最低学历要求:  </b>
@@ -254,10 +254,10 @@
             }
         }
 
-        if(jmz_GetLength(dataArr[3]) >1000){
-            alertStr = '职位描述不能超过1000字符'
-        }else if(jmz_GetLength(dataArr[1]) >1000){
-            alertStr = '企业描述不能超过1000字符'
+        if(jmz_GetLength(dataArr[3]) >4500){
+            alertStr = '职位描述不能超过5000字符'
+        }else if(jmz_GetLength(dataArr[1]) >4500){
+            alertStr = '企业描述不能超过5000字符'
         }
 
         if(alertStr.length >0){

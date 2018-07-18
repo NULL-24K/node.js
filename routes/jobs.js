@@ -194,6 +194,10 @@ router.post('/jobEdit',function(req,res,next) {
         var whereSql = {
             where:{'jobId':params.jobId}
         }
+
+
+
+
         if (params.imposed == true){//强制转让  无需判断是否有重复职位
             moveJobIssuccess(sql,whereSql,function (isSuccess) {
                 if (isSuccess){

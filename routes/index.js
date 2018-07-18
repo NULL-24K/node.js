@@ -294,7 +294,7 @@ router.get('/admin/getAdminQrCodeImg',function (req,res,next) {
         util.getAdminQrImg(params.administratorId,function (isSuccess) {
             var data = {administratorId:params.administratorId}
             if (isSuccess){
-                data.imagePath = '/resources/qrDataImg/'+params.administratorId +'.png';
+                data.imagePath = '/resources/qrDataImg/'+params.administratorId +'.jpg';
             }
             res.render('admin/getAdminQrCodeImg',{obj:data})
         })

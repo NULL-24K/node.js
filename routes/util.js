@@ -145,7 +145,8 @@ function initConfig() {
 /*生成管理员二维码 返回true表示当前存在或者已生成*/
 function getAdminQrImg(adminId,callBack) {
 
-    var imgPath = './public/resources/qrDataImg/'+adminId+'.png';
+    var imgPath = './public/resources/qrDataImg/'+adminId+'.jpg';
+    console.log(imgPath);
     var fs = require('fs');
     fs.exists(imgPath,function(exists){
         console.log(exists);
@@ -180,7 +181,7 @@ function getAdminShareCode(administratorId,callback) {
                     "content-type": "application/json"
                 },
                 body: requestData
-            }).pipe(fs.createWriteStream('./public/resources/qrDataImg/' + administratorId + '.png'));
+            }).pipe(fs.createWriteStream('./public/resources/qrDataImg/' + administratorId + '.jpg'));
             callback(true)
         }else {
             callback(false)
