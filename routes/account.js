@@ -15,17 +15,17 @@ var request = require('request');
 router.post('/Login',function(req,res,next) {
     var model = new ResModel();
     var params = req.body;
-    var isAsync = false;
     if (!params.phoneNum){
         model.msg = '手机号码不能为空'
+        res.send(JSON.stringify(model));
     }else if(!params.psd){
         model.msg = '验证码不能为空'
     // }else if(!util._isPhoneNum(params.phoneNum)){
     //     model.msg = '手机号码格式不正确'
     // }else if(params.psd.length != 6){
     //    model.msg = '验证码码格式不正确';
+        res.send(JSON.stringify(model));
     }else {
-        isAsync = true;
         //.这里还要判断验证码是否正确***
         db.MsgCode.findOne({where:{phoneNum:params.phoneNum}}).then(function (msgResult) {
             var obj = msgResult.dataValues;
@@ -49,20 +49,41 @@ router.post('/Login',function(req,res,next) {
                 }).then(function (result) {
                     //.此处判断用户是否注册过
                     if (result && result.dataValues){
-                        model.data = {token:result.dataValues.uuid,shareId:result.dataValues.shareId}
+                        console.log(result.dataValues)
+                        console.log(params);
+                        var updataSql = new Object();
+                        var isUpdata = false;
+                        //如果登录的时候携带的shareId 不是默认ID 且数据库默认存储ID是默认ID 重置ID
+                        var returnUserShareId = result.dataValues.shareId;
+                        if(result.dataValues.shareId == 'goldbee' && params.shareId !='goldbee' &&params.shareId.length >0) {
+                            updataSql.shareId = params.shareId;
+                            returnUserShareId = params.shareId;
+                          //  console.log("%%")
+                            isUpdata = true;
+                        }
+                        //.判断是否携带openID且数据库未存储没有openId
+                        if(!result.dataValues.openid && params.openid){
+                            updataSql.openid = params.openid;
+                            updataSql.session_key = params.session_key
+                           // console.log("***")
+                            isUpdata = true;
+                        }
+
+                        model.data = {token:result.dataValues.uuid,shareId:returnUserShareId}
                         model.code = 0;
                         model.msg = '登录成功'
                         res.send(JSON.stringify(model));
-                        console.log(result.dataValues)
-                        //.判断是否携带openID且数据库未存储没有openId
-                        if(!result.dataValues.openid && params.openid){
-                            db.Account.update({openid:params.openid,session_key:params.session_key},{where:{phoneNum:params.phoneNum}}).then(function (upsult) {
-                                console.log('插入openID成功')
+
+                        if(isUpdata){
+                            // console.log('大于0')
+                            // console.log(updataSql);
+                            db.Account.update(updataSql,{where:{phoneNum:params.phoneNum}}).then(function (upsult) {
+                                console.log('更新成功')
                             })
                         }
 
                     }else {
-                        var saveInfo = {phoneNum:params.phoneNum}
+                        var saveInfo = {phoneNum:params.phoneNum,shareId:params.shareId}
                         if(params.session_key){
                             saveInfo.session_key =params.session_key
                         }
@@ -104,7 +125,6 @@ router.post('/Login',function(req,res,next) {
             res.send(JSON.stringify(model));
         })
     }
-    isAsync?null:res.send(JSON.stringify(model));
 })
 
 router.post('/setAdmin',function (req,res,next) {
