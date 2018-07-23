@@ -303,6 +303,37 @@ router.post('/setServePhone',function (req,res,next) {
 })
 
 
+router.post('/getAdministers',function (req,res,next) {
+    var params = req.body;
+    var model = new ResModel();
+    if (!params.administratorId || params.administratorId.length ==0){
+        model.msg = '你暂无此权限'
+        res.send(JSON.stringify(model));
+    }else {
+        db.Administer.findAll({where:{deleteType:0}}).then(function (result) {
+            var jobArr = new  Array();
+            for(var i =0;i <result.length; i++){
+                var  obj = result[i].dataValues;
+                var  newObj = {
+                    name:obj.name,
+                    phoneNum:obj.phoneNum,
+                    administratorId:obj.administratorId
+                }
+                if(newObj.administratorId !=params.administratorId){
+                    jobArr.push(newObj);
+                }
+            }
+            model.data = jobArr;
+            model.code = 0;
+            model.msg = '成功'
+            res.send(JSON.stringify(model));
+        }).catch(function (err) {
+            res.send(JSON.stringify(model));
+        })
+    }
+})
+
+
 
 module.exports = router;
 

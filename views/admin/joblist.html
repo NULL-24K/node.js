@@ -169,12 +169,15 @@
 
                         if(window.confirm('确定' +this.innerHTML +'?')){
                             if (type == 'public' || type == 'move'){
+                                var obj = jsonArr[this.id];
+                                window.location.href = baseUrl+'admin/moveAndPublicJob?administratorId=' +administratorId +'&type='+type +'&jobId='+obj.jobId;
+
                                 var alertStr = '共享该职位后,您和您共享的小伙伴都将拥有该职位(职位ID不同)'
                                 if (type == 'move'){
                                     alertStr = '转移该职位后,该职位将从您的职位列表下转移到您的小伙伴下(已申请该职位的用户可在消息->进展详情->职位信息中查看)'
                                 }
                                 if (window.confirm(alertStr)){
-                                  //  jonEdit(this.id,type);
+
                                 }
                             }else {
                                 jonEdit(this.id,type);

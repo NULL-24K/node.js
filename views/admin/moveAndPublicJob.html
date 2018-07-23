@@ -5,15 +5,91 @@
     <title>转让/共享职位</title>
     <script src="/jsDic/ajax.js"></script>
 </head>
+<style media="screen">
+    @keyframes fadeIn {
+        0%    {opacity: 0}
+        100%  {opacity: 1}
+    }
+    @-webkit-keyframes fadeIn {
+        0%    {opacity: 0}
+        100%  {opacity: 1}
+    }
+    @-moz-keyframes fadeIn {
+        0%    {opacity: 0}
+        100%  {opacity: 1}
+    }
+    @-o-keyframes fadeIn {
+        0%    {opacity: 0}
+        100%  {opacity: 1}
+    }
+    @-ms-keyframes fadeIn {
+        0%    {opacity: 0}
+        100%  {opacity: 1}
+    }
+    @keyframes fadeOut {
+        0%    {opacity: 1}
+        100%  {opacity: 0}
+    }
+    @-webkit-keyframes fadeOut {
+        0%    {opacity: 1}
+        100%  {opacity: 0}
+    }
+    @-moz-keyframes fadeOut {
+        0%    {opacity: 1}
+        100%  {opacity: 0}
+    }
+    @-o-keyframes fadeOut {
+        0%    {opacity: 1}
+        100%  {opacity: 0}
+    }
+    @-ms-keyframes fadeOut {
+        0%    {opacity: 1}
+        100%  {opacity: 0}
+    }
+    #toast{
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        font-size: 14px;
+        line-height: 1;
+        padding:20px;
+        border-radius: 3px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        -webkit-transform: translate(-50%,-50%);
+        -moz-transform: translate(-50%,-50%);
+        -o-transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        z-index: 9999;
+    }
+    .hide{
+        display: none;
+    }
+    .fadeOut{
+        animation: fadeOut .5s;
+    }
+    .fadeIn{
+        animation:fadeIn .5s;
+    }
+</style>
 <nav>
     <b style="background-color: #00d6b2;width: 60px;height: 30px;color: white;font-size: 18px" onclick="backMain()">返回首页</b>
 </nav>
 <body>
 <div>
-    <b style="color: red">添加管理员</b>
-    <input type="text" placeholder="请输入管理员姓名"  id="name"/>
-    <input type="text" placeholder="请输入管理员手机号码" id="phone"/>
-    <button onclick="addAdminister()">添加</button>
+    <b style="color: red">共享/转让职位</b>
+    <p style="color: red;font-size: 24px">注:共享职位:</p>
+    <p>1.选择您需希望共享的小伙伴,点击并确认共享</p>
+    <p>2.提交请求之后,系统会判断您的小伙伴的职位下面是否有类似职位,如果没有类似职位,操作成功</p>
+    <p>3.如果有类似职位,系统将会弹窗对话框,您可以选择强制操作,也可以取消操作</p>
+    <p style="color: red">4.强制操作之后,操作成功,但是该操作可能导致小伙伴下面出现相似职位[请谨慎操作]</p>
+    <p style="color: red;font-size: 24px">注:转让职位:</p>
+    <p>1.选择您需希望转让的小伙伴,点击并确认转让</p>
+    <p>2.提交请求之后,系统会判断您的小伙伴的职位下面是否有类似职位,如果没有类似职位,转让成功</p>
+    <p>3.如果有类似职位,系统将会弹窗对话框,您可以选择强制操作,也可以取消操作</p>
+    <p style="color: red">4.强制操作之后,操作成功,但是该操作可能导致小伙伴下面出现相似职位[请谨慎操作]</p>
+    <p style="color: green">5.转让职位操作成功之后,您的职位列表中将不存在该职位,但是您的用户中已申请该职位的用户,您依然可以操作</p>
     <table border="1" cellspacing="0" cellpadding="0" border-color="#999999"  id="main">
         <tr>
             <th>编号</th>
@@ -25,51 +101,142 @@
 </div>
 <script type="text/javascript">
     var json = '<%- JSON.stringify(obj)%>'
-    var jsonArr = JSON.parse(json);
+    var administratorId = '<%-administratorId%>'
+    var editType = '<%-type%>'
+    var jsonDic = JSON.parse(json);
     var table = document.getElementById('main');
-    var dataArr = handelData();
-    setHtml();
-    addBtn()
-    function handelData() {
-        var newArr = new Array();
-        for (var i =0; i <jsonArr.length;i ++){
-            var liArr = new Array();
-            var obj = jsonArr[i];
-            liArr[0] = i;
-            liArr[1] = obj.name;
-            liArr[2] = obj.phoneNum;
-            liArr[3] = '删除该管理员';
-            newArr.push(liArr);
-        }
-        return newArr;
-    }
-    function setHtml() {
-        for (var i =0;i < dataArr.length; i++){
-            var tr_ = document.createElement('tr')
-            for(var j=0; j<dataArr[i].length;j ++){
-                var td_ = document.createElement('td');
-                td_.innerHTML = dataArr[i][j];
-                td_.setAttribute('id',dataArr[i][0]);
-                td_.style.padding = '5px';
-                if(j ==dataArr[i].length -1){
-                    td_.onclick = function () {
-                        if(window.confirm('确定要删除该管理员?一旦删除 该管理员所有的关系信息将被转移到超级管理员下')){
-                            deleteAdmin(this.id)
-                        }else {
-
-                        }
-                    }
-                    td_.style.color = 'red'
+    var dataArr;
+    var infosArr;
+    getAdminInfo()
+    console.log(jsonDic);
+    function getAdminInfo() {
+        //getAdministers
+        ajax({
+            method:'POST',
+            url:baseUrl+'account/getAdministers',
+            data:{
+                administratorId:administratorId
+            },
+            success:function (res) {
+                var obj = JSON.parse(res);
+                if(obj.code ==0){
+                    dataArr = handelData(obj.data);
+                    infosArr = obj.data;
+                    setHtml()
+                }else {
+                    alert('网络异常,请刷新重试')
                 }
-                tr_.appendChild(td_);
             }
-            table.appendChild(tr_);
-        }
+        })
     }
 
+  function handelData(infoArr) {
+      var newArr = new Array();
+      for (var i =0; i <infoArr.length;i ++){
+          var liArr = new Array();
+          var obj = infoArr[i];
+          liArr[0] = i;
+          liArr[1] = obj.name;
+          liArr[2] = obj.phoneNum;
+          liArr[3] = editType=='public'?'共享':'转让';
+          newArr.push(liArr);
+      }
+      return newArr;
+  }
+
+  function setHtml() {
+      for (var i =0;i < dataArr.length; i++){
+          var tr_ = document.createElement('tr')
+          for(var j=0; j<dataArr[i].length;j ++){
+              var td_ = document.createElement('td');
+              td_.innerHTML = dataArr[i][j];
+              td_.setAttribute('id',dataArr[i][0]);
+              td_.style.padding = '5px';
+              if(j ==dataArr[i].length -1){
+                  td_.onclick = function () {
+                      var alertStr = editType =='public'?'共享该职位后,您和您共享的小伙伴都将拥有该职位':'转移该职位后,该职位将从您的职位列表下转移到您的小伙伴下(已申请该职位的用户可在消息->进展详情->职位信息中查看)'
+                      if(window.confirm(alertStr)){
+                          editJobs(this.id,'noimposed')
+                      }
+                  }
+                  td_.style.color = 'red'
+              }
+              tr_.appendChild(td_);
+          }
+          table.appendChild(tr_);
+      }
+  }
+
+  function editJobs(index,isImposed) {
+      //move  public
+      var reqData = {
+          administratorId:administratorId,
+          newAdministratorId:infosArr[index].administratorId,
+          companyName:jsonDic.companyName,
+          jobName:jsonDic.jobName,
+          jobId:jsonDic.jobId,
+          imposed:isImposed
+      }
+
+      if (editType =='public'){
+          reqData.public = 1
+      }else {
+          reqData.move = 1
+      }
+      console.log(reqData)
+      ajax({
+          method:'POST',
+          url:baseUrl+'jobs/jobEdit',
+          data:reqData,
+          success:function (res) {
+              var obj = JSON.parse(res);
+              console.log(obj)
+              if(obj.code ==0){
+                  if(editType == 'public'){
+                      toast({
+                          message:obj.msg,
+                          time:2000
+                      });
+                      setTimeout(function () {
+                          location.reload(true);
+                      },2000)
+                  }else {
+                      toast({
+                          message:obj.msg,
+                          time:2000
+                      });
+                      setTimeout(function () {
+                          window.location.href =  baseUrl+'admin/joblist?administratorId='+administratorId;
+                      },2000)
+                  }
+              }else if(obj.code == 110){
+                  if(window.confirm('该管理员下已有相似职位,确定强制操作?')){
+                      editJobs(index,'imposed');
+                  }
+              } else {
+                  alert('网络异常,请刷新重试')
+              }
+          }
+      })
+  }
+
+    var toast = function(params){
+        var el = document.createElement("div");
+        el.setAttribute("id","toast");
+        el.innerHTML = params.message;
+        document.body.appendChild(el);
+        el.classList.add("fadeIn");
+        setTimeout(function(){
+            el.classList.remove("fadeIn");
+            el.classList.add("fadeOut");
+            el.addEventListener("animationend", function(){
+                el.classList.add("hide");
+            });
+        },params.time);
+    };
     //.返回首页
     function backMain() {
-        window.location.href = baseUrl+'admin/main?administratorId='+'superAdminister';
+        window.location.href = baseUrl+'admin/main?administratorId='+administratorId;
     }
 </script>
 </body>

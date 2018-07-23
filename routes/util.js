@@ -235,7 +235,6 @@ function wechatTokenIsEnable(callBack) {
     getLocationInfo('get',function (locationInfo) {
        //这里是客户度的回调值
     })
-
 }
 
 

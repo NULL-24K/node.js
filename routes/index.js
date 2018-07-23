@@ -302,6 +302,33 @@ router.get('/admin/getAdminQrCodeImg',function (req,res,next) {
 })
 
 
+router.get('/admin/moveAndPublicJob',function (req,res,next) {
+    var timestamp = Date.parse(new Date());
+    var params = URL.parse(req.url, true).query;
+    if (!params.administratorId || params.administratorId.length ==0){
+        res.render('admin/main');
+        return;
+    }else {
+        db.JobInfo.findOne({where:{jobId:params.jobId}}).then(function (result) {
+            var data = new Object();
+            if (result){
+                data = {
+                    companyName:result.dataValues.companyName,
+                    jobName:result.dataValues.jobName,
+                    jobId:params.jobId
+                }
+            }else {
+
+            }
+            res.render('admin/moveAndPublicJob',{obj:data,administratorId:params.administratorId,type:params.type})
+        }).catch(function (error) {
+
+        })
+        res.render('admin/moveAndPublicJob',{obj:data})
+    }
+})
+
+
 router.get('/admin/web_one',function (req,res,next) {
    res.render('admin/web_one') ;
 })

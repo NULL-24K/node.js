@@ -195,10 +195,7 @@ router.post('/jobEdit',function(req,res,next) {
             where:{'jobId':params.jobId}
         }
 
-
-
-
-        if (params.imposed == true){//强制转让  无需判断是否有重复职位
+        if (params.imposed == 'imposed'){//强制转让  无需判断是否有重复职位
             moveJobIssuccess(sql,whereSql,function (isSuccess) {
                 if (isSuccess){
                     model.code = 0;
@@ -210,9 +207,9 @@ router.post('/jobEdit',function(req,res,next) {
             })
         }else {
             //非强制转让职位时 先判断该用户下是否存在该职位(职位名称,公司名称相同即为重复职位)
-            var sqlStr = {where:{administratorId:params.administratorId,companyName:params.companyName,jobName:params.jobName}};
-            jobIsSame(sqlStr,function (res) {
-                if (res == 0){//没有重复职位
+            var sqlStr = {where:{administratorId:params.newAdministratorId,companyName:params.companyName,jobName:params.jobName}};
+            jobIsSame(sqlStr,function (isSame) {
+                if (isSame == 0){//没有重复职位
                     var whereSql = {
                         where:{'jobId':params.jobId}
                     }
@@ -223,7 +220,7 @@ router.post('/jobEdit',function(req,res,next) {
                     }).catch(function (error) {
                         res.send(JSON.stringify(model))
                     })
-                }else if(res ==1){//有重复职位
+                }else if(isSame ==1){//有重复职位
                     model.code = 110;
                     model.msg = '该管理员下已有相似职位'
                     res.send(JSON.stringify(model))
@@ -234,31 +231,32 @@ router.post('/jobEdit',function(req,res,next) {
         }
     }else if(params.public && params.public.length >0){
         issysn = false
+        if (params.imposed == 'imposed') {//强制共享  无需判断是否有重复职位
 
-        if (params.imposed == true) {//强制共享  无需判断是否有重复职位
             publicJob({where:{'jobId':params.jobId}},params.newAdministratorId,function (result) {
                 if(result){
                     model.code = 0;
-                    model.msg = '操作成功'
+                    model.msg = '共享成功'
                     res.send(JSON.stringify(model))
                 }else {
                     res.send(JSON.stringify(model))
                 }
             })
         }else {
-            var sqlStr = {where:{administratorId:params.administratorId,companyName:params.companyName,jobName:params.jobName}};
-            jobIsSame(sqlStr,function (res) {
-                if (res == 0){//没有重复职位
+            var sqlStr = {where:{administratorId:params.newAdministratorId,companyName:params.companyName,jobName:params.jobName}};
+            jobIsSame(sqlStr,function (isSame) {
+
+                if (isSame == 0){//没有重复职位
                     publicJob({where:{'jobId':params.jobId}},params.newAdministratorId,function (result) {
                         if(result){
                             model.code = 0;
-                            model.msg = '操作成功'
+                            model.msg = '共享成功'
                             res.send(JSON.stringify(model))
                         }else {
                             res.send(JSON.stringify(model))
                         }
                     })
-                }else if(res ==1){//有重复职位
+                }else if(isSame ==1){//有重复职位
                     model.code = 110;
                     model.msg = '该管理员下已有相似职位'
                     res.send(JSON.stringify(model))
@@ -296,29 +294,28 @@ function publicJob(sql,newAdministratorId,callback) {
         if(findRes){
             var findObj = findRes.dataValues;
             delete findObj.jobId;
+            delete findObj.id;
             delete findObj.deletedAt;
             delete findObj.updatedAt;
             //重置administratorId
             findObj.administratorId = newAdministratorId;
+            console.log(findObj)
             db.JobInfo.upsert(findObj).then(function (addRes) {
                 callback(true)
-                // model.code = 0;
-                // model.msg = '操作成功'
-                // res.send(JSON.stringify(model))
             }).catch(function (addErr) {
                 callback(false)
-               // res.send(JSON.stringify(model))
             })
         }
     }).catch(function (findErr) {
         callback(false)
-       // res.send(JSON.stringify(model))
     })
 }
 
 function jobIsSame(sql,callback) {
+    console.log(sql)
     //转让/分享职位时 先判断该用户下是否存在该职位(职位名称,公司名称相同即为重复职位)
-    db.JobInfo.findAll(sql).then(function (findAllRes) {
+    db.JobInfo.findOne(sql).then(function (findAllRes) {
+        console.log(findAllRes)
         if (findAllRes){
             //.存在相同职位 提示用户是否转让
             callback(1)
@@ -326,6 +323,7 @@ function jobIsSame(sql,callback) {
             callback(0)
         }
     }).catch(function (findAllErr) {
+        console.log(findAllErr)
         callback('error')
     })
 }
@@ -380,6 +378,25 @@ router.post('/adminPhoneNum',function (req,res,next) {
         res.send(JSON.stringify(model));
     }
 })
+
+
+function test() {
+    var _this = this;
+    if(window.isWx){
+        _this.setState({
+            isWx:true
+        })
+    }else {
+        var miniURL = GetParam('platType');
+        if(miniURL && miniURL=='weChatMini'){
+            window.isWx = true;
+            _this.setState({
+                isWx:true
+            })
+        }
+    }
+
+}
 
 module.exports = router;
 
