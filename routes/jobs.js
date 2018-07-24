@@ -71,6 +71,9 @@ router.post('/jobDetail',function (req,res,next) {
         var jobDetailSql = {where:{jobId:req.body.jobId}}
         db.JobInfo.findOne(jobDetailSql).then(function (result) {
             model.code = 0;
+            console.log(result)
+            console.log(req.body);
+            console.log('查找职位信息')
             if(result){
                 _jobInfo.jobName = result.dataValues.companyName;//由于交换了职位名称和公司名称 这里也交换过来
                 _jobInfo.jobIncom = result.dataValues.salary;
@@ -91,7 +94,7 @@ router.post('/jobDetail',function (req,res,next) {
                 model.data = _jobInfo;
                 model.msg = '请求成功'
             }else {
-                model.msg = '暂无数据'
+                model.msg = '该职位已停止招聘'
             }
 
             //用户已登录 需要查找该用户是否已申请该职位
