@@ -1,30 +1,211 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+<head lang="zh-cmn-Hans">
     <meta charset="UTF-8">
+    <title>热更主页</title>
+    <!--<meta name="renderer" content="webkit">-->
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">-->
+    <!--<meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>-->
+    <!--require dsbridge init js-->
+    <!--<script src="https://unpkg.com/dsbridge/dist/dsbridge.js"> </script>-->
     <script src="/jsDic/ajax.js"></script>
-    <title>web_one</title>
 </head>
+<style>
+    .btn {
+        text-align: center;
+        background: #eee;
+        color: #000;
+        padding: 20px;
+        margin: 30px;
+        font-size: 24px;
+        border-radius: 4px;
+        box-shadow: 4px 2px 10px #999;
+    }
+
+    .btn:active {
+        opacity: .7;
+        box-shadow: 4px 2px 10px #555;
+    }
+
+    .input_{
+        width:375px;
+        height:50px;
+    }
+
+</style>
 <body>
- <p>这是H5_one</p>
- <p>h5</p>
- <p>h5</p>
- <p>h5</p>
- <button onclick="pushNative()" style="font-size: 30px">跳转至原生界面two</button>
- <button onclick="pushNative_web()" style="font-size: 30px">跳转至原生webVC</button>
- <button onclick="pushH5()" style="font-size: 30px">跳转至H5界面</button>
- <script type="text/javascript">
-     function pushNative() {
+<div class="btn" onclick="callSyn()">获取同步回调</div>
+<div class="btn" onclick="callAsyn()">异步回调</div>
+<div class="btn" onclick="setValueSyn()">客户端数据持久化</div>
+<div class="btn" onclick="getValueSyn()">获取客户端持久化数据</div>
+<div class="btn" onclick="setProcessValue()">客户端缓存数据(当前APP进程有效)</div>
+<div class="btn" onclick="getProcessValue()">获取当前APP进程缓存数据</div>
+<div class="btn" onclick="getFirends()">获取通讯录</div>
+<div class="btn" onclick="getContacts()">获取通讯录,UI</div>
+<div class="btn" onclick="getPicAsyn()">获取相册</div>
+<div class="btn" onclick="showLoading()">展示加载loading 三秒后自动调用关闭</div>
+<div class="btn" onclick="showToas()">展示弹窗</div>
+<div class="btn" onclick="addRefershWithType()">开启刷新</div>
+<div class="btn" onclick="removeRefersh()">移除刷新</div>
+<div class="btn" onclick="getLocationInfo()">获取定位</div>
+<input type="file" accept="image/*" multiple class="btn" />
+<div class="btn" onclick="pushNextVC()">跳转下一页</div>
+<div class="btn" onclick="hasNativeMethod('xx')">hasNativeMethod("xx")</div>
+<div class="btn" onclick="hasNativeMethod('testSyn')">hasNativeMethod("testSyn")</div>
 
-         window.location.href = baseUrl+'admin/web_two?option=' +'native_two#0'
-     }
-     function pushNative_web() {
+<script>
 
-         window.location.href = baseUrl+'admin/web_two?option=' +'web_one#1#webVC跳转至原生'
-     }
-     function pushH5() {
-         window.location.href = baseUrl+'admin/web_two'
-     }
- </script>
+    function callSyn() {
+        alert(dsBridge.call("sys.testSyn", "testSyn"))
+    }
+
+    function callAsyn() {
+        dsBridge.call("sys.testAsyn","name", function (v) {
+            alert(v)
+        })
+    }
+
+    function setValueSyn() {
+        alert(dsBridge.call("sys.setStorgeValue",{key:"name",value:"H5热更客户端数据持久化"}));
+    }
+
+    function getValueSyn() {
+        alert(dsBridge.call("sys.getStorgeValue","name"));
+    }
+
+    function getFirends(){
+        dsBridge.call("getFirends",function(value){
+            alert(value[0].name)
+        })
+    }
+
+    function getContacts(){
+        dsBridge.call("getContacts",function(value){
+            alert(value.name +'--'+value.phone)
+        })
+    }
+
+    function showLoading(){
+        dsBridge.call("isShowLoading","1")
+        setTimeout(function () {
+            dsBridge.call("isShowLoading","0")
+        },3000)
+    }
+
+    function showToas(){
+        dsBridge.call("showToas","你好,我将在2.5秒后消失")
+    }
+
+    function addRefershWithType(){
+        dsBridge.call("addRefershWithType","1",function(value){
+            dsBridge.call("showToas","你好,我将在3秒后结束刷新")
+            setTimeout(function () {
+                dsBridge.call("isStartRefresh","0")
+            },3000)
+        })
+    }
+
+
+    function removeRefersh(){
+        dsBridge.call("removeRefresh","")
+    }
+
+
+
+    function getLocationInfo(){
+        dsBridge.call("getLocationInfo","",function(value){
+            alert(value.latitude+"_"+value.longitude);
+        })
+    }
+
+    function pushNextVC(){
+        window.location.href = baseUrl+"admin/web_two"
+    }
+
+    function setProcessValue() {
+        alert(dsBridge.call("sys.setCacheValue", {key:"name",value:{"name":"储彬","sex":"男"}}))
+    }
+
+    function getProcessValue() {
+        var obj = dsBridge.call("sys.getCacheValue", "name");
+        alert(obj.name +"_"+obj.sex)
+    }
+
+    function getPicAsyn(){
+        dsBridge.call("sys.getPicAsyn",function(res){
+
+        })
+    }
+
+    function echoSyn() {
+        // call function with namespace
+        var ret=dsBridge.call("echo.syn",{msg:" I am echoSyn call", tag:1});
+        alert(JSON.stringify(ret))
+    }
+
+    function echoAsyn() {
+        // call function with namespace
+        dsBridge.call("echo.asyn",{msg:" I am echoAsyn call",tag:2},function (ret) {
+            alert(JSON.stringify(ret));
+        })
+    }
+
+    function callProgress() {
+        dsBridge.call("callProgress", function (value) {
+            if(value==0) value="";
+            document.getElementById("progress").innerText = value
+        })
+    }
+
+    function hasNativeMethod(name) {
+        alert(dsBridge.hasNativeMethod(name))
+    }
+
+
+    dsBridge.register('addValue', function (r, l) {
+        return r + l;
+    })
+
+    dsBridge.registerAsyn('append', function (arg1, arg2, arg3, responseCallback) {
+        responseCallback(arg1 + " " + arg2 + " " + arg3);
+    })
+
+    dsBridge.registerAsyn('startTimer', function (responseCallback) {
+        var t = 0;
+        var timer = setInterval(function () {
+            if (t == 5) {
+                responseCallback(t)
+                clearInterval(timer)
+            } else {
+                // if the 2nd argument is false,  the java callback handler will be not removed!
+                responseCallback(t++, false)
+            }
+        }, 1000)
+
+    })
+
+    // namespace test for syn functions
+    dsBridge.register("syn", {
+        tag: "syn",
+        addValue:function (r,l) {
+            return r+l;
+        },
+        getInfo: function () {
+            return {tag: this.tag, value:8}
+        }
+    })
+
+    // namespace test for asyn functions
+    dsBridge.registerAsyn("asyn", {
+        tag: "asyn",
+        addValue:function (r,l, responseCallback) {
+            responseCallback(r+l);
+        },
+        getInfo: function (responseCallback) {
+            responseCallback({tag: this.tag, value:8})
+        }
+    })
+
+</script>
 </body>
 </html>
