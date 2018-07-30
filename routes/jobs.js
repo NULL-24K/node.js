@@ -137,6 +137,9 @@ router.post('/jobList',function(req,res,next) {
             offset:(page - 1) * pageSize,
             limit:pageSize
         }
+
+       // db.JobInfo.findAll({order:'RAND'})
+
         db.JobInfo.findAndCountAll(jobsSql).then(function (result) {
             model.code = 0;
             if(result){
@@ -331,6 +334,21 @@ function jobIsSame(sql,callback) {
     })
 }
 
+
+router.post('/LocationCityInfo',function (req,res,next) {
+    var model = new ResModel();
+    util.GetWeChatLocationInfo(req.body.latitude,req.body.longitude,function (cityInfo) {
+        if (cityInfo == 0){
+
+        }else {
+            model.code = 0;
+            model.data = cityInfo;
+            model.msg = '获取位置成功'
+        }
+        res.send(JSON.stringify(model))
+    })
+
+})
 
 
 router.post('/adminPhoneNum',function (req,res,next) {
