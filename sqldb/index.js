@@ -24,6 +24,7 @@ db.MsgCode = db.sequelize.import('../model/msgCode');
 db.OrderApplyList = db.sequelize.import('../model/orderApplyList');
 db.Config = db.sequelize.import('../model/config');
 db.WeChatAccessToken = db.sequelize.import('../model/weChatAccessToken');
+db.WeChatFormId = db.sequelize.import('../model/weChatFormId');
 //ngjcltj5yr
 
 

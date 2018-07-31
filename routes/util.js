@@ -162,17 +162,84 @@ function getAdminQrImg(adminId,callBack) {
     })
 }
 /*发送微信服务通知*/
-function sendWeChatMsg() {
+function sendWeChatMsg(uuid,sendData,callBack) {
     //获取token
     getAdminShareCodeToken(function (token) {
         if (token){
             //.获取了有效token
-
+            searchFormId(uuid,token,sendData,function (result) {
+                callBack(result)
+            })
         }else {
-            //未获取有效token
-
+            callBack('获取微信token失败,请重新尝试')
         }
     })
+}
+
+/*查找模板ID*/
+function searchFormId(uuid,token,sendData,callBack) {
+    db.WeChatFormId.findAll({where:{deleteType:0,uuid:uuid}}).then(function (res) {
+        if(res&&res.length>0){
+            sendTemplatemSG(token,res[0].dataValues.weChatOpenId,res[0].dataValues.weChatFormId,sendData,function (sendRes) {
+                callBack(sendRes)
+            })
+        }else {
+         callBack('暂无可用模板ID,请检查是否是否已经发送过模板信息')
+        }
+    }).catch(function (error) {
+        callBack('findErr')
+    })
+}
+/*发送服务通知信息*/
+function sendTemplatemSG(token,openId,form_id,sendData,callBack) {
+    var URL_ = 'https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=' +token
+    /*{
+     "keyword1": {
+     "value": "南京笃信教育"
+     },
+     "keyword2": {
+     "value": "开发工程师"
+     },
+     "keyword3": {
+     "value": "杭州市滨江区阡陌路482＃"
+     } ,
+     "keyword4": {
+     "value": "2017-01-11 21:50"
+     },
+     "keyword5": {
+     "value": "18815280356"
+     },
+     "keyword6": {
+     "value": "刘先生"
+     } ,
+     "keyword7": {
+     "value": "请按时参加面试"
+     }
+     }*/
+    var requestData = {
+        touser:openId,
+        template_id:'VV5yrKCSkdlzmOr1t8fKcQjTA6Cl2iBur6cnO_zjqPM',
+        form_id:form_id,
+        data:sendData
+    }
+     request({
+         url:URL_,
+         method: "POST",
+         json: true,
+         headers: {
+             "content-type": "application/json"
+         },
+         body: requestData
+     },function(error, response, body) {
+         if (!error && response.statusCode == 200) {
+             console.log(body) // 请求成功的处理逻辑
+             callBack('success');
+             //发送成功 该模板ID已经被微信设置为失效 在数据库中将该ID也设置为失效
+             db.WeChatFormId.update({deleteType:1},{where:{weChatFormId:form_id}})
+         }else {
+             callBack('sendErr')
+         }
+     })
 }
 
 
@@ -247,7 +314,7 @@ function wechatTokenIsEnable(callBack) {
         if (tokenRes){
             var timestamp = Date.parse(new Date());
             var lastTokentimestamp = Date.parse(tokenRes.dataValues.updatedAt);
-            console.log(tokenRes)
+           // console.log(tokenRes)
             if (timestamp -lastTokentimestamp < 7200){
                 callBack(tokenRes.dataValues.accessToken)
             }else {
@@ -273,7 +340,8 @@ module.exports = {
     createCode:createCode,
     initConfig:initConfig,
     getAdminQrImg:getAdminQrImg,
-    GetWeChatLocationInfo:getWeChatLocationInfo
+    GetWeChatLocationInfo:getWeChatLocationInfo,
+    sendWeChatMsg:sendWeChatMsg
 }
 
 /*

@@ -337,16 +337,21 @@ function jobIsSame(sql,callback) {
 
 router.post('/LocationCityInfo',function (req,res,next) {
     var model = new ResModel();
-    util.GetWeChatLocationInfo(req.body.latitude,req.body.longitude,function (cityInfo) {
-        if (cityInfo == 0){
+    if (req.body.latitude && req.body.longitude){
+        util.GetWeChatLocationInfo(req.body.latitude,req.body.longitude,function (cityInfo) {
+            if (cityInfo == 0){
 
-        }else {
-            model.code = 0;
-            model.data = cityInfo;
-            model.msg = '获取位置成功'
-        }
+            }else {
+                model.code = 0;
+                model.data = cityInfo;
+                model.msg = '获取位置成功'
+            }
+            res.send(JSON.stringify(model))
+        })
+    }else {
+        model.msg = '地理位置信息不能为空'
         res.send(JSON.stringify(model))
-    })
+    }
 
 })
 

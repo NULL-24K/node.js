@@ -16,6 +16,10 @@ var sequelize = require('sequelize');
 router.post('/applyJob',function (req,res,next) {
 
     var model = new ResModel();
+    if(req.body.formId){
+      //  saveFormId(req.body.formId,req.headers.token);
+       // util.sendWeChatMsg(req.headers.token)
+    }
 
     //.用户鉴权
     var token = req.headers.token;
@@ -132,6 +136,30 @@ router.post('/applyJob',function (req,res,next) {
     }
 
 })
+
+
+function saveFormId(formId,uuid) {
+    db.Account.findOne({where:{uuid:uuid}}).then(function (res) {
+        if(res && res.dataValues.openid){//存在openId
+            var saveSql = {
+                weChatFormId:formId,
+                uuid:uuid,
+                weChatOpenId:res.dataValues.openid
+            }
+            db.WeChatFormId.create(saveSql).then(function (saveRes) {
+                console.log('保存成功')
+            }).cache(function (saveErr) {
+
+            })
+        }else {
+            console.log('暂无openID')
+        }
+    }).catch(function (err) {
+
+    })
+}
+
+
 
 
 router.post('/orderStatus',function (req,res,next) {
