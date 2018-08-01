@@ -28,6 +28,7 @@ router.get('/admin/login',function (req,res,next) {
 /*首页*/
 router.get('/admin/main',function (req,res,next) {
     //administratorId
+    console.log(getClientIp(req));
     var params = URL.parse(req.url, true).query;
     var adminId = params.administratorId;
     if(!adminId || adminId.length ==0){
@@ -44,6 +45,13 @@ router.get('/admin/main',function (req,res,next) {
         })
     }
 })
+
+function getClientIp(req) {
+    return req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+}
 
 /*职位管理*/
 router.get('/admin/jobs',function (req,res,next) {
