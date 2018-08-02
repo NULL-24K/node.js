@@ -74,5 +74,49 @@ router.post('/msgDetail',function (req,res,next) {
 
 })
 
+/*查找微信formId*/
+router.post('/findFormId',function (req,res,next){
+    var model = new ResModel();
+    var params = req.body;
+    if (params.body.uuid && params.body.uuid.length >0){
+        findFormId(params.body.uuid,function (status,msg) {
+            if (status == 0){
+                model.msg = msg;
+                model.code = 0;
+            }else {
+                model.msg = msg;
+            }
+            res.send(JSON.stringify(model))
+        })
+    }else {
+        model.msg = 'UUID为空'
+        res.send(JSON.stringify(model))
+    }
+})
+
+
+
+
+function findFormId(uuid,callBack) {
+    if (uuid && uuid.length >0){
+        db.WeChatFormId.findAll({where:{deleteType:0,uuid:uuid}}).then(function (res) {
+            if(res&&res.length>0){
+                callBack(0,'存在可用ID');
+                //token,res[0].dataValues.weChatOpenId,res[0].dataValues.weChatFormId
+            }else {
+                callBack(1,'暂无可用模板ID,请检查是否是否已经发送过模板信息')
+            }
+        }).catch(function (error) {
+            callBack(1,'findErr')
+        })
+    }else {
+        callBack(1,'UUID不能为空')
+    }
+}
+
+
+
+
+
 
 module.exports = router;

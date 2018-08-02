@@ -197,7 +197,7 @@ router.get('/admin/cvdetail',function (req,res,next){
             user_.educationList = educationArr;
             user_.workYears = result.dataValues.workExpressTimes;
             user_.administratorId = params.administratorId
-            console.log('什么👻')
+            console.log('什么')
             res.render(('admin/cvdetail'),{obj:user_})
         }).catch(function (err) {
             console.log(err+'错误')
