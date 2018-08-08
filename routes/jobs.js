@@ -340,13 +340,28 @@ router.post('/LocationCityInfo',function (req,res,next) {
     if (req.body.latitude && req.body.longitude){
         util.GetWeChatLocationInfo(req.body.latitude,req.body.longitude,function (cityInfo) {
             if (cityInfo == 0){
-
+                res.send(JSON.stringify(model))
             }else {
-                model.code = 0;
-                model.data = cityInfo;
-                model.msg = '获取位置成功'
+                db.Config.findOne({where: {configName: 'opencCitys'}}).then(function (citysRes) {
+                    if (citysRes){
+                        var cityArr = citysRes.dataValues.configValue.split("/");
+                        var returnCity = '合肥'
+                        for (var i =0;i <cityArr.length; i++){
+                            console.log(cityInfo.indexOf(cityArr[i]))
+                            if (cityInfo.indexOf(cityArr[i]) !=-1){
+                                returnCity = cityArr[i];
+                                break;
+                            }
+                        }
+                        model.code = 0;
+                        model.data = returnCity;
+                        model.msg = '获取位置成功'
+                        res.send(JSON.stringify(model))
+                    }
+                }).catch(function (citysErr) {
+                    res.send(JSON.stringify(model))
+                })
             }
-            res.send(JSON.stringify(model))
         })
     }else {
         model.msg = '地理位置信息不能为空'
@@ -354,6 +369,26 @@ router.post('/LocationCityInfo',function (req,res,next) {
     }
 
 })
+
+
+router.post('/openCityInfo',function (req,res,next) {
+    var model = new ResModel();
+    db.Config.findOne({where: {configName: 'opencCitys'}}).then(function (citysRes) {
+        var cityArr = new Array();
+        if (citysRes){
+            var cityArr = citysRes.dataValues.configValue.split("/");
+        }
+        if(cityArr.length >1){
+            model.code =0;
+            model.msg = '获取开放城市成功'
+            model.data = cityArr;
+        }
+        res.send(JSON.stringify(model))
+    }).catch(function (findErr) {
+        res.send(JSON.stringify(model))
+    })
+})
+
 
 
 router.post('/adminPhoneNum',function (req,res,next) {
