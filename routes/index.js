@@ -138,7 +138,7 @@ router.get('/admin/handleCV',function (req,res,next) {
                     administratorId:obj.administratorId,
                     userName:obj.userName,
                     phoneNum:obj.phoneNum,
-                    createdAt:obj.createdAt,
+                    createdAt:moment(obj.createdAt).format('YYYY-MM-DD HH:mm:ss'),
                     updatedAt:obj.updatedAt
                 }
                 jobArr.push(newObj);
