@@ -108,7 +108,18 @@ module.exports = function(sequelize,DataTypes) {
         topStatus: {
             type: DataTypes.INTEGER,
             defaultValue: 0
+        },
+        /*标签 如 报名中,热招中等*/
+        statusTag:{
+            type:DataTypes.STRING,
+            allowNull:true
+        },
+        /*标签效果是否展示 0表示展示 其他表示展示*/
+        statusTagShowStatus:{
+            type: DataTypes.INTEGER,
+            defaultValue: 0
         }
+
     },{
         freezeTableName: true
     });
