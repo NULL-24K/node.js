@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>热更新配置</title>
+    <script src="/jsDic/ajax.js"></script>
+</head>
+<body>
+  <div>
+      <table border="1" cellspacing="0" cellpadding="0" border-color="#999999"  id="main">
+          <tr>
+              <th>编号</th>
+              <th>className</th>
+              <th>webAddresss</th>
+              <th style="color: red">操作</th>
+          </tr>
+      </table>
+      <p style="color: green">请在下面输入框中输入需要更新的VC信息</p>
+      <input type="text" placeholder="请输入VC className" id="inputOne" style="width: 200px"/>
+      <input type="text" placeholder="请输入热更新的H5页面链接" id="inputTwo" style="width: 350px"/>
+      <button onclick="submitClick()">提交</button>
+      <p>目前链接请配置为: https://ahgoldbee.cn/admin/web_one  (这是一个热更API演示页面)</p>
+  </div>
+<script type="text/javascript">
+
+    var json = '<%- obj%>'
+    var jsonArr = JSON.parse(json);
+    console.log(jsonArr)
+    valueDo();
+
+    var input_one = document.getElementById('inputOne');
+    var input_two = document.getElementById('inputTwo');
+    function submitClick() {
+        var alertStr = '';
+        if(!input_one.value || input_one.value.length ==0){
+            alertStr='请输入需要更新的原生VC className'
+        }else if(!input_two.value || input_two.value.length ==0){
+            alertStr='请输入H5页面的链接'
+        }
+        if(alertStr.length >0){
+            alert(alertStr);
+            return;
+        }
+
+        var reqData={
+            className:input_one.value,
+            webAddress:input_two.value
+        }
+
+        ajax({
+            method:'POST',
+            url:baseUrl+'hotUpdate/conf',
+            data:reqData,
+            success:function (res) {
+                var obj = JSON.parse(res);
+                console.log(res)
+                if(obj.code ==0){
+                    location.reload(true);
+                }else {
+                    alert(obj.msg);
+                }
+            }
+        })
+    }
+
+    function valueDo() {
+        var tab = document.getElementById('main')
+        for(var i =0;i <jsonArr.length;i ++){
+            var dic = jsonArr[i];
+            var tr_ = document.createElement('tr')
+            var td_0 = document.createElement('td');
+            var td_1 = document.createElement('td');
+            var td_2 = document.createElement('td');
+            var td_3 = document.createElement('td');
+
+            td_0.innerHTML = i;
+            td_1.innerHTML = dic.className;
+            td_2.innerHTML = dic.webAddress;
+            td_3.innerHTML = '删除'
+            td_3.setAttribute('id',dic.className);
+            td_3.style.color = 'red';
+            td_3.onclick = function () {
+                deleteConf(this.id);
+            }
+
+
+            tr_.appendChild(td_0);
+            tr_.appendChild(td_1);
+            tr_.appendChild(td_2);
+            tr_.appendChild(td_3);
+            tab.appendChild(tr_);
+        }
+    }
+
+    function deleteConf(key_) {
+        ajax({
+            method:'POST',
+            url:baseUrl+'hotUpdate/confEdit',
+            data:{className:key_},
+            success:function (res) {
+                var obj = JSON.parse(res);
+                console.log(res)
+                if(obj.code ==0){
+                    location.reload(true);
+                }else {
+                    alert(obj.msg);
+                }
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

@@ -2,7 +2,8 @@
 <html>
 <head lang="zh-cmn-Hans">
     <meta charset="UTF-8">
-    <title>热更主页</title>
+    <title>API演示页面</title>
+    <script src="/jsDic/dsbridge.js"></script>
     <!--<meta name="renderer" content="webkit">-->
     <!--<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">-->
     <!--<meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no"/>-->
@@ -34,26 +35,35 @@
 
 </style>
 <body>
-<div class="btn" onclick="callSyn()">获取同步回调</div>
-<div class="btn" onclick="callAsyn()">异步回调</div>
-<div class="btn" onclick="setValueSyn()">客户端数据持久化</div>
+<div class="btn" onclick="callSyn()">演示同步回调</div>
+<div class="btn" onclick="callAsyn()">演示延迟2s异步回调</div>
+<div class="btn" onclick="addRefershWithType()">开启刷新</div>
+<div class="btn" onclick="stopRefersh()">结束刷新</div>
+<div class="btn" onclick="removeRefersh()">移除刷新</div>
+<input class="btn" type="text" id="inp_0" placeholder="请输入需要持久化的数据"/>
+<div class="btn" onclick="setValueSyn()">保存持久化数据</div>
 <div class="btn" onclick="getValueSyn()">获取客户端持久化数据</div>
-<div class="btn" onclick="setProcessValue()">客户端缓存数据(当前APP进程有效)</div>
+<input class="btn" type="text" id="inp_1" placeholder="请输入需要缓存数据"/>
+<div class="btn" onclick="setProcessValue()">保存缓存数据</div>
 <div class="btn" onclick="getProcessValue()">获取当前APP进程缓存数据</div>
-<div class="btn" onclick="getFirends()">获取通讯录</div>
-<div class="btn" onclick="getContacts()">获取通讯录,UI</div>
+<input class="btn" type="text" id="inp_2" placeholder="请输入toast内容"/>
+<div class="btn" onclick="showToas()">演示toast</div>
+<div class="btn" onclick="getFirends()">演示通讯录</div>
+<div class="btn" onclick="getContacts()">演示客户端通讯录弹层</div>
 <div class="btn" onclick="getPicAsyn()">获取相册</div>
 <div class="btn" onclick="showLoading()">展示加载loading 三秒后自动调用关闭</div>
-<div class="btn" onclick="showToas()">展示弹窗</div>
-<div class="btn" onclick="addRefershWithType()">开启刷新</div>
-<div class="btn" onclick="removeRefersh()">移除刷新</div>
 <div class="btn" onclick="getLocationInfo()">获取定位</div>
 <input type="file" accept="image/*" multiple class="btn" />
+<input type="text" class="btn" placeholder="请输入需要跳转到原生VC的className" id="inp_4"/>
+<p id="lab_0" style="color: green;font-size: 30px">参数信息</p>
+<input type="text" class="btn" placeholder="请输入参数key" id="inp_5"/>
+<input type="text" class="btn" placeholder="请输入参数value" id="inp_6"/>
+<button style="width: 150px;height: 50px;font-size: 30px" onclick="keepValue()">保存</button>
 <div class="btn" onclick="pushNextVC()">跳转下一页</div>
-<div class="btn" onclick="hasNativeMethod('xx')">hasNativeMethod("xx")</div>
-<div class="btn" onclick="hasNativeMethod('testSyn')">hasNativeMethod("testSyn")</div>
-
+<div class="btn" onclick="routeBack()">返回上一页</div>
 <script>
+
+    var paramsInfo = {};
 
     function callSyn() {
         alert(dsBridge.call("sys.testSyn", "testSyn"))
@@ -66,7 +76,13 @@
     }
 
     function setValueSyn() {
-        alert(dsBridge.call("sys.setStorgeValue",{key:"name",value:"H5热更客户端数据持久化"}));
+        var inp_ = document.getElementById('inp_0');
+        var data_ = inp_.value;
+        if (!data_ || data_.length==0){
+            alert('数据不能为空')
+            return;
+        }
+        dsBridge.call("sys.setStorgeValue",{key:"name",value:data_});
     }
 
     function getValueSyn() {
@@ -86,28 +102,39 @@
     }
 
     function showLoading(){
-        dsBridge.call("isShowLoading","1")
+        dsBridge.call("Interactive.isShowLoading","1")
         setTimeout(function () {
-            dsBridge.call("isShowLoading","0")
+            dsBridge.call("Interactive.isShowLoading","0")
         },3000)
     }
 
     function showToas(){
-        dsBridge.call("showToas","你好,我将在2.5秒后消失")
+        var inp_ = document.getElementById('inp_2');
+        var data_ = inp_.value;
+        if (!data_ || data_.length==0){
+            alert('数据不能为空')
+            return;
+        }
+        dsBridge.call("Interactive.showToas",data_)
     }
 
     function addRefershWithType(){
-        dsBridge.call("addRefershWithType","1",function(value){
-            dsBridge.call("showToas","你好,我将在3秒后结束刷新")
-            setTimeout(function () {
-                dsBridge.call("isStartRefresh","0")
-            },3000)
+        dsBridge.call("Interactive.addRefershWithType","1",function(value){
+
+            dsBridge.call("Interactive.showToas","开始刷新")
+//            setTimeout(function () {
+//                dsBridge.call("Interactive.isStartRefresh","0")
+//            },3000)
         })
+    }
+
+    function stopRefersh(){
+        dsBridge.call("Interactive.isStartRefresh","0")
     }
 
 
     function removeRefersh(){
-        dsBridge.call("removeRefresh","")
+        dsBridge.call("Interactive.removeRefresh","")
     }
 
 
@@ -119,16 +146,106 @@
     }
 
     function pushNextVC(){
-        window.location.href = baseUrl+"admin/web_two"
+        var inp_ = document.getElementById('inp_4');
+        var className = inp_.value;
+        if (!className || className.length==0){
+            alert('className不能为空')
+            return;
+        }
+
+        var info_inp = document.getElementById('inp_5');
+        var info = info_inp.value;
+
+
+        dsBridge.call("sys.pushNativeVC",{"className":className,"info":paramsInfo},function(value){
+            if(value.code !=0){
+                alert(value.msg)
+            }
+        })
+       // window.location.href = baseUrl+"admin/web_two"
     }
 
+    function keepValue() {
+        var info_inp_key = document.getElementById('inp_5');
+        var info_key = info_inp_key.value;
+        var info_inp_value = document.getElementById('inp_6');
+        var info_value = info_inp_value.value;
+
+        if(!info_key || info_key.length ==0){
+            alert('key不能为空')
+        }else if(!info_value || info_value.length ==0){
+            alert('value不能为空')
+        }
+
+        paramsInfo[info_key] = info_value;
+        var lab_ = document.getElementById('lab_0');
+        lab_.innerHTML = JSON.stringify(paramsInfo);
+
+    }
+
+    function routeBack() {
+
+        dsBridge.call("sys.routeBack","");
+    }
+
+    function sss() {""
+       var paramsInfo = dsbridge.call("info.getRouteParams","");
+        //paramsInfo 为客户端保存的数据
+
+        var deviceInfo = dsbridge.call("info.getDeviceInfo","");
+        //此时 deviceInfo将会是客户端所有设备信息的总和 如:{'UUID':'VDCBCJCSJJ-1233E-CSC',deviceVersion:'iOS_11.3.1',...}
+        var UUIDInfo = dsbridge.call("info.getDeviceInfo","UUID");
+        // 此时 UUIDInfo的值为:'VDCBCJCSJJ-1233E-CSC'
+
+        var appInfo = dsbridge.call("info.getAppInfo","");
+        //此时 appInfo将会是客户端所有APP信息的总和 如:{'appCode':'com.xfqb.a',channelId:'3001',...}
+        var appCode = dsbridge.call("info.getAppInfo","appCode");
+        // 此时 appCode的值为:'com.xfqb.a'
+
+
+        var userInfo = dsbridge.call("info.getUserInfo","");
+        if(userInfo.code ==0){
+            //此时 appInfo将会是user信息的总和 如:{'token':'sacascddvffvs',name:'储彬',...}
+        }else {
+            //尚未登录
+        }
+        var userName = dsbridge.call("info.getUserInfo","userName");
+        if(userInfo.code ==0){
+            // 此时 userName:'储彬'
+        }else {
+            //尚未登录
+        }
+
+
+        dsbridge.call("info.setStorgeValue",{"key":"name","data":"储彬"});
+
+        var storgeValue = dsbridge.call("info.getStorgeValue","name");
+
+        dsbridge.call("info.removeStorgeValue","name");
+
+        dsBridge.call("getContacts",function(value){
+            // value结构为 {'name':'',phoneNums:['','']}
+        })
+
+        dsBridge.call("getLocationInfo","",function(value){
+            // value结构为 {'coordinate':{'latitude':'经度','longitude':'纬度'},locality:{'country':'国','subLocality':'','thoroughfare':'','name':''}
+        })
+    }
+
+
     function setProcessValue() {
-        alert(dsBridge.call("sys.setCacheValue", {key:"name",value:{"name":"储彬","sex":"男"}}))
+        var inp_ = document.getElementById('inp_1');
+        var data_ = inp_.value;
+        if (!data_ || data_.length==0){
+            alert('数据不能为空')
+            return;
+        }
+        dsBridge.call("sys.setCacheValue", {key:"name",value:data_})
     }
 
     function getProcessValue() {
         var obj = dsBridge.call("sys.getCacheValue", "name");
-        alert(obj.name +"_"+obj.sex)
+        alert(obj)
     }
 
     function getPicAsyn(){
@@ -137,18 +254,6 @@
         })
     }
 
-    function echoSyn() {
-        // call function with namespace
-        var ret=dsBridge.call("echo.syn",{msg:" I am echoSyn call", tag:1});
-        alert(JSON.stringify(ret))
-    }
-
-    function echoAsyn() {
-        // call function with namespace
-        dsBridge.call("echo.asyn",{msg:" I am echoAsyn call",tag:2},function (ret) {
-            alert(JSON.stringify(ret));
-        })
-    }
 
     function callProgress() {
         dsBridge.call("callProgress", function (value) {

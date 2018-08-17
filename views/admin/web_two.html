@@ -8,7 +8,7 @@
 <body>
 <p style="font-size: 35px;color: red">这是H5界面two</p>
 <button style="color: blueviolet;font-size: 35px" onclick="getList()">点击获取通讯录</button>
-<b style="color: green;font-size: 40px" id="getTitle">接收来自客户端的传值/回调值</b>
+<b style="color: green;font-size: 4px;width: 20px;height: 20px" id="getTitle">接收来自客户端的传值/回调值</b>
 <script type="text/javascript">
     function getList() {
         window.webkit.messageHandlers.getFriends.postMessage('')
@@ -16,6 +16,12 @@
     function shareResult(title,content) {
         var div = document.getElementById('getTitle');
         div.innerHTML = title+'___'+content;
+    }
+
+    window.webkit.messageHandlers.funName.postMessage('')
+    //向客户端发送信息
+    function monitor(data) {
+        //监听来自客户端的数据
     }
     
     function getUserMoible(alertStr) {
@@ -28,7 +34,6 @@
          var callBackValue = '你回传给客户端的参数'
          window.webkit.messageHandlers.AppModel.postMessage(callBackValue)
      }
-
 
 </script>
 </body>
