@@ -21,15 +21,225 @@
       <button onclick="submitClick()">提交</button>
       <p>目前链接请配置为: https://ahgoldbee.cn/admin/web_one  (这是一个热更API演示页面)</p>
   </div>
+  <div>
+      <table id="classInfo" border="1" cellspacing="0" cellpadding="0" border-color="#999999">
+          <tr>
+              <th>类名</th>
+              <th>描述</th>
+              <th>属性</th>
+          </tr>
+      </table>
+  </div>
 <script type="text/javascript">
 
     var json = '<%- obj%>'
     var jsonArr = JSON.parse(json);
     console.log(jsonArr)
     valueDo();
-
+    var classInfoArr = [
+        {'className':'LoanFlowPersionInfoVC',
+            'description':'提交借款的个人资料页面',
+            'title':'个人资料',
+            'propertys':{'loanDay':{'type':'string','description':'借款天数'},
+                'loanMoney':{'type':'string','description':'借款金额'},
+                'gameUrl':{'type':'string','description':'游戏链接URL'},
+                'gameId':{'type':'string','description':'游戏ID'},
+                'gameName':{'type':'string','description':'游戏名称'},
+                'convertRatio':{'type':'string','description':'充值比例'}}},
+        {'className':'YXDFirstViewController',
+            'description':'进入APP的首页',
+            'title':'万贯街贷款',
+            'propertys':{}},
+        {'className':'YXDMainViewController',
+            'description':'借款首页',
+            'title':'申请借款',
+            'propertys':{}},
+        {'className':'YXDLoanFlowCertifyVC',
+            'description':'提交借款的授权认证页面',
+            'title':'授权认证',
+            'propertys':{'loanDay':{'type':'string','description':'借款天数'},
+                'loanMoney':{'type':'string','description':'借款金额'},
+                'gameUrl':{'type':'string','description':'游戏链接URL'},
+                'gameId':{'type':'string','description':'游戏ID'},
+                'gameName':{'type':'string','description':'游戏名称'},
+                'convertRatio':{'type':'string','description':'充值比例'}}},
+        {'className':'LoanFlowSubMitVC',
+            'description':'提交借款的提交确认页面',
+            'title':'提交确认',
+            'propertys':{'loanDay':{'type':'string','description':'借款天数'},
+                'loanMoney':{'type':'string','description':'借款金额'},
+                'gameUrl':{'type':'string','description':'游戏链接URL'},
+                'gameId':{'type':'string','description':'游戏ID'},
+                'gameName':{'type':'string','description':'游戏名称'},
+                'convertRatio':{'type':'string','description':'充值比例'}}},
+        {'className':'YXDsubmitLoanSuccessVC',
+            'description':'提交借款的个人资料页面',
+            'title':'个人资料',
+            'propertys':{'applyType':{'type':'enum','description':'申请是否成功,0成功,1充值比例有误'},
+                'gameUrl':{'type':'string','description':'游戏链接URL'},
+                'gameId':{'type':'string','description':'游戏ID'}}},
+        {'className':'YXDCertifyVC',
+            'description':'认证页面',
+            'title':'认证',
+            'propertys':{}},
+        {'className':'XFZhiMaVC',
+            'description':'芝麻认证页面',
+            'title':'芝麻认证/支付宝认证',
+            'propertys':{'titleName':{'type':'string','description':'提示芝麻已授权或者支付宝已授权'},
+            }},
+        {'className':'YXD_NewZhimaVC',
+            'description':'2.0芝麻认证页面,(芝麻、支付宝合一)',
+            'title':'支付宝认证',
+            'propertys':{}},
+        {'className':'YXDIDCardInfoVC',
+            'description':'身份证认证',
+            'title':'身份证认证',
+            'propertys':{}},
+        {'className':'XFPhoneInfoVC',
+            'description':'手机认证(第一步)',
+            'title':'手机认证',
+            'propertys':{}},
+        {'className':'YXDphoneCertifyGetMsg',
+            'description':'手机认证,获取短信验证码界面',
+            'title':'手机认证',
+            'propertys':{'token':{'type':'string','description':'葫芦数据token'},
+            }},
+        {'className':'YXDPhoneCertifyGetServeMsg',
+            'description':'手机认证,主动发送验证码界面',
+            'title':'手机认证',
+            'propertys':{'token':{'type':'string','description':'葫芦数据token'},
+            }},
+        {'className':'XFBankCardInfoVC',
+            'description':'银行卡认证',
+            'title':'银行卡认证',
+            'propertys':{'cardType_':{'type':'enum','description':'卡类型,主卡或者副卡'},
+            }},
+        {'className':'XFBankCardInfoHadBankCard',
+            'description':'银行卡认证,查看主卡',
+            'title':'银行卡认证',
+            'propertys':{'isPushFromCertify':{'type':'bool','description':'是否是从认证页进入,如果是且可删除主卡,显示删除按钮'},
+            }},
+        {'className':'YXDemergencyPersionVC',
+            'description':'紧急联系人信息',
+            'title':'紧急联系人信息',
+            'propertys':{}},
+        {'className':'XFAddressBooksVC',
+            'description':'选择联系人界面(已废弃)',
+            'title':'紧急联系人',
+            'propertys':{'dataArr':{'type':'Array','description':'联系人数组'}}},
+        {'className':'YXDPersionInfoVC',
+            'description':'个人信息',
+            'title':'个人资料',
+            'propertys':{}},
+        {'className':'YXDBaseInfoVC',
+            'description':'基本信息',
+            'title':'基本信息',
+            'propertys':{}},
+        {'className':'YXDMyViewController',
+            'description':'我的页面(1.0页面,已废弃)',
+            'title':'我的',
+            'propertys':{}},
+        {'className':'XFHelpVC',
+            'description':'帮助页面',
+            'title':'帮助',
+            'propertys':{}},
+        {'className':'XFSettingVC',
+            'description':'设置',
+            'title':'设置',
+            'propertys':{}},
+        {'className':'XFRepayVC',
+            'description':'我要还款页面',
+            'title':'我要还款',
+            'propertys':{}},
+        {'className':'YXDRepayNextVC',
+            'description':'我要还款次级界面(还款成功界面)',
+            'title':'我要还款',
+            'propertys':{}},
+        {'className':'YXDAddBankCardVC',
+            'description':'添加银行卡界面(展示主卡,副卡信息,可以添加、删除)',
+            'title':'我的银行卡',
+            'propertys':{}},
+        {'className':'XFLoanNoteVC',
+            'description':'借款记录页面',
+            'title':'借款记录',
+            'propertys':{}},
+        {'className':'YXDLoadDetailVC',
+            'description':'借款详情页面',
+            'title':'借款详情',
+            'propertys':{'userLoanUuid':{'type':'string','description':'借款记录的UUID'}}},
+        {'className':'XFLoanDetailListVC',
+            'description':'借款list记录',
+            'title':'借款明细、还款明细',
+            'propertys':{'userLoanUuid':{'type':'string','description':'借款记录的UUID'},
+                'isReloUserLoanType':{'bool':'string','description':'是否需要刷新用户借款状态,如果这笔订单处于未还清状态,会用该订单的状态刷新用户的借款状态(1.0版本为减少请求而进行的优化)'},
+                'convertRatio':{'type':'string','description':'充值比例'}}},
+        {'className':'XFRepayListVC',
+            'description':'还款明细表',
+            'title':'还款明细',
+            'propertys':{'userLoanUuid':{'type':'string','description':'借款记录的UUID'}}},
+        {'className':'XFBankCardVC',
+            'description':'添加银行卡界面(展示主卡,副卡信息,可以添加、删除)',
+            'title':'我的银行卡',
+            'propertys':{}},
+        {'className':'YXDUpdataVC',
+            'description':'版本更新',
+            'title':'版本更新',
+            'propertys':{'isNeedUpdata':{'type':'bool','description':'是否需要更新APP'}}},
+        {'className':'XFFacebackVC',
+            'description':'意见反馈',
+            'title':'意见反馈',
+            'propertys':{}},
+        {'className':'YXDChangedPsdVC',
+            'description':'修改密码',
+            'title':'修改密码',
+            'propertys':{}},
+        {'className':'YXDConvertCodeVC',
+            'description':'我的兑换码(3.0已更新为我的游戏)',
+            'title':'我的兑换码',
+            'propertys':{}},
+        {'className':'LeadViewController',
+            'description':'引导页',
+            'title':'引导页',
+            'propertys':{}},
+        {'className':'YXDLoadingVC',
+            'description':'次级启动页,为了保证配置接口获得反馈之前能够保证APP不展示主页,使用该页面进行过度',
+            'title':'',
+            'propertys':{'isGetData':{'type':'bool','description':'是否成功获取数据,一但接口有数据反馈,该页面将会控制APP是进入原生主页还是H5页面'}}},
+        {'className':'XFLeftVC',
+            'description':'侧滑页面',
+            'title':'',
+            'propertys':{}},
+        {'className':'RootViewController',
+            'description':'所有具有业务功能页面的父类,不建议替换',
+            'title':'',
+            'propertys':{}},
+        {'className':'LoginViewController',
+            'description':'登录页',
+            'title':'引导页',
+            'propertys':{}},
+        {'className':'YXDNewLoginAndRegisterVC',
+            'description':'登录、注册,验证码登录页面',
+            'title':'登录、验证码登录。注册',
+            'propertys':{'applyType':{'type':'enum','description':'操作类型,注册:0 验证码登录:1 密码登录:2'},
+                'isRemoveMindVC':{'type':'bool','description':'是否需要移除中间界面,由于3.0在登录之前 做了一个前置界面,所以从修改密码页面进入时,不需要移除中间界面 '},
+                'IsCreateNewVC':{'type':'bool','description':'在切换登录方式时  是否已经存在VC 如果是 无需再次创建新vc'}}},
+        {'className':'XFRegisterFirstVC',
+            'description':'注册前置界面(已废弃)',
+            'title':'注册',
+            'propertys':{'type':{'type':'enum','description':'操作类型'},
+                'phoneNum':{'type':'string','description':'手机号码'}}},
+        {'className':'XFRegisterVC',
+            'description':'注册(已废弃)',
+            'title':'注册',
+            'propertys':{'type':{'type':'enum','description':'操作类型'},
+                'phoneNum':{'type':'string','description':'手机号码'}}}
+    ]
     var input_one = document.getElementById('inputOne');
     var input_two = document.getElementById('inputTwo');
+
+
+    createAPIHtml();
+
     function submitClick() {
         var alertStr = '';
         if(!input_one.value || input_one.value.length ==0){
@@ -108,6 +318,68 @@
             }
         })
     }
+
+    
+    function createAPIHtml() {
+        var  table_ = document.getElementById('classInfo');
+        for(var i =0;i <classInfoArr.length;i ++){
+            var infoDic = classInfoArr[i];
+            var tr_ = document.createElement('tr')
+
+            var className_ = document.createElement('td');
+            className_.innerHTML = infoDic.className;
+
+            var classDes_ = document.createElement('td');
+            classDes_.innerHTML = infoDic.description;
+
+            var pro_td = document.createElement('td');
+
+            var propType_table = document.createElement('table');
+            propType_table.border = '1';
+            propType_table.cellspacing ='0'
+            propType_table.cellpadding = '0'
+
+            var isCreate = JSON.stringify(infoDic.propertys) !='{}';
+
+            if(isCreate){
+                var pro_name = document.createElement('th');
+                pro_name.innerHTML = '属性名';
+                var pro_type = document.createElement('th');
+                pro_type.innerHTML = '属性类型';
+                var pro_des = document.createElement('th');
+                pro_des.innerHTML = '属性描述';
+                propType_table.appendChild(pro_name);
+                propType_table.appendChild(pro_type);
+                propType_table.appendChild(pro_des);
+            }
+
+            for (var key in infoDic.propertys){
+                var pro_ = document.createElement('tr');
+                var propType_name = document.createElement('td')
+                propType_name.innerHTML = key;
+
+                var propTypeDic = infoDic.propertys[key];
+                //console.log(propTypeDic);
+                var propType_type = document.createElement('td')
+                propType_type.innerHTML = propTypeDic.type;
+                var propType_des = document.createElement('td')
+                propType_des.innerHTML = propTypeDic.description;
+                pro_.appendChild(propType_name)
+                pro_.appendChild(propType_type)
+                pro_.appendChild(propType_des)
+                propType_table.appendChild(pro_);
+            }
+            pro_td.appendChild(propType_table);
+            tr_.appendChild(className_);
+            tr_.appendChild(classDes_);
+            tr_.appendChild(pro_td);
+            table_.appendChild(tr_);
+
+
+        }
+    }
+    
+    
 
 </script>
 </body>
