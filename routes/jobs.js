@@ -9,7 +9,7 @@ var ResModel = require('./responseModel');
 var JOB = require('./jobModel');
 var util = require('./util');
 var db = require('../sqldb');
-
+var Sequelize = require('sequelize');//引入orm
 
 router.post('/jobDetail',function (req,res,next) {
     var model = new  ResModel();
@@ -126,6 +126,7 @@ router.post('/jobList',function(req,res,next) {
 
     var page = 1, pageSize = 50;
     var adminId = req.body.adminId;
+    var locationCity = req.body.location;
     var sql_where = {administratorId:'superAdminister'}
     if (adminId && adminId !='goldbee'){
         sql_where = {administratorId:[adminId,'superAdminister'],showStatus:0}
@@ -138,7 +139,9 @@ router.post('/jobList',function(req,res,next) {
             limit:pageSize
         }
 
-       // db.JobInfo.findAll({order:'RAND'})
+        if(!adminId || adminId == 'goldbee'){
+            jobsSql = {order: Sequelize.fn('RAND'),limit:10}
+        }
 
         db.JobInfo.findAndCountAll(jobsSql).then(function (result) {
             model.code = 0;
@@ -158,7 +161,15 @@ router.post('/jobList',function(req,res,next) {
                     jobInfo.time = obj.interviewTimes;
                     jobInfo.administratorId = obj.administratorId;
                     jobInfo.applyNum = obj.applyNum +obj.defApplyNum;
-                    jobArr.push(jobInfo);
+                    if(locationCity && locationCity.length >0){
+                        if(obj.workAddress.indexOf(locationCity) != -1 || obj.interViewAddress.indexOf(locationCity) != -1){
+                            //这一步 取出当前定位城市
+                            jobArr.push(jobInfo);
+                        }
+                    }else {
+                        jobArr.push(jobInfo);
+                    }
+
                 }
                 model.data = jobArr;
                 model.msg = '请求成功'

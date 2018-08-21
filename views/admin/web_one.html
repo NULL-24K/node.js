@@ -53,6 +53,7 @@
 <div class="btn" onclick="getPicAsyn()">获取相册</div>
 <div class="btn" onclick="showLoading()">展示加载loading 三秒后自动调用关闭</div>
 <div class="btn" onclick="getLocationInfo()">获取定位</div>
+<div class="btn" onclick="getRouteParams()">获取原生VC传递的属性映射</div>
 <input type="file" accept="image/*" multiple class="btn" />
 <input type="text" class="btn" placeholder="请输入需要跳转到原生VC的className" id="inp_4"/>
 <p id="lab_0" style="color: green;font-size: 30px">参数信息</p>
@@ -143,6 +144,12 @@
         dsBridge.call("getLocationInfo","",function(value){
             alert(value.latitude+"_"+value.longitude);
         })
+    }
+
+
+    function getRouteParams() {
+       var params = dsBridge.call("info.getRouteParams","");
+        alert(JSON.stringify(params))
     }
 
     function pushNextVC(){
