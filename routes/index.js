@@ -105,7 +105,10 @@ router.get('/admin/joblist',function (req,res,next) {
                     createdAt:moment(obj.createdAt).format('YYYY-MM-DD HH:mm:ss'),
                     updatedAt:obj.updatedAt,
                     showStatus:obj.showStatus,
-                    topStatus:obj.topStatus
+                    topStatus:obj.topStatus,
+                    statusTag : obj.statusTag,
+                    tagImgAddress :obj.tagImgAddress,
+                    openCity:obj.openCity
                 }
                 jobArr.push(newObj);
             }

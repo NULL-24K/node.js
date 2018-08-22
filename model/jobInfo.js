@@ -114,12 +114,16 @@ module.exports = function(sequelize,DataTypes) {
             type:DataTypes.STRING,
             allowNull:true
         },
-        /*标签效果是否展示 0表示展示 其他表示展示*/
-        statusTagShowStatus:{
-            type: DataTypes.INTEGER,
-            defaultValue: 0
+        /*标签地址,default表示选取默认值*/
+        tagImgAddress:{
+            type: DataTypes.STRING,
+            allowNull:true
+        },
+        openCity:{
+            type: DataTypes.STRING,
+            allowNull:true,
+            defaultValue:'合肥'
         }
-
     },{
         freezeTableName: true
     });

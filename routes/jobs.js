@@ -35,7 +35,7 @@ router.post('/jobDetail',function (req,res,next) {
                     if(typeof params.wellArr != 'string'){
                         params.wellArr = JSON.stringify(params.wellArr);
                     }
-                    console.log(params +'///')
+                   // console.log(params +'///')
                     db.JobInfo.upsert(params).then(function (result) {
                         model.code =0;
                         if(result == false){
@@ -161,15 +161,16 @@ router.post('/jobList',function(req,res,next) {
                     jobInfo.time = obj.interviewTimes;
                     jobInfo.administratorId = obj.administratorId;
                     jobInfo.applyNum = obj.applyNum +obj.defApplyNum;
+                    jobInfo.statusTag = obj.statusTag;
+                    jobInfo.tagImgAddress = obj.tagImgAddress;
                     if(locationCity && locationCity.length >0){
-                        if(obj.workAddress.indexOf(locationCity) != -1 || obj.interViewAddress.indexOf(locationCity) != -1){
+                        if(obj.workAddress.indexOf(locationCity) != -1 || obj.interViewAddress.indexOf(locationCity) != -1 || obj.openCity == locationCity){
                             //这一步 取出当前定位城市
                             jobArr.push(jobInfo);
                         }
                     }else {
                         jobArr.push(jobInfo);
                     }
-
                 }
                 model.data = jobArr;
                 model.msg = '请求成功'

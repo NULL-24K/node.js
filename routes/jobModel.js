@@ -32,6 +32,9 @@ function jobDetailModel() {
     this.applyState;
     this.jobid;
     this.companyName;
+    this.statusTag;
+    this.tagImgAddress;
+    this.openCity;
 }
 
 module.exports = {

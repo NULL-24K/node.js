@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel='stylesheet', href='/stylesheets/joblist.css' />
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <!--<script src="http://code.jquery.com/jquery-latest.js"></script>-->
     <script src="/jsDic/ajax.js"></script>
     <title>职位管理</title>
 </head>
@@ -87,6 +87,7 @@
           <th>公司</th>
           <th>薪资</th>
           <th>发布时间</th>
+          <th style="color: blue">所属开放城市</th>
           <th style="color: blue">编辑</th>
           <th style="color: red">删除</th>
           <th>共享该职位</th>
@@ -115,12 +116,13 @@
             liArr[2] = obj.companyName;
             liArr[3] = obj.salary;
             liArr[4] = obj.createdAt;
-            liArr[5] = '修改职位';
-            liArr[6] = '删除该职位';
-            liArr[7] = '共享该职位';
-            liArr[8] = '转让该职位';
-            liArr[9] = obj.showStatus ==0?'隐藏该职位':'取消隐藏';
-            liArr[10] = obj.topStatus ==0?'置顶':'取消置顶'
+            liArr[5] = obj.openCity;
+            liArr[6] = '修改职位';
+            liArr[7] = '删除该职位';
+            liArr[8] = '共享该职位';
+            liArr[9] = '转让该职位';
+            liArr[10] = obj.showStatus ==0?'隐藏该职位':'取消隐藏';
+            liArr[11] = obj.topStatus ==0?'置顶':'取消置顶'
             newArr.push(liArr);
         }
         return newArr;
@@ -133,6 +135,13 @@
                 td_.innerHTML = dataArr[i][j];
                 td_.setAttribute('id',dataArr[i][0]);
                 td_.style.padding = '5px';
+
+                if(j==5){//设置所属城市样式
+                    if (td_.innerHTML == '成都'){
+                        td_.style.color = 'blue'
+                    }
+                }
+
                 if(j ==dataArr[i].length -5 || j ==dataArr[i].length -6){
                     td_.onclick = function () {
                         if(this.innerHTML == '删除该职位'){//删除职位
@@ -150,7 +159,7 @@
                             window.location.href = baseUrl+'admin/jobs?data='+jsonStr;
                         }
                     }
-                }else if(j ==7 || j ==8 || j ==9||j ==10){
+                }else if(j ==11 || j ==8 || j ==9||j ==10){
                     td_.onclick = function () {
                         var type;
                         if(this.innerHTML == '共享该职位'){
@@ -197,7 +206,7 @@
         var addBtn = document.createElement('td');
         addBtn.setAttribute('id','123');
         addBtn.setAttribute('style','text-align: center');
-        addBtn.setAttribute('colspan','11')
+        addBtn.setAttribute('colspan','12')
         addBtn.style.backgroundColor = 'green'
         var addStr = '立即添加'
         if(dataArr.length == 0){

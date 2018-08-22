@@ -77,30 +77,45 @@
         <b class="titleSty" id="11">默认申请人数(最终显示的申请人数=默认申请人数+真实申请人数):  </b>
         <input type="text" placeholder="请输入默认申请人数" onblur="endEdit(this.value,11)" id="1-11"/>
     </div>
+    <div class="cellBackSty">
+        <p class="titleSty" id="14">职位标签(请输入职位标签,当前仅仅支持单个标签,如:热招中);此选项可以为空建议只针对某些职位设置:  </p>
+        <input type="text" style="width: 300px" placeholder="请输入标签,不能超过4个中文汉字;如:报名中、热招中" onblur="endEdit(this.value,14)" id="1-14"/>
+    </div>
+    <div class="cellBackSty">
+        <p class="titleSty" id="15">职位图标,选择default表示默认图标,此选项可以为空,为保证小程序界面效果,请不要对超过三个以上的职位配置图标 </p>
+        <select onchange="selectChanged(this.value,15)" id="1-15"></select>
+    </div>
+    <div class="cellBackSty">
+        <p class="titleSty" style="font-size: 36px" id="16">所属开放城市(默认合肥) </p>
+        <select onchange="selectChanged(this.value,16)" id="1-16"></select>
+    </div>
     <button style="font-size: 24px;margin-left: 100px;margin-top: 20px;" onclick="subMit()">提交</button>
 </div>
 <script type="text/javascript">
     var administratorId ='';
-    var defwellArr = [];//['五险一金','全款皮肤','定期体检','绩效奖金','季度旅游','美女如云','工作餐','提供住宿','交通补贴','出差补贴','节日福利'];
+    var defwellArr = [];
     var defDopArr =[];
     var defWorkyearsArr =[];
     var defIncomArr =[];
+    var openCitysArr = [];
     var json = '<%-JSON.stringify(obj)%>';
     var jsonDic = JSON.parse(json);
+
     var dataArr = [];
-    dataArr[14] = '';
+    dataArr[17] = '';
     dataArr[9] = []
-    getConfigData();
-    if(jsonDic){
-        handelData();
-        administratorId = jsonDic.administratorId;
-    }else {
-        var a_ = GetRequest();
-        administratorId = a_['administratorId'];
-    }
+    getConfigData(function (value) {
+        if(jsonDic){
+            handelData();
+            administratorId = jsonDic.administratorId;
+        }else {
+            var a_ = GetRequest();
+            administratorId = a_['administratorId'];
+        }
+    });
 
     /*获取配置*/
-    function getConfigData() {
+    function getConfigData(callback) {
         ajax({
             method:'POST',
             url:baseUrl+'config/config',
@@ -119,13 +134,23 @@
                             defIncomArr = dic.configValue.split("/");
                         }else if (dic.configName =='workYears'){
                             defWorkyearsArr=dic.configValue.split("/");
+                        }else if(dic.configName =='opencCitys'){
+                            openCitysArr = dic.configValue.split("/");
                         }
                     }
                     createSelect();
-                    createWellCell()
+                    createWellCell();
+                    for(var i =0;i <jsonDic.wellArr.length;i ++){
+
+                        wellChooesd(jsonDic.wellArr[i],true);
+                    }
                 }else {
                     alert(obj.msg);
                 }
+                callback(1);
+            },
+            fail:function (err) {
+                callback(0)
             }
         })
     }
@@ -145,6 +170,9 @@
         dataArr[11] = jsonDic.defApplyNum;
         dataArr[12] = jsonDic.minWorkExperience;
         dataArr[13] = jsonDic.interviewTimes;
+        dataArr[14] = jsonDic.statusTag;
+        dataArr[15] = jsonDic.tagImgAddress;
+        dataArr[16] = jsonDic.openCity;
         for(var i = 0; i <dataArr.length -1;i ++){
             endEdit(dataArr[i],i);
             var htmlId = '1-' +i;
@@ -158,10 +186,8 @@
                 html_.value = dataArr[i];
             }
         }
-        for(var i =0;i <jsonDic.wellArr.length;i ++){
-           wellChooesd(jsonDic.wellArr[i],true);
-        }
     }
+
     function endEdit(e,index) {
         if(e && e.length >0 || ((typeof e) == 'number')&& e>0){
             classChanged(index,true)
@@ -245,12 +271,16 @@
     function subMit() {
         var alertStr = '';
         for(var i=0;i <dataArr.length -1;i ++){
-            if(!dataArr[i]){
-                var title = document.getElementById(i);
-                var str = title.innerHTML;
-                str = str.substring(0,str.length -3);
-                alertStr = str+'不能为空';
-                break;
+            if(i== 14 || i== 15){
+
+            }else {
+                if(!dataArr[i] ){
+                    var title = document.getElementById(i);
+                    var str = title.innerHTML;
+                    str = str.substring(0,str.length -3);
+                    alertStr = str+'不能为空';
+                    break;
+                }
             }
         }
 
@@ -278,13 +308,21 @@
             defApplyNum:dataArr[11],
             minWorkExperience:dataArr[12],
             interviewTimes:dataArr[13],
+            statusTag:dataArr[14],
             administratorId:administratorId,
-            type:1
+            type:1,
+            openCity:dataArr[16]
         }
         if(jsonDic && jsonDic.jobId){
             params['jobId'] = jsonDic.jobId;
         }
+        if(dataArr[15] && dataArr[15] != 0){
+            params.tagImgAddress = dataArr[15];
+        }else {
+            params.tagImgAddress = null;
+        }
         console.log(params)
+
         ajax({
             method:'POST',
             url:baseUrl+'jobs/jobDetail',
@@ -339,6 +377,28 @@
         console.log(CurentTime())
         timeDiv.value = CurentTime();
         timeDiv.min = CurentTime();
+
+
+        var selectDiv_tagImgAddress = document.getElementById('1-15');
+        var option_tagImg_d = document.createElement('option');
+        option_tagImg_d.value = '0';
+        option_tagImg_d.innerHTML='暂不展示图标';
+        selectDiv_tagImgAddress.appendChild(option_tagImg_d);
+        var option_tagImg = document.createElement('option');
+        option_tagImg.value = 'default';
+        option_tagImg.innerHTML='default';
+        selectDiv_tagImgAddress.appendChild(option_tagImg);
+
+
+        var opencitydiv = document.getElementById('1-16');
+        for(var i=0;i <openCitysArr.length;i ++){
+            var option = document.createElement('option');
+            option.value = openCitysArr[i]
+            option.innerHTML=openCitysArr[i]
+            opencitydiv.appendChild(option);
+        }
+
+
     }
     /*下拉框选择*/
    function selectChanged(e,index) {
