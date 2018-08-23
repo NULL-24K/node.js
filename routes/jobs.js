@@ -391,7 +391,7 @@ router.post('/openCityInfo',function (req,res,next) {
             var cityArr = citysRes.dataValues.configValue.split("/");
         }
         if(cityArr.length >1){
-            model.code =0;
+            model.code =1;
             model.msg = '获取开放城市成功'
             model.data = cityArr;
         }

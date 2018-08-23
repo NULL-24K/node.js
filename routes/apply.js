@@ -17,8 +17,7 @@ router.post('/applyJob',function (req,res,next) {
 
     var model = new ResModel();
     if(req.body.formId){
-      //  saveFormId(req.body.formId,req.headers.token);
-       // util.sendWeChatMsg(req.headers.token)
+        saveFormId(req.body.formId,req.headers.token);
     }
 
     //.用户鉴权
@@ -148,7 +147,7 @@ function saveFormId(formId,uuid) {
             }
             db.WeChatFormId.create(saveSql).then(function (saveRes) {
                 console.log('保存成功')
-            }).cache(function (saveErr) {
+            }).catch(function (saveErr) {
 
             })
         }else {
