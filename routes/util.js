@@ -7,6 +7,7 @@ var QcloudSms = require("qcloudsms_js");
 var sequelize = require('sequelize')
 var request = require('request');
 var path = require('path')//把path模块导入进来
+//var schedule = require('node-schedule');
 
 function isPhoneNum(phoneNum) {
     var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
@@ -34,6 +35,49 @@ function db_add(table,obj,callback) {
         }
     })
 }
+
+/*每天自动增加职位申请人数任务*/
+function roundNumSchedule() {
+    var rule = new schedule.RecurrenceRule();
+    rule.dayOfWeek = [0, new schedule.Range(1, 6)];
+    rule.hour = 16;
+    rule.minute = 38;
+    var j = schedule.scheduleJob(rule,function () {
+        changedJobRoundNum()
+    });
+}
+/*自动增加n-m之间的随机人数*/
+function changedJobRoundNum() {
+    db.JobInfo.findAll({where:{deleteType:0}}).then(function (findRes) {
+        for(var i =0 ;i <findRes.length; i++){
+            var roundNum = randomNum(2,7);
+            var new_roundNum = findRes[i].dataValues.roundNum + roundNum;
+            db.JobInfo.update({roundNum:new_roundNum},{where:{jobId:findRes[i].dataValues.jobId}}).then(function (updateRes) {
+                console.log('更新roundNum'+updateRes.dataValues);
+            }).catch(function (updateErr) {
+
+            })
+        }
+    }).catch(function (findErr) {
+
+    })
+}
+/*生成n-m的随机正整数*/
+function randomNum(minNum,maxNum){
+    switch(arguments.length){
+        case 1:
+            return parseInt(Math.random()*minNum+1,10);
+            break;
+        case 2:
+            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10);
+            break;
+        default:
+            return 0;
+            break;
+    }
+}
+
+
 
 function workStatusENUM(status) {
     var statusObj = ['正在找工作-随时到岗', '在职-正在考虑换工作', '在职-考虑更好的工作机会', '在职-暂无跳槽意向'];
@@ -130,7 +174,7 @@ function createCode() {
     console.log(code);
     return code;
 }
-
+/*启动配置*/
 function initConfig() {
    var sql ={administratorId:'superAdminister',phoneNum:'18767090623',name:'洪大鹏',psd:'goldbee'}
     db.Administer.upsert(sql).then(function (res) {
@@ -138,9 +182,8 @@ function initConfig() {
     }).catch(function (err) {
         console.log('添加超级管理员失败')
     })
-    // getAdminQrImg('goldbeeAdmin17315828372_',function (imgPath) {
-    //     console.log(imgPath)
-    // })
+    //启动的时候  开启定时任务
+   // roundNumSchedule();
 }
 /*生成管理员二维码 返回true表示当前存在或者已生成*/
 function getAdminQrImg(adminId,callBack) {

@@ -85,7 +85,13 @@ module.exports = function(sequelize,DataTypes) {
             type:DataTypes.INTEGER,
             allowNull:true,
         },
+        /*默认申请人数*/
         defApplyNum:{
+            type:DataTypes.INTEGER,
+            allowNull:false,
+        },
+        /*每天随机增加人数*/
+        roundNum:{
             type:DataTypes.INTEGER,
             allowNull:false,
         },

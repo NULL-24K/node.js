@@ -24,6 +24,7 @@ router.post('/config',function (req,res,next) {
                 }
                 configArr.push(newObj);
             }
+
             model.code =0;
             model.msg = '成功'
             model.data = configArr
