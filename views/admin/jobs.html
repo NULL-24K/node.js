@@ -105,12 +105,14 @@
     dataArr[17] = '';
     dataArr[9] = []
     getConfigData(function (value) {
+        console.log('#####');
         if(jsonDic){
             handelData();
             administratorId = jsonDic.administratorId;
         }else {
             var a_ = GetRequest();
             administratorId = a_['administratorId'];
+
         }
     });
 
@@ -122,7 +124,7 @@
             data:{type:0},
             success:function (res) {
                 var obj = JSON.parse(res);
-                console.log(obj)
+                callback(1);
                 if(obj.code ==0){
                     for (var  i=0; i<obj.data.length;i ++){
                         var dic = obj.data[i];
@@ -140,14 +142,14 @@
                     }
                     createSelect();
                     createWellCell();
-                    for(var i =0;i <jsonDic.wellArr.length;i ++){
-
-                        wellChooesd(jsonDic.wellArr[i],true);
+                    if(json && json.length >10){
+                        for(var i =0;i <jsonDic.wellArr.length;i ++){
+                            wellChooesd(jsonDic.wellArr[i],true);
+                        }
                     }
                 }else {
                     alert(obj.msg);
                 }
-                callback(1);
             },
             fail:function (err) {
                 callback(0)
@@ -283,7 +285,10 @@
                 }
             }
         }
-
+        if(alertStr.length >0){
+            alert(alertStr);
+            return;
+        }
         if(jmz_GetLength(dataArr[3]) >4500){
             alertStr = '职位描述不能超过5000字符'
         }else if(jmz_GetLength(dataArr[1]) >4500){
