@@ -80,7 +80,7 @@ router.post('/jobDetail',function (req,res,next) {
                 _jobInfo.singerLocation = result.dataValues.workAddress;
                 _jobInfo.minEducation = result.dataValues.minEducation;
                 _jobInfo.workExperienc = result.dataValues.minWorkExperience;
-                _jobInfo.applyNum = result.dataValues.applyNum +result.dataValues.defApplyNum;
+                _jobInfo.applyNum = result.dataValues.applyNum +result.dataValues.defApplyNum +result.dataValues.roundNum;
                 _jobInfo.wellArr = JSON.parse(result.dataValues.wellArr);
                 _jobInfo.interviewTime = result.dataValues.interviewTimes;
                 _jobInfo.interViewLocation = result.dataValues.interViewAddress;
@@ -160,7 +160,7 @@ router.post('/jobList',function(req,res,next) {
                     jobInfo.salary = obj.salary;
                     jobInfo.time = obj.interviewTimes;
                     jobInfo.administratorId = obj.administratorId;
-                    jobInfo.applyNum = obj.applyNum +obj.defApplyNum;
+                    jobInfo.applyNum = obj.applyNum +obj.defApplyNum +obj.roundNum;
                     jobInfo.statusTag = obj.statusTag;
                     jobInfo.tagImgAddress = obj.tagImgAddress;
                     if(locationCity && locationCity.length >0){

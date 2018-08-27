@@ -7,7 +7,7 @@ var QcloudSms = require("qcloudsms_js");
 var sequelize = require('sequelize')
 var request = require('request');
 var path = require('path')//把path模块导入进来
-//var schedule = require('node-schedule');
+var schedule = require('node-schedule');
 
 function isPhoneNum(phoneNum) {
     var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
@@ -183,7 +183,7 @@ function initConfig() {
         console.log('添加超级管理员失败')
     })
     //启动的时候  开启定时任务
-   // roundNumSchedule();
+    roundNumSchedule();
 }
 /*生成管理员二维码 返回true表示当前存在或者已生成*/
 function getAdminQrImg(adminId,callBack) {

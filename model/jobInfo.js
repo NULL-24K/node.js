@@ -93,7 +93,7 @@ module.exports = function(sequelize,DataTypes) {
         /*每天随机增加人数*/
         roundNum:{
             type:DataTypes.INTEGER,
-            allowNull:false,
+            allowNull:true,
         },
         /*管理员ID(发布者ID)*/
         administratorId:{
