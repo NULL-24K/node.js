@@ -161,8 +161,8 @@ router.post('/jobList',function(req,res,next) {
                     jobInfo.time = obj.interviewTimes;
                     jobInfo.administratorId = obj.administratorId;
                     jobInfo.applyNum = obj.applyNum +obj.defApplyNum +obj.roundNum;
-                    jobInfo.statusTag = obj.statusTag;
-                    jobInfo.tagImgAddress = obj.tagImgAddress;
+                    jobInfo.statusTag = obj.statusTag=='null'?null:obj.statusTag;
+                    jobInfo.tagImgAddress = obj.tagImgAddress=='null'?null:obj.tagImgAddress;
                     if(locationCity && locationCity.length >0){
                         if(obj.workAddress.indexOf(locationCity) != -1 || obj.interViewAddress.indexOf(locationCity) != -1 || obj.openCity == locationCity){
                             //这一步 取出当前定位城市

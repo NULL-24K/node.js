@@ -6,7 +6,92 @@
     <script src="/jsDic/ajax.js"></script>
     <title>简历处理</title>
 </head>
+<style>
+    .div-relative{position:relative; color:#000; border:1px solid #000; width:500px; height:400px}
+    .div-c{ position:absolute; left:80px; top:80px; background:#00F; width:300px; height:300px}
+</style>
 <body>
+<div class="notifBackViewSty" id="notifBackView" >
+    <div class="notifSty">
+        <div class="lookBackSty" id="lookBackView">
+            <div class="lookViewSty">
+                <div class="notifHeaderSty" style="margin-top: 20px">
+                    <b style="font-size: 18px;color: #b58900">面试邀约提醒</b>
+                    <p style="color: red">请仔细核对信息,确认无误后点击发送</p>
+                </div>
+                <div style="margin-top: 60px">
+                    <b class="lookLeftSty">公司名称</b>
+                    <b id="look_0" class="lookDetailSty"></b>
+                    <br/>
+
+                    <b class="lookLeftSty">应聘岗位</b>
+                    <b id="look_1" class="lookDetailSty"></b>
+                    <br/>
+
+                    <b class="lookLeftSty">面试地点</b>
+                    <b id="look_2" class="lookDetailSty"></b>
+                    <br/>
+
+                    <b class="lookLeftSty">面试时间</b>
+                    <b id="look_3" class="lookDetailSty"></b>
+                    <br/>
+
+                    <b class="lookLeftSty">联系方式</b>
+                    <b id="look_4" class="lookDetailSty"></b>
+                    <br/>
+
+                    <b class="lookLeftSty">联系人</b>
+                    <b id="look_5" class="lookDetailSty" style="margin-left: 26px"></b>
+                    <br/>
+
+                    <b class="lookLeftSty">温馨提醒</b>
+                    <b id="look_6" class="lookDetailSty"></b>
+                </div>
+                <div class="btnBackSty" style="margin-top: 100px">
+                    <button class="btnSty" onclick="cancelSend()">返回修改</button>
+                    <button class="btnSty" style="color: green" onclick="sendNotif()">确定发送</button>
+                </div>
+            </div>
+        </div>
+        <div class="notifHeaderSty">
+            <b style="font-size: 32px;color: #b58900">服务通知</b>
+            <p style="color: red">提示:请仔细核对服务通知信息,部分信息可以编辑,为保证服务通知发送正确,必须点击预览,查看信息无误后方可发送</p>
+        </div>
+        <div style="margin-top: 20px">
+            <b class="leftTitleSty">公司名称:</b>
+            <input class="inputSty" id="input_0" />
+            <br/>
+
+            <b class="leftTitleSty">应聘岗位:</b>
+            <input class="inputSty" id="input_1" />
+            <br/>
+
+            <b class="leftTitleSty">面试地点:</b>
+            <input class="inputSty" id="input_2" />
+            <br/>
+
+            <b class="leftTitleSty">面试时间:</b>
+            <input class="inputSty" id="input_3" />
+            <br/>
+
+            <b class="leftTitleSty">联系方式:</b>
+            <input class="inputSty" id="input_4" />
+            <br/>
+
+            <b class="leftTitleSty">联系人:</b>
+            <input class="inputSty" id="input_5" style="margin-left: 36px"/>
+            <br/>
+
+            <b class="leftTitleSty">温馨提醒:</b>
+            <input class="inputSty" id="input_6" />
+
+        </div>
+        <div class="btnBackSty">
+            <button class="btnSty" onclick="removeSend()">关闭</button>
+            <button class="btnSty" style="color: blue" onclick="lookClick()">预览</button>
+        </div>
+    </div>
+</div>
 <nav>
     <b style="background-color: #00d6b2;width: 60px;height: 30px;color: white;font-size: 18px" onclick="backMain()">返回首页</b>
 </nav>
@@ -100,6 +185,9 @@
                                 }
                             }
                         })
+
+                        //如果存在weChatFormId 弹出服务通知弹窗
+                        //setNoftiHtml();
                     }
                 }else if(j ==dataArr[i].length -3){
                     td_.onclick = function () {
@@ -150,6 +238,67 @@
             table.appendChild(lastUL);
         }
     }
+
+    /*预览服务通知返回修改功能*/
+    function cancelSend() {
+        var lookDiv = document.getElementById('lookBackView');
+        lookDiv.style.display='none';
+    }
+    /*关闭服务通知弹窗*/
+    function removeSend() {
+        var lookDiv = document.getElementById('notifBackView');
+        lookDiv.style.display='none';
+    }
+
+
+    /*点击预览*/
+    function lookClick() {
+
+        //取出所有输入框数据
+        var dataArr = new Array();
+        for(var i=0;i <7;i ++){
+            var ele_id = 'input_'+i;
+            var input_ = document.getElementById(ele_id);
+            var value_input = input_.value;
+            if(!value_input ||value_input.length ==0){
+
+            }else {
+               dataArr.push(value_input);
+            }
+        }
+
+        if(dataArr.length < 7){
+            alert('信息不能存在空值')
+            return;
+        }else {
+            var lookDiv = document.getElementById('lookBackView');
+            lookDiv.style.display='flex';
+            for(var j=0;j <dataArr.length;j ++){
+                var ele_id = 'look_'+j;
+                var detail = document.getElementById(ele_id);
+                detail.innerHTML = dataArr[j];
+            }
+        }
+    }
+    /*确定发送服务通知消息*/
+    function sendNotif() {
+
+    }
+    /*弹出服务短信通知页面 并赋值*/
+    function setNoftiHtml(data) {
+        var lookDiv = document.getElementById('notifBackView');
+        lookDiv.style.display='flex';
+
+    }
+
+
+
+
+
+
+
+
+
 
     //.返回首页
     function backMain() {
