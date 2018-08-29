@@ -18,6 +18,15 @@
         <input type="text" placeholder="请输入您的服务号码"  id="phoneInput" style="width: 180px"/>
         <button onclick="addAdminister()">确定重置</button>
     </div>
+    <br/>
+    <h2 style="color: red">重置昵称</h2>
+    <b>您当前的昵称是:</b>
+    <b style="color: green" id="nickName"></b>
+    <h2> </h2>
+    <div>
+        <input type="text" placeholder="请输入您的昵称"  id="nickNameInput" style="width: 180px"/>
+        <button onclick="setNickName()">确定重置</button>
+    </div>
 </div>
 
 
@@ -25,11 +34,17 @@
     var jsonStr = '<%-JSON.stringify(obj)%>';
     var jsonDic = JSON.parse(jsonStr);
     var phoneNum = jsonDic.phoneNum
+    var nickName = jsonDic.nickName
     var administratorId = jsonDic.administratorId
+
     var phoneLab = document.getElementById('phoneNum')
     phoneLab.innerHTML = phoneNum
+    var nickNameLab = document.getElementById('nickName')
+    nickNameLab.innerHTML = nickName;
 
+   console.log(jsonStr)
     var inputTF = document.getElementById('phoneInput');
+    var naickInput = document.getElementById('nickNameInput');
 
     function addAdminister() {
         if (inputTF.value == phoneNum){
@@ -42,6 +57,7 @@
                 method:'POST',
                 url:baseUrl+'account/setServePhone',
                 data:{
+                    type:0,
                     phoneNum:inputTF.value,
                     administratorId:administratorId
                 },
@@ -49,6 +65,37 @@
                     var obj = JSON.parse(res);
                     if (obj.code == 0 ){
                         console.log('添加成功')
+                        window.history.go(-1);
+                    }else {
+                        alert(obj.msg);
+                    }
+                }
+            })
+        }else {
+
+        }
+    }
+
+
+    function setNickName() {
+        if (naickInput.value == phoneNum){
+            alert('昵称不能重复')
+            return;
+        }
+
+        if(window.confirm('确定重置昵称?')){
+            ajax({
+                method:'POST',
+                url:baseUrl+'account/setServePhone',
+                data:{
+                    type:1,
+                    nickName:naickInput.value,
+                    administratorId:administratorId
+                },
+                success:function (res) {
+                    var obj = JSON.parse(res);
+                    if (obj.code == 0 ){
+                        console.log('重置成功')
                         window.history.go(-1);
                     }else {
                         alert(obj.msg);

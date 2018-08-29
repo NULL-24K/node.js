@@ -145,10 +145,11 @@ function saveFormId(formId,uuid) {
                 uuid:uuid,
                 weChatOpenId:res.dataValues.openid
             }
+            console.log(saveSql)
             db.WeChatFormId.create(saveSql).then(function (saveRes) {
                 console.log('保存成功')
             }).catch(function (saveErr) {
-
+                console.log(saveErr)
             })
         }else {
             console.log('暂无openID')
@@ -175,7 +176,16 @@ router.post('/orderStatus',function (req,res,next) {
             }).catch(function (adderr) {
                 console.log('简历处理' +adderr)
             })
-            res.send(JSON.stringify(model));
+            //查找是否有可用的模板ID可以使用 如果有,提示管理员
+            util.searchWeChatFormId(params.uuid,function (result) {
+                if(result ==0){
+                    model.data = '存在可用的服务通知魔板ID,您可以选择发送模板通知'
+                    res.send(JSON.stringify(model));
+                }else {
+                    res.send(JSON.stringify(model));
+                }
+            })
+
         }).catch(function (err) {
             console.log(err)
             res.send(JSON.stringify(model));
@@ -186,5 +196,10 @@ router.post('/orderStatus',function (req,res,next) {
         res.send(JSON.stringify(model));
     }
 })
+
+
+
+
+
 
 module.exports = router;

@@ -14,6 +14,7 @@ var sqldb = require('./sqldb');
 var message = require('./routes/message');
 var config = require('./routes/config');
 var hotUpdate = require('./routes/hotUpdate');
+var servers = require('./routes/servers');
 // var ajax = require('./routes/ajax')
 
 var ejs = require('ejs')
@@ -45,6 +46,7 @@ app.use('/apply',apply);
 app.use('/message',message);
 app.use('/config',config);
 app.use('/hotUpdate',hotUpdate);
+app.use('/servers',servers);
 
 
 // catch 404 and forward to error handler

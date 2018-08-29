@@ -25,12 +25,12 @@ module.exports = function(sequelize,DataTypes){
         },
         weChatOpenId:{
             type:DataTypes.STRING,
-            unique:true,
+            allowNull:false,
         }
     },{
         freezeTableName: true
     });
-    // WeChatAccessToken.sync({ alter: true });
-    // WeChatAccessToken.sync({force:true})
+    //WeChatFormId.sync({ alter: true });
+    // WeChatFormId.sync({force:true})
     return WeChatFormId;
 };

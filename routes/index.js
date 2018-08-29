@@ -280,9 +280,18 @@ router.get('/admin/servePhoneSetting',function (req,res,next) {
                 }else {
                     servePhone =  result.dataValues.phoneNum
                 }
+
+                var adminnickName = ''
+                if (result.dataValues.adminNickName && result.dataValues.adminNickName.length >0){
+                    adminnickName =  result.dataValues.adminNickName
+                }else {
+                    adminnickName =  result.dataValues.name
+                }
+
                 var dataObj = {
                     phoneNum:servePhone,
-                    administratorId:params.administratorId
+                    administratorId:params.administratorId,
+                    nickName:adminnickName
                 }
                 res.render('admin/servePhoneSetting',{obj:dataObj});
             }else {

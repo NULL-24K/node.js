@@ -19,7 +19,7 @@
                     <b style="font-size: 18px;color: #b58900">面试邀约提醒</b>
                     <p style="color: red">请仔细核对信息,确认无误后点击发送</p>
                 </div>
-                <div style="margin-top: 60px">
+                <div style="margin-top: 40px">
                     <b class="lookLeftSty">公司名称</b>
                     <b id="look_0" class="lookDetailSty"></b>
                     <br/>
@@ -116,6 +116,8 @@
     var dataArr = handelData();
     var table = document.getElementById('main');
     var administratorId = '<%=administratorId%>';
+    //设置默认选择的行
+    var selectIndex = '';
     setHtml();
     addBtn();
     function handelData() {
@@ -162,7 +164,7 @@
                 }else if(j ==dataArr[i].length -2){//邀请
                     classFromStatus(td_,jsonArr[i].intentionStatus_Int,1);
                     td_.onclick = function () {
-                        console.log(this)
+                        var index = this.id;
                         var obj = jsonArr[this.id];
                         obj.intentionStatus =2;
                         obj.administratorId
@@ -172,6 +174,7 @@
                          intentionStatus:2,
                          administratorId:administratorId
                          }*/
+                        console.log(obj)
                         ajax({
                             method:'POST',
                             url:baseUrl+'apply/orderStatus',
@@ -179,7 +182,16 @@
                             success:function (res) {
                                 var resobj = JSON.parse(res);
                                 if(resobj.code ==0){
-                                    location.reload(true);
+                                    if(resobj.data && resobj.data.length >0){
+                                        if (window.confirm(resobj.data)){
+                                            //获取模板ID 数据
+                                            getFormInfo(obj,index)
+                                        }else {
+                                            location.reload(true);
+                                        }
+                                    }else {
+                                        location.reload(true);
+                                    }
                                 }else {
                                     alert(resobj.msg)
                                 }
@@ -220,10 +232,46 @@
 
        }
     }
-//    function statusFormStr(str) {
-//        var statusObj = ['立即申请','已申请','已邀请面试','已面试','没有获得面试机会','放弃面试'];
-//
-//    }
+
+
+    /*调用接口 获取魔板信息*/
+    function getFormInfo(params,index) {
+        ajax({
+            method:'POST',
+            url:baseUrl+'servers/searchNotif',
+            data:params,
+            success:function (res) {
+                var resobj = JSON.parse(res);
+                if(resobj.code ==0){
+                    var data = resobj.data;
+                    setNoftiHtml(data);
+                }else {
+                    alert(resobj.msg)
+                }
+            }
+        })
+        selectIndex = index;
+    }
+
+    /*调用接口 发送模板信息*/
+    function sendFormInfo(params) {
+        ajax({
+            method:'POST',
+            url:baseUrl+'servers/sendNotif',
+            data:params,
+            success:function (res) {
+                var resobj = JSON.parse(res);
+                if(resobj.code ==0){
+                    //成功之后 取消弹窗
+                    cancelSend()
+                    removeSend()
+                    alert('发送成功')
+                }else {
+                    alert(resobj.msg)
+                }
+            }
+        })
+    }
 
     function addBtn() {
         if(dataArr.length == 0){
@@ -255,7 +303,7 @@
     function lookClick() {
 
         //取出所有输入框数据
-        var dataArr = new Array();
+        var inputArr_ = new Array();
         for(var i=0;i <7;i ++){
             var ele_id = 'input_'+i;
             var input_ = document.getElementById(ele_id);
@@ -263,39 +311,80 @@
             if(!value_input ||value_input.length ==0){
 
             }else {
-               dataArr.push(value_input);
+                inputArr_.push(value_input);
             }
         }
 
-        if(dataArr.length < 7){
+        if(inputArr_.length < 7){
             alert('信息不能存在空值')
             return;
         }else {
             var lookDiv = document.getElementById('lookBackView');
             lookDiv.style.display='flex';
-            for(var j=0;j <dataArr.length;j ++){
+            for(var j=0;j <inputArr_.length;j ++){
                 var ele_id = 'look_'+j;
                 var detail = document.getElementById(ele_id);
-                detail.innerHTML = dataArr[j];
+                detail.innerHTML = inputArr_[j];
             }
         }
     }
     /*确定发送服务通知消息*/
     function sendNotif() {
 
+        //取出所有输入框数据
+        var inputArr_ = new Array();
+        for(var i=0;i <7;i ++){
+            var ele_id = 'input_'+i;
+            var input_ = document.getElementById(ele_id);
+            var value_input = input_.value;
+            if(!value_input ||value_input.length ==0){
+
+            }else {
+                inputArr_.push(value_input);
+            }
+        }
+        var userUUID='' ;
+        if(selectIndex.length >0){
+            var obj_ = jsonArr[selectIndex]
+            userUUID =  obj_.uuid;
+        }
+
+        if(inputArr_.length < 7){
+            alert('信息不能存在空值')
+            return;
+        }else if(userUUID.length ==0){
+            alert('UUID出现空值,请联系开发人员处理')
+            return;
+        } else {
+         var params = {
+             uuid:userUUID,
+             sendInfoArr:inputArr_,
+             administratorId:administratorId
+         }
+            sendFormInfo(params);
+        }
     }
-    /*弹出服务短信通知页面 并赋值*/
+    /*弹出服务短信通知页面 并填充*/
     function setNoftiHtml(data) {
         var lookDiv = document.getElementById('notifBackView');
         lookDiv.style.display='flex';
 
+        var infoArr = [];
+        infoArr[0]=data.jobName;
+        infoArr[1]=data.companyName;
+        infoArr[2]=data.interViewAddress;
+        infoArr[3]=data.interviewTimes;
+        infoArr[4]=data.servePhoneNum;
+        infoArr[5]=data.nickName;
+        infoArr[6]=data.tipS;
+
+        for(var i=0;i < infoArr.length;i++){
+            var ele_id = 'input_'+i;
+            var ele = document.getElementById(ele_id);
+            ele.value = infoArr[i];
+            ele.placeholder = infoArr[i];
+        }
     }
-
-
-
-
-
-
 
 
 

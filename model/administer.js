@@ -26,6 +26,12 @@ module.exports = function(sequelize,DataTypes){
             type:DataTypes.STRING,
             allowNull:false
         },
+        /*管理员昵称 主要用于服务通知处展示*/
+        adminNickName:{
+            type:DataTypes.STRING,
+            allowNull:true,
+            defaultValue:''
+        },
         psd:{
             type:DataTypes.STRING,
             allowNull:false,
@@ -44,7 +50,7 @@ module.exports = function(sequelize,DataTypes){
     },{
         freezeTableName: true
     });
-   // Administer.sync({ alter: true })
+    //Administer.sync({ alter: true })
     // Administer.sync({force:true})
     return Administer;
 };

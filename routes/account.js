@@ -285,13 +285,34 @@ router.post('/adminLogin',function (req,res,next) {
 router.post('/setServePhone',function (req,res,next) {
     var params = req.body;
     var model = new ResModel();
-    if(!params.phoneNum || params.phoneNum.length != 11){
-        model.msg = '手机号码格式不正确'
-        res.send(JSON.stringify(model));
-        return;
+
+    var updataSql = {}
+
+    if(params.type ==0){//修改号码
+        if(!params.phoneNum || params.phoneNum.length != 11){
+            model.msg = '手机号码格式不正确'
+            res.send(JSON.stringify(model));
+            return;
+        }else {
+            updataSql = {
+                servePhoneNum:params.phoneNum
+            }
+        }
+    }else {//修改昵称
+        if(!params.nickName || params.nickName.length == 0){
+            model.msg = '昵称不能为空'
+            res.send(JSON.stringify(model));
+            return;
+        }else {
+            updataSql = {
+                adminNickName:params.nickName
+            }
+        }
     }
+
+
     console.log(params);
-    db.Administer.update({servePhoneNum:params.phoneNum},{where:{administratorId:params.administratorId,deleteType:0}}).then(function (result) {
+    db.Administer.update(updataSql,{where:{administratorId:params.administratorId,deleteType:0}}).then(function (result) {
         console.log(result);
         model.msg = '重置成功'
         model.code = 0;
