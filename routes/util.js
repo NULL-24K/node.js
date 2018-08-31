@@ -255,7 +255,8 @@ function sendTemplatemSG(token,openId,form_id,sendData,callBack) {
         touser:openId,
         template_id:'VV5yrKCSkdlzmOr1t8fKcQjTA6Cl2iBur6cnO_zjqPM',
         form_id:form_id,
-        data:sendData
+        data:sendData,
+        page:'pages/index/index'
     }
      request({
          url:URL_,
@@ -269,6 +270,11 @@ function sendTemplatemSG(token,openId,form_id,sendData,callBack) {
          if (!error && response.statusCode == 200) {
              console.log(body) // 请求成功的处理逻辑
              callBack({'code':0});
+             if(body.errcode == 0){
+                 callBack({'code':0});
+             }else {
+                 callBack({'code':1});
+             }
              //发送成功 该模板ID已经被微信设置为失效 在数据库中将该ID也设置为失效
              db.WeChatFormId.update({deleteType:1},{where:{weChatFormId:form_id}})
          }else {
