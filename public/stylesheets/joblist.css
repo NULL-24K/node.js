@@ -24,7 +24,7 @@ body {
 }
 
 .notifBackViewSty{
-    position:absolute;
+    position:fixed;
     display: none;
     justify-content: center;
     align-content: center;
@@ -82,7 +82,7 @@ body {
 }
 
 .lookBackSty{
-    position:absolute;
+    position:fixed;
     display: none;
     justify-content: center;
     align-content: center;
