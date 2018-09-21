@@ -394,12 +394,49 @@ router.post('/openCityInfo',function (req,res,next) {
             model.code =1;
             model.msg = '获取开放城市成功'
             model.data = cityArr;
+            console.log(req.headers);
+            userIsAdmin(req.headers.token,function (isAdmin) {
+                if (isAdmin == 1){
+                    model.code = 0;
+                }
+                res.send(JSON.stringify(model))
+            })
+        }else {
+            res.send(JSON.stringify(model))
         }
-        res.send(JSON.stringify(model))
     }).catch(function (findErr) {
         res.send(JSON.stringify(model))
     })
 })
+/*判断该用户是否是管理员*/
+function userIsAdmin(uuid,callBack) {
+    if(!uuid || uuid.length ==0){
+        callBack(0)
+    }else {
+        console.log(uuid)
+        console.log('管理员ID')
+        db.Account.findOne({where:{uuid:uuid}}).then(function (result) {
+            console.log(result.dataValues)
+            console.log('结果')
+            if(result){
+                db.Administer.findOne({where:{phoneNum:result.dataValues.phoneNum}}).then(function (res) {
+                    if(res){
+                        callBack(1)
+                    }else {
+                        callBack(0)
+                    }
+                }).catch(function (err) {
+                    callBack(0)
+                })
+            }else {
+                callBack(0)
+            }
+        }).catch(function (error) {
+            callBack(0)
+        })
+    }
+}
+//eb5be150-b73f-11e8-af2e-0dbcc5fa39bf
 
 
 
