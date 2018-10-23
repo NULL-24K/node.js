@@ -347,7 +347,7 @@ function jobIsSame(sql,callback) {
 }
 
 
-router.post('/LocationCityInfo',function (req,res,next) {
+router.post('/Loca1tionCityInfo',function (req,res,next) {
     var model = new ResModel();
     if (req.body.latitude && req.body.longitude){
         util.GetWeChatLocationInfo(req.body.latitude,req.body.longitude,function (cityInfo) {
@@ -396,7 +396,7 @@ router.post('/openCityInfo',function (req,res,next) {
             model.data = cityArr;
             console.log(req.headers);
             userIsAdmin(req.headers.token,function (isAdmin) {
-                if (isAdmin == 1){
+                if (isAdmin != 1){
                     model.code = 0;
                 }
                 res.send(JSON.stringify(model))

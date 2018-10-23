@@ -70,6 +70,28 @@
         }
     }
 
+
+    Array.prototype.safeAdd = function (args) {
+        if(args =='123'){
+            //不操作
+        }else {
+            this.push(args)
+        }
+
+    }
+
+
+    var testArr = new Array();
+
+    testArr.safeAdd('888');
+    testArr.safeAdd('123');
+    testArr.safeAdd('%%%');
+    console.log(testArr)
+
+
+
+
+
     function backLogin() {
         window.location.href = baseUrl+'admin/login'
     }

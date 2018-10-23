@@ -310,6 +310,10 @@ function getAdminShareCode(administratorId,callback) {
         }
     })
 }
+/*
+*
+*
+* */
 
 /*获取微信地理反编码*/
 function getWeChatLocationInfo(latitude,longitude,callBack) {

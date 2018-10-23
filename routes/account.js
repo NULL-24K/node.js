@@ -192,6 +192,7 @@ router.post('/getMsg',function (req,res,next) {
         //     res.send(JSON.stringify(model))
         // }
     } else {
+
         var msgcode_ = util.createCode();
         var params = [msgcode_];
         util.sendMsg(req.body.phoneNum,params,function (err, msgRes, resData) {
