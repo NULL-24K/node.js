@@ -5,19 +5,161 @@
     <script src="/jsDic/ajax.js"></script>
     <title>管理员二维码</title>
 </head>
+<style media="screen">
+    @keyframes fadeIn {
+        0%    {opacity: 0}
+        100%  {opacity: 1}
+    }
+    @-webkit-keyframes fadeIn {
+        0%    {opacity: 0}
+        100%  {opacity: 1}
+    }
+    @-moz-keyframes fadeIn {
+        0%    {opacity: 0}
+        100%  {opacity: 1}
+    }
+    @-o-keyframes fadeIn {
+        0%    {opacity: 0}
+        100%  {opacity: 1}
+    }
+    @-ms-keyframes fadeIn {
+        0%    {opacity: 0}
+        100%  {opacity: 1}
+    }
+    @keyframes fadeOut {
+        0%    {opacity: 1}
+        100%  {opacity: 0}
+    }
+    @-webkit-keyframes fadeOut {
+        0%    {opacity: 1}
+        100%  {opacity: 0}
+    }
+    @-moz-keyframes fadeOut {
+        0%    {opacity: 1}
+        100%  {opacity: 0}
+    }
+    @-o-keyframes fadeOut {
+        0%    {opacity: 1}
+        100%  {opacity: 0}
+    }
+    @-ms-keyframes fadeOut {
+        0%    {opacity: 1}
+        100%  {opacity: 0}
+    }
+    #toast{
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        font-size: 14px;
+        line-height: 1;
+        padding:20px;
+        border-radius: 3px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        -webkit-transform: translate(-50%,-50%);
+        -moz-transform: translate(-50%,-50%);
+        -o-transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        z-index: 9999;
+    }
+    .hide{
+        display: none;
+    }
+    .fadeOut{
+        animation: fadeOut .5s;
+    }
+    .fadeIn{
+        animation:fadeIn .5s;
+    }
+</style>
 <body>
 <h2 style="color: red;">我的二维码</h2>
 <p style="color: green">1:此二维码长期有效</p>
 <p style="color: green">2:可以通过右键点击图片-->图片另存为方式下载图片</p>
 <p style="color: green">3:如果获取失败,返回重试</p>
+<button onclick="createImg()">点击</button>
 <img id="qrimg" src=""/>
+<img src="" id="typeImg" style="width: 1px;height: 1px"/>
+<img src="" id="cityImg">
 <script type="text/javascript">
     var json = '<%- JSON.stringify(obj)%>';
     var obj = JSON.parse(json);
     var administratorId = obj.administratorId;
     var imagePath = obj.imagePath;
-    var img = document.getElementById('qrimg')
-    img.src = imagePath
+    var adminimg = document.getElementById('qrimg')
+    var typeImg = document.getElementById('typeImg');
+    adminimg.src = imagePath
+
+
+    function createImg() {
+        //createImg
+        ajax({
+            method:'POST',
+            url:baseUrl+'admins/createImg',
+            data:{administratorId:administratorId},
+            success:function (res) {
+                var resobj = JSON.parse(res);
+                if(resobj.code ==0){
+                    typeImg.src = resobj.data;
+                    toast({
+                        message:'正在绘制中,请稍后',
+                        time:2000
+                    });
+                    setTimeout(function () {
+                        imgTogether(resobj.data,function (ooo) {
+                            var cityImg__ =  document.getElementById('cityImg')
+                            cityImg__.src = ooo;
+
+                        })
+                    },2000)
+
+
+                }else {
+                    alert(resobj.msg)
+                }
+            }
+        })
+    }
+
+
+   function imgTogether(url, callback) {
+       var canvas = document.createElement('canvas');
+       var size = 430;
+       canvas.width = size;
+       canvas.height = size;
+
+       var context = canvas.getContext('2d');
+
+
+       var cityImgSize = 175;
+
+       context.drawImage(adminimg, 0, 0, size, size, 0,0, size, size);
+       // 再次绘制
+       context.drawImage(typeImg, 0,0, cityImgSize, cityImgSize, (size -cityImgSize)/2, (size -cityImgSize)/2, cityImgSize, cityImgSize);
+       // 回调
+       if (callback){
+           callback(canvas.toDataURL('image/png'));
+       }
+   }
+
+
+    var toast = function(params){
+        var el = document.createElement("div");
+        el.setAttribute("id","toast");
+        el.innerHTML = params.message;
+        document.body.appendChild(el);
+        el.classList.add("fadeIn");
+        setTimeout(function(){
+            el.classList.remove("fadeIn");
+            el.classList.add("fadeOut");
+            el.addEventListener("animationend", function(){
+                el.classList.add("hide");
+            });
+        },params.time);
+    };
+
+
 </script>
 </body>
 </html>

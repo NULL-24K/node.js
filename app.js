@@ -15,6 +15,7 @@ var message = require('./routes/message');
 var config = require('./routes/config');
 var hotUpdate = require('./routes/hotUpdate');
 var servers = require('./routes/servers');
+var admins = require('./routes/admins');
 // var ajax = require('./routes/ajax')
 
 var ejs = require('ejs')
@@ -47,6 +48,7 @@ app.use('/message',message);
 app.use('/config',config);
 app.use('/hotUpdate',hotUpdate);
 app.use('/servers',servers);
+app.use('/admins',admins);
 
 
 // catch 404 and forward to error handler
