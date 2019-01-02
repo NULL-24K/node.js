@@ -18,13 +18,29 @@ router.post('/createImg',function (req,res,next) {
         res.send(JSON.stringify(model));
     }else {
         var adminQrImg = './public/resources/qrDataImg/'+params.administratorId +'.jpg'
-        var typeImg = '/resources/qrDataImg/' +'xian'+'.png'
+
+        var typeImg = '/resources/qrDataImg/' +cityToImgUrl(params.city)+'.png'
         model.code =0;
         model.data = typeImg;
         model.msg = '成功'
         res.send(JSON.stringify(model));
     }
 })
+
+
+function cityToImgUrl(city) {
+    var citysDic = {'合肥':'goldbee_hefei',
+                    '武汉':'goldbee_wuhan',
+                    '成都':'goldbee_chengdu',
+                    '西安':'goldbee_xian',
+                    '重庆':'goldbee_chonqing',
+                    '上海':'goldbee_shanghai',
+                    '北京':'goldbee_beijn',
+                    '天津':'goldbee_tianjing',
+                    '长沙':'goldbee_changsha',
+                    '南京':'goldbee_nanjin'}
+    return citysDic[city];
+}
 
 
 

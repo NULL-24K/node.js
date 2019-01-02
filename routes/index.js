@@ -110,6 +110,7 @@ router.get('/admin/joblist',function (req,res,next) {
                     tagImgAddress :obj.tagImgAddress,
                     openCity:obj.openCity
                 }
+             //   console.log(obj.openCity);
                 jobArr.push(newObj);
             }
            // console.log(jobArr[0])

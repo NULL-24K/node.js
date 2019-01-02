@@ -124,9 +124,12 @@ router.post('/jobDetail',function (req,res,next) {
 router.post('/jobList',function(req,res,next) {
     var  model = new ResModel();
 
-    var page = 1, pageSize = 50;
+    var page = 1, pageSize = 100;
     var adminId = req.body.adminId;
     var locationCity = req.body.location;
+
+    // adminId = 'goldbeeAdmin15157769033_'
+    // locationCity = '武汉'
     var sql_where = {administratorId:'superAdminister'}
     if (adminId && adminId !='goldbee'){
         sql_where = {administratorId:[adminId,'superAdminister'],showStatus:0}
@@ -135,7 +138,7 @@ router.post('/jobList',function(req,res,next) {
         var jobsSql = {
             order: [['topStatus','DESC'],['createdAt', 'DESC']],
             where:sql_where,
-            offset:(page - 1) * pageSize,
+            offset:0,
             limit:pageSize
         }
 
@@ -143,7 +146,7 @@ router.post('/jobList',function(req,res,next) {
             jobsSql = {order: Sequelize.fn('RAND'),limit:10}
         }
 
-        db.JobInfo.findAndCountAll(jobsSql).then(function (result) {
+        db.JobInfo.findAndCount(jobsSql).then(function (result) {
             model.code = 0;
             if(result){
                 var jobArr = new  Array();
@@ -163,7 +166,10 @@ router.post('/jobList',function(req,res,next) {
                     jobInfo.applyNum = obj.applyNum +obj.defApplyNum +obj.roundNum;
                     jobInfo.statusTag = obj.statusTag=='null'?null:obj.statusTag;
                     jobInfo.tagImgAddress = obj.tagImgAddress=='null'?null:obj.tagImgAddress;
+
+                    jobInfo.statusTag = jobInfo.statusTag =='undefined'?null:jobInfo.statusTag;
                     if(locationCity && locationCity.length >0){
+
                         if(obj.workAddress.indexOf(locationCity) != -1 || obj.interViewAddress.indexOf(locationCity) != -1 || obj.openCity == locationCity){
                             //这一步 取出当前定位城市
                             jobArr.push(jobInfo);

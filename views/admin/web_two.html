@@ -7,33 +7,36 @@
 </head>
 <body>
 <p style="font-size: 35px;color: red">这是H5界面two</p>
-<button style="color: blueviolet;font-size: 35px" onclick="getList()">点击获取通讯录</button>
-<b style="color: green;font-size: 4px;width: 20px;height: 20px" id="getTitle">接收来自客户端的传值/回调值</b>
+<button style="color: blueviolet;font-size: 35px" onclick="getList()">点击获取用户名称</button>
+<p style="color: green;font-size: 24px;width: 500px;height: 60px" id="asdf">接收来自客户端的传值/回调值</p>
 <script type="text/javascript">
     function getList() {
-        window.webkit.messageHandlers.getFriends.postMessage('')
-    }
-    function shareResult(title,content) {
-        var div = document.getElementById('getTitle');
-        div.innerHTML = title+'___'+content;
+        window.webkit.messageHandlers.getUserNames.postMessage('我想获取用户姓名')
     }
 
-    window.webkit.messageHandlers.funName.postMessage('')
-    //向客户端发送信息
-    function monitor(data) {
-        //监听来自客户端的数据
-    }
-    
-    function getUserMoible(alertStr) {
-        alert(alertStr)
+    function getNameResult(content) {
+        if (!content) {return}
+
+        var div1 = document.getElementById('asdf');
+        div1.innerHTML = content;
     }
 
-     //客户端首先调用你的函数 并将参数传给你 你收到客户端的调用后 调用客户端的函数 将参数回传给客户端
-     function nativeUserFun(option) {//option是客户端传给你的参数
-         //这里可以对option进行判断
-         var callBackValue = '你回传给客户端的参数'
-         window.webkit.messageHandlers.AppModel.postMessage(callBackValue)
-     }
+//    window.webkit.messageHandlers.funName.postMessage('')
+//    //向客户端发送信息
+//    function monitor(data) {
+//        //监听来自客户端的数据
+//    }
+//
+//    function getUserMoible(alertStr) {
+//        alert(alertStr)
+//    }
+//
+//     //客户端首先调用你的函数 并将参数传给你 你收到客户端的调用后 调用客户端的函数 将参数回传给客户端
+//     function nativeUserFun(option) {//option是客户端传给你的参数
+//         //这里可以对option进行判断
+//         var callBackValue = '你回传给客户端的参数'
+//         window.webkit.messageHandlers.AppModel.postMessage(callBackValue)
+//     }
 
 </script>
 </body>

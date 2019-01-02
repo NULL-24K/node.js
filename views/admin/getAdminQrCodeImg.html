@@ -78,7 +78,12 @@
 <p style="color: green">1:此二维码长期有效</p>
 <p style="color: green">2:可以通过右键点击图片-->图片另存为方式下载图片</p>
 <p style="color: green">3:如果获取失败,返回重试</p>
-<button onclick="createImg()">点击</button>
+<b style="color: red">选择你需要的城市二维码</b>
+<select style="width: 200px" id="selectCity"></select>
+<button onclick="createImg()">点击合成图片</button>
+<br/>
+<br/>
+<br/>
 <img id="qrimg" src=""/>
 <img src="" id="typeImg" style="width: 1px;height: 1px"/>
 <img src="" id="cityImg">
@@ -90,14 +95,16 @@
     var adminimg = document.getElementById('qrimg')
     var typeImg = document.getElementById('typeImg');
     adminimg.src = imagePath
-
+    setSelectCity();
 
     function createImg() {
         //createImg
+        var selectCity = document.getElementById('selectCity')
+        console.log(selectCity.value);
         ajax({
             method:'POST',
             url:baseUrl+'admins/createImg',
-            data:{administratorId:administratorId},
+            data:{administratorId:administratorId,city:selectCity.value},
             success:function (res) {
                 var resobj = JSON.parse(res);
                 if(resobj.code ==0){
@@ -143,6 +150,17 @@
        }
    }
 
+
+   function setSelectCity() {
+       var  citysArr = ['合肥','武汉','成都','西安','重庆','上海','北京','天津','长沙','南京'];// ['不限','小学','初中','高中','本科','硕士']
+       var citySelect = document.getElementById('selectCity');
+       for(var i=0;i <citysArr.length;i ++){
+           var option = document.createElement('option');
+           option.value = citysArr[i]
+           option.innerHTML=citysArr[i]
+           citySelect.appendChild(option);
+       }
+   }
 
     var toast = function(params){
         var el = document.createElement("div");
