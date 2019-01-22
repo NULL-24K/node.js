@@ -179,6 +179,35 @@ router.post('/setAdmin',function (req,res,next) {
     }
 })
 
+
+router.post('/setAdminInfo',function (req,res,next) {
+    var params = req.body;
+    var model = new ResModel();
+    if(params.administratorId !='superAdminister'){
+        model.msg = '对不起,您没有权限进行此项操作'
+        res.send(JSON.stringify(model))
+        return;
+    }
+
+    var sql_ = {};
+    if (params.type ==0){
+        sql_ = {psd:params.value}//{,{where:{phoneNum:params.phoneNum}}}
+    }else {
+        sql_ = {adminJobNum:params.value}
+    }
+
+    db.Administer.update(sql_,{where:{phoneNum:params.phoneNum}}).then(function (result) {
+        model.code = 0;
+        model.msg = '修改成功'
+        res.send(JSON.stringify(model))
+    }).catch(function (error) {
+        model.code = 1;
+        model.msg = '修改失败'
+        res.send(JSON.stringify(model))
+    })
+
+})
+
 router.post('/getMsg',function (req,res,next) {
     var model = new ResModel();
     if(!req.body.phoneNum || req.body.phoneNum.length == 0){

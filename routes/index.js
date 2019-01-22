@@ -229,7 +229,9 @@ router.get('/admin/setAdmin',function (req,res,next) {
                 var  newObj = {
                     name:obj.name,
                     phoneNum:obj.phoneNum,
-                    administratorId:obj.administratorId
+                    administratorId:obj.administratorId,
+                    psd:obj.psd,
+                    adminJobNum:obj.adminJobNum
                 }
                 jobArr.push(newObj);
             }

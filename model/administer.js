@@ -46,11 +46,17 @@ module.exports = function(sequelize,DataTypes){
         servePhoneNum:{
             type:DataTypes.STRING,
             defaultValue:''
-        }
+        },
+        /*管理员工号*/
+        adminJobNum:{
+            type:DataTypes.STRING,
+            defaultValue:''
+        },
     },{
         freezeTableName: true
     });
-    //Administer.sync({ alter: true })
+    //新增字段
+  //  Administer.sync({ alter: true })
     // Administer.sync({force:true})
     return Administer;
 };
