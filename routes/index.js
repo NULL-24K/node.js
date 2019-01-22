@@ -32,11 +32,17 @@ router.get('/admin/main',function (req,res,next) {
     var params = URL.parse(req.url, true).query;
     var adminId = params.administratorId;
     if(!adminId || adminId.length ==0){
-        res.render('admin/login',{name:'ssss',title:'这是title'});
+        res.render('admin/login',{name:'错误',title:'错误'});
     }else {
         db.Administer.findOne({where:{administratorId:adminId}}).then(function (result) {
             if(result){
-                res.render('admin/main',{name:result.dataValues.name,adminId:adminId})
+                var adminInfo = ''
+                if (result.dataValues.adminJobNum||result.dataValues.adminJobNum.length >1){
+                    adminInfo = result.dataValues.adminJobNum;
+                }else {
+                    adminInfo = result.dataValues.name;
+                }
+                res.render('admin/main',{name:adminInfo,adminId:adminId})
             }else {
                 res.render('admin/login');
             }
